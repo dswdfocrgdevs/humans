@@ -22,10 +22,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     # Dashboard urls
-    path('', include('dashboards.urls')),
+    path('rsp/', include('rsp.urls')),
 
     # Auth urls
-    path('', include('auth.urls')),
+    path('', include('kt_auth.urls')),
 ]
 
 handler404 = SystemView.as_view(template_name = 'pages/' + settings.KT_THEME + '/system/not-found.html', status=404)

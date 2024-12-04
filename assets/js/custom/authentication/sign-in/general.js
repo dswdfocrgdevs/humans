@@ -14,14 +14,10 @@ var KTSigninGeneral = function () {
             form,
             {
                 fields: {
-                    'email': {
+                    'username': {
                         validators: {
-                            regexp: {
-                                regexp: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                                message: 'The value is not a valid email address',
-                            },
                             notEmpty: {
-                                message: 'Email address is required'
+                                message: 'Username is required'
                             }
                         }
                     },
@@ -80,7 +76,7 @@ var KTSigninGeneral = function () {
                             }
                         }).then(function (result) {
                             if (result.isConfirmed) {
-                                form.querySelector('[name="email"]').value = "";
+                                form.querySelector('[name="username"]').value = "";
                                 form.querySelector('[name="password"]').value = "";
 
                                 //form.submit(); // submit form
@@ -146,7 +142,7 @@ var KTSigninGeneral = function () {
                         } else {
                             // Show error popup. For more info check the plugin's official documentation: https://sweetalert2.github.io/
                             Swal.fire({
-                                text: "Sorry, the email or password is incorrect, please try again.",
+                                text: "Sorry, the username or password is incorrect, please try again.",
                                 icon: "error",
                                 buttonsStyling: false,
                                 confirmButtonText: "Ok, got it!",
@@ -206,11 +202,11 @@ var KTSigninGeneral = function () {
 
             handleValidation();
 
-            if (isValidUrl(submitButton.closest('form').getAttribute('action'))) {
+            // if (isValidUrl(submitButton.closest('form').getAttribute('action'))) {
                 handleSubmitAjax(); // use for ajax submit
-            } else {
-                handleSubmitDemo(); // used for demo purposes only
-            }
+            // } else {
+            //     handleSubmitDemo(); // used for demo purposes only
+            // }
         }
     };
 }();
