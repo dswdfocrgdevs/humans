@@ -11,5 +11,10 @@ context.update({
 {% block title %}{% translate "Dashboard" %}{% endblock %}
 
 {% block content %}
-
+<button onclick="test()">Click Me</button>
+<script type="text/javascript">
+    function test() {
+        alert('123');
+    }
+</script>
 {% endblock content %}
