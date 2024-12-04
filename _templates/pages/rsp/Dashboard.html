@@ -1,0 +1,20 @@
+<!--
+Define in dashboards/views.py file
+context.update({
+    'layout': KTTheme.setLayout('default.html', context),
+})
+-->
+{% extends layout %}
+
+{% load i18n %}
+
+{% block title %}{% translate "Dashboard" %}{% endblock %}
+
+{% block content %}
+<button onclick="test()">Click Me</button>
+<script type="text/javascript">
+    function test() {
+        alert('123');
+    }
+</script>
+{% endblock content %}
