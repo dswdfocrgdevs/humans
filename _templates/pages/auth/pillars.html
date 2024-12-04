@@ -136,7 +136,7 @@
                                                         <a href="#" class="d-flex text-gray-900 text-hover-primary align-items-center mb-5">
                                                             <!--begin::Symbol-->
                                                             <div class="symbol symbol-40px me-4">
-                                                                <img src="{% static 'media/avatars/300-2.jpg' %}" alt="" />
+                                                                <img src="{{ user_image }}" alt="" />
                                                             </div>
                                                             <!--end::Symbol-->
                                                             <!--begin::Title-->
@@ -1437,7 +1437,7 @@
                                 <div class="d-flex align-items-center me-lg-n2 ms-1 ms-lg-3" id="kt_header_user_menu_toggle">
                                     <!--begin::Menu wrapper-->
                                     <div class="btn btn-icon btn-active-light-primary btn-custom w-30px h-30px w-md-40px h-md-40px" data-kt-menu-trigger="click" data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end">
-                                        <img class="h-30px w-30px rounded" src="{% static 'media/avatars/300-2.jpg' %}" alt="" />
+                                        <img class="h-30px w-30px rounded" src="{{ request.session.user_image }}" alt="" />
                                     </div>
                                     <!--begin::User account menu-->
                                     <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg menu-state-color fw-semibold py-4 fs-6 w-275px" data-kt-menu="true">
@@ -1446,13 +1446,12 @@
                                             <div class="menu-content d-flex align-items-center px-3">
                                                 <!--begin::Avatar-->
                                                 <div class="symbol symbol-50px me-5">
-                                                    <img alt="Logo" src="{% static 'media/avatars/300-2.jpg' %}" />
+                                                    <img alt="Logo" src="{{ request.session.user_image }}" />
                                                 </div>
                                                 <!--end::Avatar-->
                                                 <!--begin::Username-->
                                                 <div class="d-flex flex-column">
-                                                    <div class="fw-bold d-flex align-items-center fs-5">Max Smith 
-                                                    <span class="badge badge-light-success fw-bold fs-8 px-2 py-1 ms-2">Pro</span></div>
+                                                    <div class="fw-bold d-flex align-items-center fs-5">{{ request.session.user_first_name }}</div>
                                                     <a href="#" class="fw-semibold text-muted text-hover-primary fs-7">max@kt.com</a>
                                                 </div>
                                                 <!--end::Username-->
@@ -1597,7 +1596,7 @@
                                         <!--end::Menu item-->
                                         <!--begin::Menu item-->
                                         <div class="menu-item px-5">
-                                            <a href="authentication/layouts/corporate/sign-in.html" class="menu-link px-5">Sign Out</a>
+                                            <a href="/signout" class="menu-link px-5">Sign Out</a>
                                         </div>
                                         <!--end::Menu item-->
                                     </div>
@@ -5073,12 +5072,12 @@
                                 <div class="d-flex align-items-center">
                                     <!--begin::Avatar-->
                                     <div class="symbol symbol-35px symbol-circle">
-                                        <img alt="Pic" src="{% static 'media/avatars/300-1.jpg' %}" />
+                                        <img alt="Pic" src="{{ request.session.user_image }}" />
                                     </div>
                                     <!--end::Avatar-->
                                     <!--begin::Details-->
                                     <div class="ms-5">
-                                        <a href="#" class="fs-5 fw-bold text-gray-900 text-hover-primary mb-2">Max Smith</a>
+                                        <a href="#" class="fs-5 fw-bold text-gray-900 text-hover-primary mb-2">{{ request.session.user_first_name }}</a>
                                         <div class="fw-semibold text-muted">max@kt.com</div>
                                     </div>
                                     <!--end::Details-->
@@ -5747,12 +5746,12 @@
                                             <!--end::Checkbox-->
                                             <!--begin::Avatar-->
                                             <div class="symbol symbol-35px symbol-circle">
-                                                <img alt="Pic" src="{% static 'media/avatars/300-1.jpg' %}" />
+                                                <img alt="Pic" src="{{ request.session.user_image }}" />
                                             </div>
                                             <!--end::Avatar-->
                                             <!--begin::Details-->
                                             <div class="ms-5">
-                                                <a href="#" class="fs-5 fw-bold text-gray-900 text-hover-primary mb-2">Max Smith</a>
+                                                <a href="#" class="fs-5 fw-bold text-gray-900 text-hover-primary mb-2">{{ request.session.user_first_name }}</a>
                                                 <div class="fw-semibold text-muted">max@kt.com</div>
                                             </div>
                                             <!--end::Details-->
