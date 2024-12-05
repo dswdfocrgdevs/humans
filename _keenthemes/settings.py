@@ -41,8 +41,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # Keenthemes Apps
-    'rsp.apps.DashboardsConfig',
+    # 'rsp.apps.DashboardsConfig',
     'kt_auth.apps.AuthConfig',
+    'rsp',
+
 ]
 
 MIDDLEWARE = [

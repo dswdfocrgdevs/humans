@@ -44,7 +44,39 @@ class DashboardsView(LoginRequiredMixin, TemplateView):
         KTTheme.addVendors(['amcharts', 'amcharts-maps', 'amcharts-stock'])
 
         return context
+    
+class NewlyHiredStaffView(LoginRequiredMixin, TemplateView):
+    # Default template file
+    # Refer to dashboards/urls.py file for more pages and template files
+    template_name = 'pages/dashboards/index.html'
+
+    login_url = '/signin'
+    # Predefined function
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+
+        """
+        # Example to get page name. Refer to dashboards/urls.py file.
+        url_name = resolve(self.request.path_info).url_name
+
+        if url_name == 'dashboard-2':
+            # Example to override settings at the runtime
+            settings.KT_THEME_DIRECTION = 'rtl'
+        else:
+            settings.KT_THEME_DIRECTION = 'ltr'
+        """
+
+        # A function to init the global layout. It is defined in _keenthemes/__init__.py file
+        context = KTLayout.init(context)
+
+        # Include vendors and javascript files for dashboard widgets
+        KTTheme.addVendors(['amcharts', 'amcharts-maps', 'amcharts-stock'])
+
+        return context
 
 
-
+def NewlyHiredStaff(request):
+        print("testtt")
+        return render(request, 'pages/rsp/NewlyHiredStaff.html')
     
