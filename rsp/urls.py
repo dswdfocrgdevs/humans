@@ -1,6 +1,6 @@
 from django.urls import path
 from django.conf import settings
-from humans.views import DashboardsView
+from .views import DashboardsView
 
 app_name = 'rsp'
 
