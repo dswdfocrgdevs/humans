@@ -7,6 +7,7 @@ from _keenthemes.__init__ import KTLayout
 from _keenthemes.libs.theme import KTTheme
 from pprint import pprint
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import render
 
 """
 This file is a view controller for multiple pages as a module.
@@ -43,3 +44,7 @@ class DashboardsView(LoginRequiredMixin, TemplateView):
         KTTheme.addVendors(['amcharts', 'amcharts-maps', 'amcharts-stock'])
 
         return context
+
+
+
+    
