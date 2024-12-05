@@ -1,6 +1,74 @@
 {% extends layout %}  {% load i18n %}
 {% block content %}
 
-<h1>NewlyHired Staff</h1>
+<link rel="stylesheet" href="{% static 'plugins/custom/prismjs/prismjs.bundle.css' %}" />
+<link rel="stylesheet" href="{% static 'plugins/custom/datatables/datatables.bundle.css' %}" />
+<link rel="stylesheet" href="{% static 'plugins/global/plugins.bundle.css' %}" />
+<link rel="stylesheet" href="{% static 'css/style.bundle.css' %}" />
 
+<table id="kt_datatable_dom_positionings" class="table table-striped table-row-bordered gy-5 gs-7 border rounded">
+    <thead>
+        <tr class="fw-bold fs-6 text-gray-800 px-7">
+            <th>Name</th>
+            <th>Position</th>
+            <th>Salary</th>
+            <th>Office</th>
+            <th>Extn.</th>
+            <th>E-mail</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Tiger Nixon</td>
+            <td>System Architect</td>
+            <td>Edinburgh</td>
+            <td>61</td>
+            <td>2011/04/25</td>
+            <td>$320,800</td>
+        </tr>
+        <tr>
+            <td>Garrett Winters</td>
+            <td>Accountant</td>
+            <td>Tokyo</td>
+            <td>63</td>
+            <td>2011/07/25</td>
+            <td>$170,750</td>
+        </tr>
+    </tbody>
+</table>
 {% endblock content %}
+
+
+{% block footer_scripts %} 
+<script src="{% static 'plugins/global/plugins.bundle.js' %}"></script>
+<script src="{% static 'js/scripts.bundle.js' %}"></script>
+<script src="{% static 'js/custom/documentation/documentation.js' %}"></script>
+<script src="{% static 'js/custom/documentation/search.js' %}"></script>
+
+<script src="{% static 'plugins/custom/prismjs/prismjs.bundle.js' %}"></script>
+<script src="{% static 'plugins/custom/datatables/datatables.bundle.js' %}"></script>
+
+<script>
+$(document).ready(function () {
+    $("#kt_datatable_dom_positionings").DataTable({
+        "language": {
+            "lengthMenu": "Show _MENU_",
+        },
+        "dom":
+            "<'row mb-2'" +
+            "<'col-sm-6 d-flex align-items-center justify-conten-start dt-toolbar'l>" +
+            "<'col-sm-6 d-flex align-items-center justify-content-end dt-toolbar'f>" +
+            ">" +
+
+            "<'table-responsive'tr>" +
+
+            "<'row'" +
+            "<'col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start'i>" +
+            "<'col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end'p>" +
+            ">"
+    });
+});
+
+</script>
+
+{% endblock footer_scripts %}
