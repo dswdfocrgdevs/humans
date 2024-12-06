@@ -1,4 +1,4 @@
-{% extends 'layout/master.html' %}
+{% extends 'master.html' %}
 {% load i18n %}
 {% block layout %}
 <div class="header-fixed header-tablet-and-mobile-fixed toolbar-enabled bgi-no-repeat bgi-size-contain" style="background-image:url('assets/media/misc/header-bg.jpg');">
@@ -24,7 +24,7 @@
                         <!--begin::Header Logo-->
                         <div class="header-logo me-5 me-md-10 flex-grow-1 flex-lg-grow-0">
                             <a href="index.html">
-                                <img alt="Logo" src="{% static 'media/preview/prebuilts/demos/demo2.png' %}" class="logo-default h-25px" />
+                                <img alt="Logo" src="{% static 'assets/media/preview/prebuilts/demos/demo2.png' %}" class="logo-default h-25px" />
                                 <!-- <img alt="Logo" src="{% static 'media/preview/prebuilts/demos/demo2-sticky.png' %}" class="logo-sticky h-25px" /> -->
                             </a>
                         </div>
@@ -1623,7 +1623,7 @@
                             <!--begin::Col-->
                             <div class="col-xl-3">
                                 <!--begin::Mixed Widget 2-->
-                                <a href="/rsp/dashboard">
+                                <a href="{% url 'rsp:dashboard' %}">
                                     <div class="card card-xl-stretch cursor-pointer">
                                         <!--begin::Header-->
                                         <div class="card-header border-0 bg-success py-5">

@@ -9,42 +9,42 @@ from pprint import pprint
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 
-"""
-This file is a view controller for multiple pages as a module.
-Here you can override the page view layout.
-Refer to dashboards/urls.py file for more pages.
-"""
+    
+def dashboard(request):
+    context = {
+        'title': 'Dashboard'
+    }
+    return render(request, 'rsp/Dashboard.html', context)
 
-class DashboardsView(LoginRequiredMixin, TemplateView):
-    # Default template file
-    # Refer to dashboards/urls.py file for more pages and template files
-    template_name = 'pages/dashboards/index.html'
+def onboarding_forms(request):
+    context = {
+        'title': 'Onboarding Forms'
+    }
+    return render(request, 'rsp/OnBoardingForms.html', context)
 
-    login_url = '/signin'
-    # Predefined function
-    def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
-        context = super().get_context_data(**kwargs)
+def newly_hired_staff(request):
+    context = {
+        'title': 'Newly Hired Staff'
+    }
+    return render(request, 'rsp/NewlyHiredStaff.html', context)
 
-        """
-        # Example to get page name. Refer to dashboards/urls.py file.
-        url_name = resolve(self.request.path_info).url_name
+def neop(request):
+    context = {
+        'title': 'NEOP'
+    }
+    return render(request, 'rsp/Neop.html', context)
 
-        if url_name == 'dashboard-2':
-            # Example to override settings at the runtime
-            settings.KT_THEME_DIRECTION = 'rtl'
-        else:
-            settings.KT_THEME_DIRECTION = 'ltr'
-        """
+def cos_with_guidelines(request):
+    context = {
+        'title': 'COS with Guidelines'
+    }
+    return render(request, 'rsp/CosWithGuidelines.html', context)
 
-        # A function to init the global layout. It is defined in _keenthemes/__init__.py file
-        context = KTLayout.init(context)
-
-        # Include vendors and javascript files for dashboard widgets
-        KTTheme.addVendors(['amcharts', 'amcharts-maps', 'amcharts-stock'])
-
-        return context
-
+def reports_generation(request):
+    context = {
+        'title': 'Reports Generation'
+    }
+    return render(request, 'rsp/ReportsGeneration.html', context)
 
 
     
