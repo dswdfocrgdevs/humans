@@ -54,3 +54,7 @@ Django development
   python manage.py migrate
   python manage.py runserver
 ```
+
+
+.ENV
+https://drive.google.com/drive/folders/1UuRRye4r5JtbDT4cuJsg8oROvEAzuLNS?usp=drive_link
