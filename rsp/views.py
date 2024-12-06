@@ -8,8 +8,10 @@ from _keenthemes.libs.theme import KTTheme
 from pprint import pprint
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
+from django.http import JsonResponse, HttpResponse
+from django.views.decorators.csrf import csrf_exempt
+import requests
 
-    
 def dashboard(request):
     context = {
         'title': 'Dashboard'
@@ -23,6 +25,13 @@ def onboarding_forms(request):
     return render(request, 'rsp/OnBoardingForms.html', context)
 
 def newly_hired_staff(request):
+    url = "https://caraga-iris.dswd.gov.ph/api/hired-applicants/"
+    headers = {"Authorization": "Token 9c1a7ec45beaa34c3059e9c6e226142fe4606741"}
+    response = requests.get(url, headers=headers)
+
+    print("dddddddddd")
+    print(response.json())
+
     context = {
         'title': 'Newly Hired Staff'
     }
@@ -45,6 +54,16 @@ def reports_generation(request):
         'title': 'Reports Generation'
     }
     return render(request, 'rsp/ReportsGeneration.html', context)
+
+@csrf_exempt
+def list_newly_hired_staff(request):
+    url = "https://caraga-iris.dswd.gov.ph/api/hired-applicants/"
+    headers = {"Authorization": "Token 9c1a7ec45beaa34c3059e9c6e226142fe4606741"}
+    response = requests.get(url, headers=headers)
+    print("aaaaa")
+    print(response.json())
+    # Pass on the JSON data from the external API
+    return JsonResponse(response.json())
 
 
     

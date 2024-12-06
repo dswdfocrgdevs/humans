@@ -5172,7 +5172,7 @@ License: For each use you must have a valid license purchased only from above li
 											</a>
 										</div>
 										<div class="menu-item">
-											<a class="menu-link" href="#">
+											<a class="menu-link {% if url_name == 'newly-hired-staff' %}active{% endif %}" href="{% url 'rsp:newly-hired-staff' %}">
 											<span class="menu-link">
 												<span class="menu-icon">{% getIcon 'abstract-25' 'fs-2' %}</span>
 												<span class="menu-title">Newly Appointed Internal Staff</span>
@@ -9833,6 +9833,10 @@ License: For each use you must have a valid license purchased only from above li
 		<script src="{% static 'assets/js/custom/utilities/modals/users-search.js' %}"></script>
 		<script src="{% static 'assets/plugins/custom/datatables/datatables.bundle.js' %}"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		<script src="{% static 'plugins/custom/prismjs/prismjs.bundle.js' %}"></script>
+
+
+
         {% block script %}{% endblock script %}
 		<!--end::Custom Javascript-->
 		<!--end::Javascript-->
