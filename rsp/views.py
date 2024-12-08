@@ -11,6 +11,7 @@ from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 import requests
+import os
 
 def dashboard(request):
     context = {
@@ -24,13 +25,26 @@ def onboarding_forms(request):
     }
     return render(request, 'rsp/OnBoardingForms.html', context)
 
+# def newly_hired_staff(request):
+#     iris_url = os.getenv('IRIS_URL')
+#     iris_api_token = os.getenv('IRIS_API_TOKEN')
+#     url = iris_url+"/api/hired-applicants/"
+#     headers = {"Authorization": "Token " + iris_api_token}
+#     response = requests.get(url, headers=headers)
+
+#     print("NEWWTESTAAAA")
+#     print(response.json())
+
+#     context = {
+#         'title': 'Newly Hired Staff'
+#     }
+#     return render(request, 'rsp/NewlyHiredStaff.html', context)
+
 def newly_hired_staff(request):
+    iris_api_token = os.getenv('IRIS_API_TOKEN')
     url = "https://caraga-iris.dswd.gov.ph/api/hired-applicants/"
     headers = {"Authorization": "Token 9c1a7ec45beaa34c3059e9c6e226142fe4606741"}
     response = requests.get(url, headers=headers)
-
-    print("dddddddddd")
-    print(response.json())
 
     context = {
         'title': 'Newly Hired Staff'
