@@ -103,6 +103,8 @@ def validate_signin(request):
 
                     if response_employee_details.status_code == 200:
                         # Return successful response with the employee details
+
+                        breakpoint()
                         return {
                             'status_code': 200,
                             'status': 'success',
