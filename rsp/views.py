@@ -32,6 +32,7 @@ def newly_hired_staff(request):
     return render(request, 'rsp/NewlyHiredStaff.html', context)
 
 def neop(request):
+
     context = {
         'title': 'NEOP'
     }

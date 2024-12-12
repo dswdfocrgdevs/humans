@@ -54,3 +54,53 @@ Django development
   python manage.py migrate
   python manage.py runserver
 ```
+
+
+## Installation
+
+```bash
+  python -m venv .venv
+```
+```bash
+pip install -r requirements.txt
+```
+
+```bash
+npm install
+```
+
+```bash
+npm run dev
+```
+
+```bash
+python manage.py migrate
+```
+
+```bash
+python manage.py runserver
+```
+## Production
+
+```bash
+npm run build
+```
+
+```bash
+python manage.py collectstatic
+```
+
+```bash
+python manage.py runserver
+```
+
+## Custom Commands
+
+#### Get Newly Hired From IRIS
+- can be used for crons or sync button
+
+```http
+ python manage.py fetch_hired_applicants
+```
+
+
