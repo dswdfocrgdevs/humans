@@ -103,3 +103,4 @@ python manage.py runserver
 python manage.py fetch_hired_applicants
 ```
 
+ 
