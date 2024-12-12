@@ -36,6 +36,14 @@ License: For each use you must have a valid license purchased only from above li
 		<!--begin::Global Stylesheets Bundle(mandatory for all pages)-->
 		<link href="{% static 'assets/plugins/global/plugins.bundle.css' %}" rel="stylesheet" type="text/css" />
 		<link href="{% static 'assets/css/style.bundle.css' %}" rel="stylesheet" type="text/css" />
+
+		<link rel="stylesheet" href="{% static 'assets/plugins/custom/prismjs/prismjs.bundle.css' %}" />
+
+
+
+
+
+
 		<!--end::Global Stylesheets Bundle-->
 		<script>// Frame-busting to prevent site from being loaded within a frame without permission (click-jacking) if (window.top != window.self) { window.top.location.replace(window.self.location.href); }</script>
 	</head>
@@ -5172,7 +5180,7 @@ License: For each use you must have a valid license purchased only from above li
 											</a>
 										</div>
 										<div class="menu-item">
-											<a class="menu-link" href="#">
+											<a class="menu-link {% if url_name == 'newly-hired-staff' %}active{% endif %}" href="{% url 'rsp:newly-hired-staff' %}">
 											<span class="menu-link">
 												<span class="menu-icon">{% getIcon 'abstract-25' 'fs-2' %}</span>
 												<span class="menu-title">Newly Appointed Internal Staff</span>
@@ -5240,7 +5248,7 @@ License: For each use you must have a valid license purchased only from above li
 					</div>
 					<!--end::Sidebar-->
 					<!--begin::Main-->
-					<div class="app-main flex-column flex-row-fluid" id="kt_app_main">
+					<div class="app-main flex-column flex-column-fluid" id="kt_app_main">
 						<!--begin::Content wrapper-->
 						{% block content %}{% endblock content %}
 						<!--end::Content wrapper-->
@@ -9833,6 +9841,16 @@ License: For each use you must have a valid license purchased only from above li
 		<script src="{% static 'assets/js/custom/utilities/modals/users-search.js' %}"></script>
 		<script src="{% static 'assets/plugins/custom/datatables/datatables.bundle.js' %}"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		<script src="{% static 'plugins/custom/prismjs/prismjs.bundle.js' %}"></script>
+
+
+
+		<script src="{% static 'assets/js/custom/documentation/documentation.js' %}"></script>
+		<script src="{% static 'assets/js/custom/documentation/search.js' %}"></script>
+		<script src="{% static 'assets/plugins/custom/datatables/datatables.bundle.js' %}"></script>
+
+
+
         {% block script %}{% endblock script %}
 		<!--end::Custom Javascript-->
 		<!--end::Javascript-->

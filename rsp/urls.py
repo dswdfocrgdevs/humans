@@ -1,6 +1,6 @@
 from django.urls import path
 from django.conf import settings
-from .views import dashboard, onboarding_forms, newly_hired_staff, neop, cos_with_guidelines, reports_generation
+from .views import dashboard, onboarding_forms, newly_hired_staff, neop, cos_with_guidelines, reports_generation, list_newly_hired_staff
 
 app_name = 'rsp'
 
@@ -11,6 +11,8 @@ urlpatterns = [
     path('neop', neop, name='neop'),
     path('cos-with-guidelines', cos_with_guidelines, name='cos-with-guidelines'),
     path('reports-generation', reports_generation, name='reports-generation'),
+    path('list_newly_hired_staff', list_newly_hired_staff, name='list-newly-hired-staff'),
+    
     # path('error', DashboardsView.as_view(template_name = 'non-exist-file.html'), name='Error Page'),
 ]
 
