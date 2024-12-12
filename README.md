@@ -102,5 +102,3 @@ python manage.py runserver
 ```bash
 python manage.py fetch_hired_applicants
 ```
-
- 
