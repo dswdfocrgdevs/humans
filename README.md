@@ -99,7 +99,15 @@ python manage.py runserver
 #### Get Newly Hired From IRIS
 - can be used for crons or sync button
 
+<<<<<<< HEAD
 ```bash
 python manage.py fetch_hired_applicants
 ```
 
+=======
+```http
+ python manage.py fetch_hired_applicants
+```
+
+
+>>>>>>> a9f93740febb7003aba72238e1131145fce5d783
