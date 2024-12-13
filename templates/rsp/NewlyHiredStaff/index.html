@@ -1,0 +1,236 @@
+{% extends 'layout.html' %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'assets/plugins/custom/prismjs/prismjs.bundle.css' %}" />
+<link rel="stylesheet" href="{% static 'assets/plugins/custom/datatables/datatables.bundle.css' %}" />
+<link rel="stylesheet" href="{% static 'assets/plugins/global/plugins.bundle.css' %}" />
+<link rel="stylesheet" href="{% static 'assets/css/style.bundle.css' %}" />
+<style>
+.link-style {
+    color: #337ab7; /* Link color */
+    text-decoration: none; /* Removes underline */
+    cursor: pointer; /* Pointer cursor on hover */
+}
+
+.link-style:hover {
+    text-decoration: underline; /* Adds underline on hover */
+    color: darkblue; /* Changes color slightly on hover */
+}
+
+</style>
+
+<div class="d-flex flex-column flex-column-fluid">
+    <!--begin::Toolbar-->
+    <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+        <!--begin::Toolbar container-->
+        <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
+            <!--begin::Page title-->
+            <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+                <!--begin::Title-->
+                <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0">{{title}}</h1>
+                <!--end::Title-->
+                <!--begin::Breadcrumb-->
+                <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+                    <!--begin::Item-->
+                    <li class="breadcrumb-item text-muted">
+                        <a href="#" class="text-muted text-hover-primary">Home</a>
+                    </li>
+                    <!--end::Item-->
+                    <!--begin::Item-->
+                    <li class="breadcrumb-item">
+                        <span class="bullet bg-gray-500 w-5px h-2px"></span>
+                    </li>
+                    <!--end::Item-->
+                    <!--begin::Item-->
+                    <li class="breadcrumb-item text-muted">{{title}}</li>
+                    <!--end::Item-->
+                </ul>
+                <!--end::Breadcrumb-->
+            </div>
+            <!--end::Page title-->
+            <!--begin::Actions-->
+
+            <!--end::Actions-->
+        </div>
+        <!--end::Toolbar container-->
+    </div>
+    <!--end::Toolbar-->
+    <!--begin::Content-->
+    <div id="kt_app_content" class="app-content flex-column-fluid">
+        <!--begin::Content container-->
+        <div id="kt_app_content_container" class="app-container container-fluid">
+        </div>
+    </div>
+</div>
+
+<div id="kt_app_content" class="app-content flex-column-fluid">
+    <!--begin::Content container-->
+    <div id="kt_app_content_container" class="app-container container-fluid">
+
+        <div class="row g-5 g-xl-12">
+            <!--begin::Col-->
+            <div class="col-xl-12">
+
+                <div class="card mb-5 mb-xl-8">
+                    <!--begin::Header-->
+                    <div class="card-header border-0 pt-5 d-flex justify-content-between align-items-center">
+                        <div class="d-flex">
+                            <a href="#" class="btn btn-sm fw-bold btn-primary me-2" data-bs-toggle="modal" data-bs-target="#kt_modal_create_app">
+                                <i class="fas fa-list"></i> List of Transmittal
+                            </a>
+                            <a href="#" class="btn btn-sm fw-bold btn-secondary">
+                                <i class="fas fa-stream"></i> List of Streamline Applicants
+                            </a>
+                        </div>
+                    
+                        <div class="d-flex">
+                            <a href="#" class="btn btn-sm fw-bold btn-success me-2" data-bs-toggle="modal" data-bs-target="#kt_modal_create_app">
+                                <i class="fas fa-file-excel"></i> Generate Transmittal
+                            </a>
+                            <a href="#" class="btn btn-sm fw-bold btn-info">
+                                <i class="fas fa-file-excel"></i> Generate Checklist
+                            </a>
+                        </div>
+                    </div>
+                    <!--end::Header-->
+                    <!--begin::Body-->
+                    <div class="card-body py-3">
+                        <!--begin::Table container-->
+                        <div class="table-responsive">
+                            <!--begin::Table-->
+                            <table id="hired-table" class="table table-striped table-row-bordered gy-5 gs-7 border rounded">
+                                <thead>
+                        
+                                </thead>
+                                <tbody>
+                                    <!-- Data will be inserted here dynamically -->
+                                </tbody>
+                            </table>
+                            <!--end::Table-->
+                        </div>
+                        <!--end::Table container-->
+                    </div>
+                    <!--begin::Body-->
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock content %}
+
+{% block script %}
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        var table = $("#hired-table").DataTable({
+            processing: true, 
+            serverSide: true, 
+            ajax: {
+                url: "{% url 'rsp:list-newly-hired-staff' %}",
+                type: 'GET',
+                data: function(d) {
+                    d.page = Math.floor(d.start / d.length) + 1;  // Set page number
+                    d.length = d.length;  // Number of records per page
+                },
+            },
+            columns: [
+                { data: 'app_id' },
+                { data: 'app_id' },
+                { data: 'full_name', title: 'Name' },
+                { data: 'position', title: 'Position' },
+                { data: 'former_incumbent', title: 'Former Incumbent' },
+                { 
+                    data: 'salary', 
+                    title: 'Salary',
+                    render: function(data, type, row) {
+                        return numeral(data).format('0,0.00');
+                    }
+                },
+                { data: 'effectivity_of_contract', title:'Contract Effectivity' },
+                { data: 'end_of_contract', title: 'End Contract' },
+                { data: 'emp_status', title:'Status' },
+                { data: 'nature', title: 'Nature' },
+                { data: 'area_of_assignment', title: 'Area of Assignment' },
+                { data: 'requirements_ok', title: 'Requirements' },
+                { data: 'remarks', title: 'Remarks' }
+            ],
+            headerCallback: function (thead, data, start, end, display) {
+                $(thead).find('th').addClass('text-center'); // Add center class to all headers
+            },
+            columnDefs: [
+            {
+                title: '',
+                sortable: false,
+                targets: 0,
+                render: function(data) {
+                    return `<input type="checkbox" class="dt-checkboxes form-check-input checkbox-items" value="${data}">`;
+                },
+            },
+            {
+                targets: 1,
+                title: 'Action',
+                orderable: false,
+                searchable: false,
+                render: function (data) {
+                    return `
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="actionDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                Actions
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="actionDropdown">
+                                <li><a class="dropdown-item" href="/checklist">Requirements Checklist</a></li>
+                                <li><a class="dropdown-item" href="/checklist22">Onboarding Checklist</a></li>
+                                <li><a class="dropdown-item" href="/checklist33">Remarks</a></li>
+                                <li><a class="dropdown-item" href="/print">PRINT</a></li>
+                            </ul>
+                        </div>
+                    `;
+                },
+            },
+                
+  
+            ],
+            dom: "<'row mb-2'<'col-sm-6 d-flex align-items-center justify-content-start dt-toolbar'l><'col-sm-6 d-flex align-items-center justify-content-end dt-toolbar'Bf>>" +
+                "<'table-responsive'tr>" +
+                "<'row'" +
+                "<'col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start'i>" +
+                "<'col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end'p>" +
+                ">",
+
+            buttons: [
+                {
+                    extend: 'collection',
+                    text: 'Export',
+                    className: 'btn btn-secondary', // Basic button styling
+                    buttons: [
+                        {
+                            extend: 'excelHtml5',
+                            text: 'Export to Excel',
+                            title: 'Newly Hired Staff',
+                            exportOptions: {
+                                columns: ':visible' // Export only visible columns
+                            }
+                        },
+                        {
+                            extend: 'csvHtml5',
+                            text: 'Export to CSV',
+                            title: 'Newly Hired Staff',
+                            exportOptions: {
+                                columns: ':visible' // Export only visible columns
+                            }
+                        },
+                        {
+                            extend: 'pdfHtml5',
+                            text: 'Export to PDF',
+                            title: 'Newly Hired Staff',
+                            exportOptions: {
+                                columns: ':visible' // Export only visible columns
+                            }
+                        }
+                    ]
+                }
+            ],
+        });   
+   });
+</script>
+{% endblock script %}

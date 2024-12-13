@@ -20,6 +20,7 @@ class NewlyHiredStaff(models.Model):
     nature = models.CharField(max_length=100,null=True)  # Nature of employment (e.g., permanent, temporary)
     created_at = models.DateTimeField(auto_now_add=True)  # Automatically set on creation
     updated_at = models.DateTimeField(auto_now=True)      # Automatically update on save
+    remarks = models.TextField(null=True)
 
     def __str__(self):
         return f"{self.full_name} - {self.position}"
