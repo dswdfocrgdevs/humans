@@ -5059,7 +5059,7 @@ License: For each use you must have a valid license purchased only from above li
 												<!--begin:Menu item-->
 												<div class="menu-item">
 													<!--begin:Menu link-->
-													<a  class="menu-link {% if url_name == 'NoticeNewlyHired' %}active{% endif %}" href="{% url 'rsp:NoticeNewlyHired' %}">
+													<a  class="menu-link {% if url_name == 'PermanentContractualNoticeNewlyHired' %}active{% endif %}" href="{% url 'rsp:PermanentContractualNoticeNewlyHired' %}">
 														<span class="menu-bullet">
 															<span class="bullet bullet-dot"></span>
 														</span>
@@ -5071,7 +5071,7 @@ License: For each use you must have a valid license purchased only from above li
 												<!--begin:Menu item-->
 												<div class="menu-item">
 													<!--begin:Menu link-->
-													<a  class="menu-link {% if url_name == 'WelcomeLetter' %}active{% endif %}" href="{% url 'rsp:WelcomeLetter' %}">
+													<a  class="menu-link {% if url_name == 'PermanentContractualWelcomeLetter' %}active{% endif %}" href="{% url 'rsp:PermanentContractualWelcomeLetter' %}">
 														<span class="menu-bullet">
 															<span class="bullet bullet-dot"></span>
 														</span>
@@ -5085,7 +5085,7 @@ License: For each use you must have a valid license purchased only from above li
 										</div>
 										<!--end:Menu item-->
 										<!--begin:Menu item-->
-										<div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+										<div data-kt-menu-trigger="click" class="menu-item menu-accordion {% if 'cos-jo' in request.path %}hover show{% endif %}">
 											<!--begin:Menu link-->
 											<span class="menu-link">
 												<span class="menu-icon">
@@ -5106,7 +5106,7 @@ License: For each use you must have a valid license purchased only from above li
 												<!--begin:Menu item-->
 												<div class="menu-item">
 													<!--begin:Menu link-->
-													<a class="menu-link" href="account/overview.html">
+													<a  class="menu-link {% if url_name == 'CosJoJobOffer' %}active{% endif %}" href="{% url 'rsp:CosJoJobOffer' %}">
 														<span class="menu-bullet">
 															<span class="bullet bullet-dot"></span>
 														</span>
@@ -5118,7 +5118,7 @@ License: For each use you must have a valid license purchased only from above li
 												<!--begin:Menu item-->
 												<div class="menu-item">
 													<!--begin:Menu link-->
-													<a class="menu-link" href="account/settings.html">
+													<a  class="menu-link {% if url_name == 'CosJoNoticeNewlyHired' %}active{% endif %}" href="{% url 'rsp:CosJoNoticeNewlyHired' %}">
 														<span class="menu-bullet">
 															<span class="bullet bullet-dot"></span>
 														</span>
@@ -5130,7 +5130,7 @@ License: For each use you must have a valid license purchased only from above li
 												<!--begin:Menu item-->
 												<div class="menu-item">
 													<!--begin:Menu link-->
-													<a class="menu-link" href="account/security.html">
+													<a  class="menu-link {% if url_name == 'CosJoWelcomeLetter' %}active{% endif %}" href="{% url 'rsp:CosJoWelcomeLetter' %}">
 														<span class="menu-bullet">
 															<span class="bullet bullet-dot"></span>
 														</span>
@@ -5142,11 +5142,11 @@ License: For each use you must have a valid license purchased only from above li
 												<!--begin:Menu item-->
 												<div class="menu-item">
 													<!--begin:Menu link-->
-													<a class="menu-link" href="account/activity.html">
+													<a  class="menu-link {% if url_name == 'CosJoRequirementsList' %}active{% endif %}" href="{% url 'rsp:CosJoRequirementsList' %}">
 														<span class="menu-bullet">
 															<span class="bullet bullet-dot"></span>
 														</span>
-														<span class="menu-title">List of requirements.txt</span>
+														<span class="menu-title">Requirements List</span>
 													</a>
 													<!--end:Menu link-->
 												</div>
