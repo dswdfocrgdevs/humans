@@ -44,6 +44,7 @@ class Command(BaseCommand):
                     end_of_contract=item.get('end_of_contract'),
                     emp_status=item.get('emp_status', ''),
                     nature=item.get('nature', ''),
+                    remarks=item.get('remarks', ''),
                 )
                 print()
             
