@@ -30,7 +30,7 @@ def newly_hired_staff(request):
     context = {
         'title': 'Newly Hired Staff'
     }
-    return render(request, 'rsp/NewlyHiredStaff.html', context)
+    return render(request, 'rsp/NewlyHiredStaff/index.html', context)
 
 def neop(request):
 
@@ -54,38 +54,48 @@ def reports_generation(request):
 
 @csrf_exempt
 def list_newly_hired_staff(request):
-    data = []
-    newly_hired_data = NewlyHiredStaff.objects.all()  
-
     try:
-        for item in newly_hired_data:
-            data.append({
-                'id': item.id,
-                'app_id': item.id,
-                'full_name': item.full_name,
-                'position': item.position,
-                'former_incumbent': item.former_incumbent,
-                'salary': item.salary,
-                'effectivity_of_contract': item.effectivity_of_contract,
-                'end_of_contract': item.end_of_contract,
-                'emp_status': item.emp_status,
-                'nature': item.nature,
-                'area_of_assignment': item.area_of_assignment,
-                'requirements_ok': item.requirements_ok,
-                'remarks': item.remarks,
-            })
+        # Get query params for pagination and search
+        page = int(request.GET.get('page', 1))  # Default page is 1
+        per_page = int(request.GET.get('length', 10))  # Default length is 10
+        search_value = request.GET.get('search[value]', '').strip()  # Get search query
 
-        total = len(data)
-        page = int(request.GET.get('page', 1))
-        per_page = int(request.GET.get('length', 10))
+        # Fetch data and apply search filter if search term exists
+        newly_hired_data = NewlyHiredStaff.objects.all()
+
+        if search_value:
+            newly_hired_data = newly_hired_data.filter(
+                full_name__icontains=search_value
+            )
+
+        # Total records (before pagination)
+        total = newly_hired_data.count()
+
+        # Paginate data
         start = (page - 1) * per_page
-        end = start + per_page
-        paginated_data = data[start:end]
+        paginated_data = newly_hired_data[start:start + per_page]
+
+        # Prepare data for response
+        data = [{
+            'id': item.id,
+            'app_id': item.id,
+            'full_name': item.full_name,
+            'position': item.position,
+            'former_incumbent': item.former_incumbent,
+            'salary': item.salary,
+            'effectivity_of_contract': item.effectivity_of_contract,
+            'end_of_contract': item.end_of_contract,
+            'emp_status': item.emp_status,
+            'nature': item.nature,
+            'area_of_assignment': item.area_of_assignment,
+            'requirements_ok': item.requirements_ok,
+            'remarks': item.remarks,
+        } for item in paginated_data]
 
         return JsonResponse({
-            'data': paginated_data,
-            'recordsTotal': total,
-            'recordsFiltered': total,
+            'data': data,
+            'recordsTotal': total,  # Total records without filtering
+            'recordsFiltered': total,  # Total filtered records after search
         })
 
     except Exception as e:
@@ -95,7 +105,3 @@ def list_newly_hired_staff(request):
             'recordsTotal': 0,
             'recordsFiltered': 0,
         }, status=200)
-
-
-
-    

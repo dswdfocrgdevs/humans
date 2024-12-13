@@ -99,21 +99,7 @@
                             <!--begin::Table-->
                             <table id="hired-table" class="table table-striped table-row-bordered gy-5 gs-7 border rounded">
                                 <thead>
-                                    <tr class="fw-bold fs-6 text-gray-800 px-7">
-                                        <th class="text-center">ACTION</th>
-                                        <th class="text-center">CHECK</th>
-                                        <th class="text-center">FULLNAME</th>
-                                        <th class="text-center">POSITION</th>
-                                        <th class="text-center">FORMER INCUMBENT</th>
-                                        <th class="text-center display-none">BASIC MONHTLY SALARY</th>
-                                        <th class="text-center">EFFECTIVITY OF CONTRACT</th>
-                                        <th class="text-center">END OF CONTRACT</th>
-                                        <th class="text-center">STATUS OF EMPLOYMENT</th>
-                                        <th class="text-center">NATURE</th>
-                                        <th class="text-center">AREA OF ASSIGNMENT</th>
-                                        <th class="text-center">IS REQUIREMENTS OK</th>
-                                        <th class="text-center">REMARKS</th> 
-                                    </tr>
+                        
                                 </thead>
                                 <tbody>
                                     <!-- Data will be inserted here dynamically -->
@@ -142,52 +128,108 @@
             ajax: {
                 url: "{% url 'rsp:list-newly-hired-staff' %}",
                 type: 'GET',
+                data: function(d) {
+                    d.page = Math.floor(d.start / d.length) + 1;  // Set page number
+                    d.length = d.length;  // Number of records per page
+                },
             },
             columns: [
                 { data: 'app_id' },
                 { data: 'app_id' },
-                { data: 'full_name' },
-                { data: 'position' },
-                { data: 'former_incumbent' },
-                { data: 'salary' },
-                { data: 'effectivity_of_contract' },
-                { data: 'end_of_contract' },
-                { data: 'emp_status' },
-                { data: 'nature' },
-                { data: 'area_of_assignment' },
-                { data: 'requirements_ok' },
-                { data: 'remarks' }
+                { data: 'full_name', title: 'Name' },
+                { data: 'position', title: 'Position' },
+                { data: 'former_incumbent', title: 'Former Incumbent' },
+                { 
+                    data: 'salary', 
+                    title: 'Salary',
+                    render: function(data, type, row) {
+                        return numeral(data).format('0,0.00');
+                    }
+                },
+                { data: 'effectivity_of_contract', title:'Contract Effectivity' },
+                { data: 'end_of_contract', title: 'End Contract' },
+                { data: 'emp_status', title:'Status' },
+                { data: 'nature', title: 'Nature' },
+                { data: 'area_of_assignment', title: 'Area of Assignment' },
+                { data: 'requirements_ok', title: 'Requirements' },
+                { data: 'remarks', title: 'Remarks' }
             ],
+            headerCallback: function (thead, data, start, end, display) {
+                $(thead).find('th').addClass('text-center'); // Add center class to all headers
+            },
             columnDefs: [
-                {
-                    targets: 0,
-                    title: 'ACTION',
-                    orderable: false,
-                    searchable: false,
-                    render: function (data) {
-                        return (
-                            '<a href="/checklist" class="link-style">Requirements Checklist</a> |' +
-                            '<a href="/checklist22" class="link-style">Onboarding Checklist</a> |' +
-                            '<a href="/checklist33" class="link-style">Remarks</a> |' +
-                            '<a href="/print" class="link-style">PRINT</a>'
-                        );
-                    },
+            {
+                title: '',
+                sortable: false,
+                targets: 0,
+                render: function(data) {
+                    return `<input type="checkbox" class="dt-checkboxes form-check-input checkbox-items" value="${data}">`;
                 },
-                {
-                    targets: 1,
-                    render: function(data) {
-                        return `<input type="checkbox" class="dt-checkboxes form-check-input checkbox-items" value="${data}">`;
-                    },
+            },
+            {
+                targets: 1,
+                title: 'Action',
+                orderable: false,
+                searchable: false,
+                render: function (data) {
+                    return `
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="actionDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                Actions
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="actionDropdown">
+                                <li><a class="dropdown-item" href="/checklist">Requirements Checklist</a></li>
+                                <li><a class="dropdown-item" href="/checklist22">Onboarding Checklist</a></li>
+                                <li><a class="dropdown-item" href="/checklist33">Remarks</a></li>
+                                <li><a class="dropdown-item" href="/print">PRINT</a></li>
+                            </ul>
+                        </div>
+                    `;
                 },
+            },
+                
   
             ],
-            dom: "<'row mb-2'<'col-sm-6 d-flex align-items-center justify-content-start dt-toolbar'l><'col-sm-6 d-flex align-items-center justify-content-end dt-toolbar'f>" +
-            ">" +
-            "<'table-responsive'tr>" +
-            "<'row'" +
-            "<'col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start'i>" +
-            "<'col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end'p>" +
-            ">",
+            dom: "<'row mb-2'<'col-sm-6 d-flex align-items-center justify-content-start dt-toolbar'l><'col-sm-6 d-flex align-items-center justify-content-end dt-toolbar'Bf>>" +
+                "<'table-responsive'tr>" +
+                "<'row'" +
+                "<'col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start'i>" +
+                "<'col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end'p>" +
+                ">",
+
+            buttons: [
+                {
+                    extend: 'collection',
+                    text: 'Export',
+                    className: 'btn btn-secondary', // Basic button styling
+                    buttons: [
+                        {
+                            extend: 'excelHtml5',
+                            text: 'Export to Excel',
+                            title: 'Newly Hired Staff',
+                            exportOptions: {
+                                columns: ':visible' // Export only visible columns
+                            }
+                        },
+                        {
+                            extend: 'csvHtml5',
+                            text: 'Export to CSV',
+                            title: 'Newly Hired Staff',
+                            exportOptions: {
+                                columns: ':visible' // Export only visible columns
+                            }
+                        },
+                        {
+                            extend: 'pdfHtml5',
+                            text: 'Export to PDF',
+                            title: 'Newly Hired Staff',
+                            exportOptions: {
+                                columns: ':visible' // Export only visible columns
+                            }
+                        }
+                    ]
+                }
+            ],
         });   
    });
 </script>
