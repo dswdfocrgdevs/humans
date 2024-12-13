@@ -5027,7 +5027,7 @@ License: For each use you must have a valid license purchased only from above li
 										</div>
 										<!--end:Menu item-->
 										<!--begin:Menu item-->
-										<div data-kt-menu-trigger="click" class="menu-item menu-accordion {% if url_name == 'PermanentContractualCongratulatoryLetter' %}hover show{% endif %}">
+										<div data-kt-menu-trigger="click" class="menu-item menu-accordion {% if 'permanent-contractual' in request.path %}hover show{% endif %}">
 											<!--begin:Menu link-->
 											<span class="menu-link">
 												<span class="menu-icon">
@@ -5059,7 +5059,7 @@ License: For each use you must have a valid license purchased only from above li
 												<!--begin:Menu item-->
 												<div class="menu-item">
 													<!--begin:Menu link-->
-													<a class="menu-link" href="pages/user-profile/projects.html">
+													<a  class="menu-link {% if url_name == 'NoticeNewlyHired' %}active{% endif %}" href="{% url 'rsp:NoticeNewlyHired' %}">
 														<span class="menu-bullet">
 															<span class="bullet bullet-dot"></span>
 														</span>
@@ -5071,7 +5071,7 @@ License: For each use you must have a valid license purchased only from above li
 												<!--begin:Menu item-->
 												<div class="menu-item">
 													<!--begin:Menu link-->
-													<a class="menu-link" href="pages/user-profile/campaigns.html">
+													<a  class="menu-link {% if url_name == 'WelcomeLetter' %}active{% endif %}" href="{% url 'rsp:WelcomeLetter' %}">
 														<span class="menu-bullet">
 															<span class="bullet bullet-dot"></span>
 														</span>

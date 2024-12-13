@@ -2,7 +2,7 @@ from django.urls import path
 from django.conf import settings
 from .views.views import dashboard, onboarding_forms, newly_hired_staff, neop, cos_with_guidelines, reports_generation, list_newly_hired_staff, employee_search_data
 
-from rsp.views.viewsPermanentContractual import CongratulatoryLetter as PermanentContractualCongratulatoryLetter
+from rsp.views.viewsPermanentContractual import CongratulatoryLetter as PermanentContractualCongratulatoryLetter, NoticeNewlyHired, WelcomeLetter
 
 from rsp.views.viewsCosJo import CongratulatoryLetter as CosJoCongratulatoryLetter
 
@@ -22,6 +22,8 @@ urlpatterns = [
     path('employee_search_data', employee_search_data, name='employee_search_data'),
 
     path('permanent-contractual/congratulatory-letter', PermanentContractualCongratulatoryLetter, name='PermanentContractualCongratulatoryLetter'),
+    path('permanent-contractual/notice-newly-hired', NoticeNewlyHired, name='NoticeNewlyHired'),
+    path('permanent-contractual/welcome-letter', WelcomeLetter, name='WelcomeLetter'),
 
     path('cos-jo/congratulatory-letter', CosJoCongratulatoryLetter, name='CosJoCongratulatoryLetter'),
 
