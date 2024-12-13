@@ -13,6 +13,7 @@ from django.views.decorators.csrf import csrf_exempt
 import requests
 import os
 from rsp.models import NewlyHiredStaff
+from ..utils import search_employees
 
 def dashboard(request):
     context = {
@@ -105,3 +106,13 @@ def list_newly_hired_staff(request):
             'recordsTotal': 0,
             'recordsFiltered': 0,
         }, status=200)
+
+
+def employee_search_data(request):
+    query = request.GET.get('query', '')
+    
+    # Use the utility function to get the employee data
+    employee_data = search_employees(query)
+    
+    # Return the data as a JSON response
+    return JsonResponse({'results': employee_data})
