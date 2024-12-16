@@ -14,11 +14,31 @@ import requests
 import os
 from rsp.models import NewlyHiredStaff
 from ..utils import search_employees
+from django.db.models import Count, Case, When, Value, CharField
 
 def dashboard(request):
+    count_hired_emp_status = NewlyHiredStaff.objects.values('emp_status').annotate(count=Count('id')).order_by('-count')
+    count_hired_nature = (
+        NewlyHiredStaff.objects.annotate(
+            grouped_nature=Case(
+                When(nature__isnull=True, then=Value('N/A')),
+                When(nature='N/A', then=Value('N/A')),
+                default='nature',
+                output_field=CharField()
+            )
+        )
+        .values('grouped_nature')
+        .annotate(count=Count('id'))
+        .order_by('grouped_nature')
+        .order_by('-count')
+    )
+
     context = {
-        'title': 'Dashboard'
+        'title': 'Dashboard',
+        'count_hired_emp_status': count_hired_emp_status,
+        'count_hired_nature' : count_hired_nature
     }
+
     return render(request, 'rsp/Dashboard.html', context)
 
 def onboarding_forms(request):
