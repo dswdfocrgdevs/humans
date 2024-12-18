@@ -232,16 +232,23 @@ def PostNeopStaffInfo(request):
         except NewlyHiredStaff.DoesNotExist:
             return JsonResponse({"error": "Staff not found"}, status=404)
 
-        # Create a new StaffNeopInfo record
-        staff_neop_info = StaffNeopInfo.objects.create(
-            staff_id=staff,
-            assumption_date=assumption_date,
-            date_end_third=date_end_third,
-            date_end_sixth=date_end_sixth
+        # Check if StaffNeopInfo exists for the given staff
+        staff_neop_info, created = StaffNeopInfo.objects.update_or_create(
+            staff_id=staff,  # Use staff instance for the foreign key
+            defaults={
+                'assumption_date': assumption_date,
+                'date_end_third': date_end_third,
+                'date_end_sixth': date_end_sixth,
+            }
         )
 
         # Return success response
-        return JsonResponse({"message": "Staff Neop Info saved successfully"}, status=200)
+        if created:
+            message = "Staff Neop Info created successfully"
+        else:
+            message = "Staff Neop Info updated successfully"
+
+        return JsonResponse({"message": message}, status=200)
 
     except json.JSONDecodeError:
         return JsonResponse({"error": "Invalid JSON data"}, status=400)
