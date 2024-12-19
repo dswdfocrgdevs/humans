@@ -1,5 +1,5 @@
 from django.db import models
-
+from kt_auth.models import CustomUser
 # Create your models here.
 
 
@@ -10,17 +10,117 @@ from django.db import models
 class NewlyHiredStaff(models.Model):
     requirements_ok = models.CharField(max_length=100,default=False,null=True)  # True if requirements are met
     full_name = models.CharField(max_length=255,null=True)  # Full name of the staff
+    first_name = models.CharField(max_length=255,null=True)
+    middle_name = models.CharField(max_length=255,null=True)
+    last_name = models.CharField(max_length=255,null=True)
     position = models.CharField(max_length=100,null=True)  # Job position
+    address = models.CharField(max_length=100,null=True)
+    age = models.CharField(max_length=100,null=True)
+    dob = models.CharField(max_length=100,null=True)
     area_of_assignment = models.CharField(max_length=100,null=True)  # Work location
     former_incumbent = models.CharField(max_length=255, blank=True, null=True)  # Name of previous holder of the position
     salary = models.DecimalField(max_digits=10, decimal_places=2,null=True)  # Salary amount
+    salary_grade = models.CharField(max_length=100,null=True)
     effectivity_of_contract = models.CharField(max_length=100, null=True)  # Start date of the contract
     end_of_contract = models.CharField(max_length=100, null=True)  # End date of the contract
     emp_status = models.CharField(max_length=100, null=True)
+    fundsource = models.CharField(max_length=100,null=True)
+    program = models.CharField(max_length=100,null=True)
     nature = models.CharField(max_length=100,null=True)  # Nature of employment (e.g., permanent, temporary)
     created_at = models.DateTimeField(auto_now_add=True)  # Automatically set on creation
     updated_at = models.DateTimeField(auto_now=True)      # Automatically update on save
     remarks = models.TextField(null=True)
+    picture = models.CharField(max_length=100,null=True)
+    
 
     def __str__(self):
         return f"{self.full_name} - {self.position}"
+    
+
+class NewlyHiredStaffStreamline(models.Model):
+    requirements_ok = models.CharField(max_length=100,default=False,null=True)  # True if requirements are met
+    full_name = models.CharField(max_length=255,null=True)  # Full name of the staff
+    first_name = models.CharField(max_length=255,null=True)
+    middle_name = models.CharField(max_length=255,null=True)
+    last_name = models.CharField(max_length=255,null=True)
+    position = models.CharField(max_length=100,null=True)  # Job position
+    address = models.CharField(max_length=100,null=True)
+    age = models.CharField(max_length=100,null=True)
+    dob = models.CharField(max_length=100,null=True)
+    area_of_assignment = models.CharField(max_length=100,null=True)  # Work location
+    former_incumbent = models.CharField(max_length=255, blank=True, null=True)  # Name of previous holder of the position
+    salary = models.DecimalField(max_digits=10, decimal_places=2,null=True)  # Salary amount
+    salary_grade = models.CharField(max_length=100,null=True)
+    effectivity_of_contract = models.CharField(max_length=100, null=True)  # Start date of the contract
+    end_of_contract = models.CharField(max_length=100, null=True)  # End date of the contract
+    emp_status = models.CharField(max_length=100, null=True)
+    fundsource = models.CharField(max_length=100,null=True)
+    program = models.CharField(max_length=100,null=True)
+    nature = models.CharField(max_length=100,null=True)  # Nature of employment (e.g., permanent, temporary)
+    created_at = models.DateTimeField(auto_now_add=True)  # Automatically set on creation
+    updated_at = models.DateTimeField(auto_now=True)      # Automatically update on save
+    remarks = models.TextField(null=True)
+    picture = models.CharField(max_length=100,null=True)
+    
+
+    def __str__(self):
+        return f"{self.full_name} - {self.position}"
+    
+    class Meta:
+        managed = False
+        db_table = 'rsp_newlyhiredstaff_streamline'
+
+
+class RspFormType(models.Model):
+    name = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'rsp_form_type'
+
+
+class RspOnboardingLayout(models.Model):
+    form_type = models.ForeignKey(RspFormType, models.DO_NOTHING)
+    content = models.TextField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'rsp_onboarding_layout'
+
+
+class RspEmpstatus(models.Model):
+    name = models.CharField(max_length=64, unique=True)
+    acronym = models.CharField(max_length=64, unique=True)
+    status = models.BooleanField()
+    upload_by = models.ForeignKey(CustomUser, models.DO_NOTHING)
+    order = models.BooleanField()
+
+    def __str__(self):
+        return self.name
+        
+    class Meta:
+        db_table = 'rsp_empstatus'
+
+
+class RspHiredreq(models.Model):
+    name = models.CharField(max_length=255)
+    empstatus =  models.ForeignKey(RspEmpstatus, models.DO_NOTHING)
+    is_required = models.BooleanField()
+    status = models.BooleanField()
+    upload_by = models.ForeignKey(CustomUser, models.DO_NOTHING)
+
+    class Meta:
+        managed = False
+        db_table = 'rsp_hired_requirements'
+
+
+class RspHiredStreamlinereq(models.Model):
+    name = models.CharField(max_length=255)
+    empstatus =  models.ForeignKey(RspEmpstatus, models.DO_NOTHING)
+    is_required = models.BooleanField()
+    status = models.BooleanField()
+    upload_by = models.ForeignKey(CustomUser, models.DO_NOTHING)
+
+    class Meta:
+        managed = False
+        db_table = 'rsp_hired_requirements_streamline'
