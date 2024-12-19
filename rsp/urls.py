@@ -16,7 +16,6 @@ urlpatterns = [
     path('newly-hired-staff-streamline', newly_hired_staff_streamline, name='newly-hired-staff-streamline'),
     path('list-of-endorsement-title', list_endorse_applicants, name='list_endorse_applicants'),
     path('list/of/endorsed/applicants/data/<int:pk>', list_endorse_applicants_data, name='list_endorse_applicants_data'),
-    path('neop', neop, name='neop'),
     path('cos-with-guidelines', cos_with_guidelines, name='cos-with-guidelines'),
     path('reports-generation', reports_generation, name='reports-generation'),
     path('list_newly_hired_staff', list_newly_hired_staff, name='list-newly-hired-staff'),
