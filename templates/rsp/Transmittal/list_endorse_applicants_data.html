@@ -1,0 +1,227 @@
+{% extends 'layout.html' %}
+{% block content %}
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="{% static 'assets/plugins/custom/prismjs/prismjs.bundle.css' %}" />
+<link rel="stylesheet" href="{% static 'assets/plugins/custom/datatables/datatables.bundle.css' %}" />
+<link rel="stylesheet" href="{% static 'assets/plugins/global/plugins.bundle.css' %}" />
+<link rel="stylesheet" href="{% static 'assets/css/style.bundle.css' %}" />
+<style>
+.link-style {
+    color: #337ab7; /* Link color */
+    text-decoration: none; /* Removes underline */
+    cursor: pointer; /* Pointer cursor on hover */
+}
+
+.link-style:hover {
+    text-decoration: underline; /* Adds underline on hover */
+    color: darkblue; /* Changes color slightly on hover */
+}
+.select2-container {
+    z-index: 9999 !important;
+}
+.select2-container--open {
+    z-index: 99999 !important;
+}
+</style>
+
+<div class="d-flex flex-column flex-column-fluid">
+    <!--begin::Toolbar-->
+    <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+        <!--begin::Toolbar container-->
+        <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
+            <!--begin::Page title-->
+            <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+                <!--begin::Title-->
+                <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0">{{title}}</h1>
+                <!--end::Title-->
+                <!--begin::Breadcrumb-->
+                <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+                    <!--begin::Item-->
+                    <li class="breadcrumb-item text-muted">
+                        <a href="#" class="text-muted text-hover-primary">Home</a>
+                    </li>
+                    <!--end::Item-->
+                    <!--begin::Item-->
+                    <li class="breadcrumb-item">
+                        <span class="bullet bg-gray-500 w-5px h-2px"></span>
+                    </li>
+                    <!--end::Item-->
+                    <!--begin::Item-->
+                    <li class="breadcrumb-item text-muted">{{title}}</li>
+                    <!--end::Item-->
+                </ul>
+                <!--end::Breadcrumb-->
+            </div>
+            <!--end::Page title-->
+            <!--begin::Actions-->
+
+            <!--end::Actions-->
+        </div>
+        <!--end::Toolbar container-->
+    </div>
+    <!--end::Toolbar-->
+    <!--begin::Content-->
+    <div id="kt_app_content" class="app-content flex-column-fluid">
+        <!--begin::Content container-->
+        <div id="kt_app_content_container" class="app-container container-fluid">
+        </div>
+    </div>
+</div>
+
+<div id="kt_app_content" class="app-content flex-column-fluid">
+    <!--begin::Content container-->
+    <div id="kt_app_content_container" class="container-fluid">
+        <div class="row g-5 g-xl-12">
+            <!--begin::Applicant Details-->
+            <div class="col-lg-8">
+                <div class="card card-custom">
+                    <div class="card-header">
+                        <h3 class="card-title">Applicant Details</h3>
+                    </div>
+                    <div class="card-body">
+                        {% if applicant %}
+                            <p><strong>Subject:</strong> {{ applicant.subject }}</p>
+                            <p><strong>Transmitted Date:</strong> {{ applicant.datetime_created }}</p>
+                            <p><strong>Created By:</strong> {{ applicant.created_by }}</p>
+                        {% else %}
+                            <p>No applicant data available.</p>
+                        {% endif %}
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped" id="endorse_tbl_data">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>First Name</th>
+                                        <th>Last Name</th>
+                                        <th>Middle Name</th>
+                                        <th class="text-center">Position</th>
+                                        <th class="text-center">Salary Rate</th>
+                                        <th class="text-center">Salary Grade</th>
+                                        <th class="text-center">Date Transmitted</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for row in endorsement_data %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ row.fname }}</td>
+                                        <td>{{ row.lname }}</td>
+                                        <td>{{ row.mname }}</td>
+                                        <td class="text-center">{{ row.position|safe }}</td>
+                                        <td class="text-center">{{ row.salary_rate }}</td>
+                                        <td class="text-center">{{ row.salary_grade }}</td>
+                                        <td class="text-center">{{ row.date_transmitted }}</td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="8" class="text-center">No endorsement data found.</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--end::Applicant Details-->
+
+            <!--begin::Track and Trace-->
+            <div class="col-lg-4">
+                <div class="card card-custom">
+                    <div class="card-header">
+                        <h3 class="card-title"><i class="fas fa-truck"></i> Track and Trace</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="timeline timeline-6">
+                            <!-- Stream 1 -->
+                            <div class="timeline-item">
+                                <div class="timeline-badge">
+                                    <i class="fa fa-circle text-primary"></i>
+                                </div>
+                                <div class="timeline-content">
+                                    <p><strong>{{ applicant.subject|upper }}</strong></p>
+                                    <p>To: {{ applicant.to|upper }}</p>
+                                    <p>From: {{ applicant.froms|upper }}</p>
+                                    {% if applicant.status == 0 %}
+                                    <p>Status: <span class="badge badge-secondary">Pending</span></p>
+                                    {% endif %}
+                                    <span>Created By: {{ applicant.created_by }}</span><br>
+                                    <span class="text-muted">{{ applicant.datetime_created }}</span>
+                                </div>
+                            </div>
+                            {% if applicant.recieved_by %}
+                            <!-- Stream 2 -->
+                            <div class="timeline-item">
+                                <div class="timeline-badge">
+                                    <i class="fa fa-circle text-success"></i>
+                                </div>
+                                <div class="timeline-content">
+                                    <p>Status: 
+                                        <span class="badge badge-success">
+                                            {% if applicant.status == 1 %}Transmittal Received{% endif %}
+                                        </span>
+                                    </p>
+                                    <p>Remarks: {{ applicant.remarks|upper }}</p>
+                                    <span>Received By: {{ applicant.recieved_by }}</span><br>
+                                    <span class="text-muted">{{ applicant.datetime_recieved }}</span>
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--end::Track and Trace-->
+        </div>
+    </div>
+    <!--end::Content container-->
+</div>
+{% endblock content %}
+
+{% block script %}
+<script type="text/javascript">
+    $('#endorse_tbl_data').DataTable({
+        'order': [[ 3, 'desc' ]],
+        dom: "<'row mb-2'<'col-sm-6 d-flex align-items-center justify-content-start dt-toolbar'l><'col-sm-6 d-flex align-items-center justify-content-end dt-toolbar'Bf>>" +
+            "<'table-responsive'tr>" +
+            "<'row'" +
+            "<'col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start'i>" +
+            "<'col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end'p>" +
+            ">",
+
+        buttons: [
+            {
+                extend: 'collection',
+                text: 'Export',
+                className: 'btn btn-secondary', // Basic button styling
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: 'Export to Excel',
+                        title: 'Newly Hired Staff',
+                        exportOptions: {
+                            columns: ':visible' // Export only visible columns
+                        }
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: 'Export to CSV',
+                        title: 'Newly Hired Staff',
+                        exportOptions: {
+                            columns: ':visible' // Export only visible columns
+                        }
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        text: 'Export to PDF',
+                        title: 'Newly Hired Staff',
+                        exportOptions: {
+                            columns: ':visible' // Export only visible columns
+                        }
+                    }
+                ]
+            }
+        ],
+    });
+</script>
+{% endblock %}

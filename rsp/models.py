@@ -124,3 +124,30 @@ class RspHiredStreamlinereq(models.Model):
     class Meta:
         managed = False
         db_table = 'rsp_hired_requirements_streamline'
+
+
+class LibNeopActivities(models.Model):
+    name = models.CharField(max_length=100,null=True)
+    description = models.CharField(max_length=255,null=True)
+    milestone = models.PositiveSmallIntegerField(null=True)
+    created_at = models.DateTimeField(auto_now_add=True)  # Automatically set on creation
+    updated_at = models.DateTimeField(auto_now=True)      # Automatically update on save
+
+class StaffNeopActivities(models.Model):
+    staff_id = models.ForeignKey(NewlyHiredStaff, on_delete=models.CASCADE, related_name='neop_activities')
+    lib_neop_id = models.ForeignKey(LibNeopActivities, on_delete=models.CASCADE, related_name='staff_activities')
+    date = models.DateField(null=True)  # Field to store the date of the activity
+    remarks = models.TextField(blank=True, null=True)  # Field to store additional remarks (optional)
+
+    def __str__(self):
+        return f'{self.staff_id.full_name} - {self.lib_neop_id.name}'
+
+    # class Meta:
+    #     unique_together = ('staff_id', 'lib_neop_id')  # Ensure a staff can't have duplicate activities
+
+class StaffNeopInfo(models.Model):
+    staff_id = models.ForeignKey(NewlyHiredStaff, on_delete=models.CASCADE, related_name='neop_info_activities')
+    assumption_date = models.DateField(null=True, blank=True)
+    date_end_third = models.DateField(null=True, blank=True)
+    date_end_sixth = models.DateField(null=True, blank=True)
+    

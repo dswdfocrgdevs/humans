@@ -1,6 +1,6 @@
 import requests
 from django.core.management.base import BaseCommand
-from rsp.models import NewlyHiredStaff
+from rsp.models import NewlyHiredStaffStreamline
 import os
 class Command(BaseCommand):
     help = 'Fetch and store hired applicants from the external API'
@@ -8,7 +8,7 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
 
 
-        base_url = os.getenv("IRIS_API_NEWLY_HIRED")
+        base_url = os.getenv("IRIS_API_NEWLY_HIRED_STREAMLINE")
         iris_token = os.getenv("IRIS_API_TOKEN")
         headers = {"Authorization": "Token " + iris_token}
 
@@ -33,7 +33,7 @@ class Command(BaseCommand):
             # Store the data in the database
             for item in data['results']:
                 # Save each applicant to the database
-                NewlyHiredStaff.objects.create(
+                NewlyHiredStaffStreamline.objects.create(
                     requirements_ok=item.get('requirements_ok',''),
                     full_name=item.get('full_name', ''),
                     first_name=item.get('first_name', ''),

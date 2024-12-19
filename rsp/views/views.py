@@ -12,9 +12,11 @@ from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 import requests
 import os
-from rsp.models import NewlyHiredStaff
+from rsp.models import NewlyHiredStaff, RspOnboardingLayout, NewlyHiredStaffStreamline
 from ..utils import search_employees
 from django.db.models import Count, Case, When, Value, CharField
+from django.db.models import Q
+from django.template import Context, Template
 
 def dashboard(request):
     count_hired_emp_status = NewlyHiredStaff.objects.values('emp_status').annotate(count=Count('id')).order_by('-count')
@@ -52,6 +54,12 @@ def newly_hired_staff(request):
         'title': 'Newly Hired Staff'
     }
     return render(request, 'rsp/NewlyHiredStaff/index.html', context)
+
+def newly_hired_staff_streamline(request):
+    context = {
+        'title': 'Newly Hired Staff Streamline'
+    }
+    return render(request, 'rsp/NewlyHiredStaff/index-streamline.html', context)
 
 def neop(request):
 
@@ -126,6 +134,61 @@ def list_newly_hired_staff(request):
             'recordsTotal': 0,
             'recordsFiltered': 0,
         }, status=200)
+    
+
+@csrf_exempt
+def list_newly_hired_staff_streamline(request):
+    try:
+        # Get query params for pagination and search
+        page = int(request.GET.get('page', 1))  # Default page is 1
+        per_page = int(request.GET.get('length', 10))  # Default length is 10
+        search_value = request.GET.get('search[value]', '').strip()  # Get search query
+
+        # Fetch data and apply search filter if search term exists
+        newly_hired_data = NewlyHiredStaffStreamline.objects.all()
+
+        if search_value:
+            newly_hired_data = newly_hired_data.filter(
+                full_name__icontains=search_value
+            )
+
+        # Total records (before pagination)
+        total = newly_hired_data.count()
+
+        # Paginate data
+        start = (page - 1) * per_page
+        paginated_data = newly_hired_data[start:start + per_page]
+
+        # Prepare data for response
+        data = [{
+            'id': item.id,
+            'app_id': item.id,
+            'full_name': item.full_name,
+            'position': item.position,
+            'former_incumbent': item.former_incumbent,
+            'salary': item.salary,
+            'effectivity_of_contract': item.effectivity_of_contract,
+            'end_of_contract': item.end_of_contract,
+            'emp_status': item.emp_status,
+            'nature': item.nature,
+            'area_of_assignment': item.area_of_assignment,
+            'requirements_ok': item.requirements_ok,
+            'remarks': item.remarks,
+        } for item in paginated_data]
+
+        return JsonResponse({
+            'data': data,
+            'recordsTotal': total,  # Total records without filtering
+            'recordsFiltered': total,  # Total filtered records after search
+        })
+
+    except Exception as e:
+        print(f"Error: {e}")
+        return JsonResponse({
+            'data': [],
+            'recordsTotal': 0,
+            'recordsFiltered': 0,
+        }, status=200)
 
 
 def employee_search_data(request):
@@ -136,3 +199,44 @@ def employee_search_data(request):
     
     # Return the data as a JSON response
     return JsonResponse({'results': employee_data})
+
+
+def print_notice_of_appointed_applicants(request, pk):
+    app = NewlyHiredStaff.objects.filter(Q(id=pk)).first()
+    context = {
+        'applicants': app,
+    }
+    return render(request, 'rsp/NewlyHiredStaff/print_notice_of_appointed.html', context)
+
+def print_onboarding_forms(request, pk, ids=None):
+    id_list = ids.split(',')
+    app = NewlyHiredStaff.objects.filter(Q(id__in=id_list))
+    context = {
+        'app': app,
+        'pk': pk
+    }
+    return render(request, 'rsp/NewlyHiredStaff/print_onboarding_forms.html', context)
+
+
+@csrf_exempt
+def print_req_checklist(request, pk=None):
+    if pk != '0':
+        ids = pk.split(',')
+        all = NewlyHiredStaff.objects.filter(Q(id__in=ids))
+        context = {
+            'pk': pk,
+            'all': all,
+        }
+    return render(request, 'rsp/NewlyHiredStaff/print_requirements_checklist.html', context)
+
+
+@csrf_exempt
+def print_req_checklist_streamline(request, pk=None):
+    if pk != '0':
+        ids = pk.split(',')
+        all = NewlyHiredStaffStreamline.objects.filter(Q(id__in=ids))
+        context = {
+            'pk': pk,
+            'all': all,
+        }
+    return render(request, 'rsp/NewlyHiredStaff/print_requirements_checklist_streamline.html', context)

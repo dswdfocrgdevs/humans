@@ -4,8 +4,9 @@ from .views.views import dashboard, onboarding_forms, newly_hired_staff, neop, c
     print_req_checklist, list_newly_hired_staff_streamline, newly_hired_staff_streamline, print_req_checklist_streamline
 from rsp.transmittal.views import list_endorse_applicants, list_endorse_applicants_data
 from rsp.views.viewsPermanentContractual import CongratulatoryLetter as PermanentContractualCongratulatoryLetter, NoticeNewlyHired as PermanentContractualNoticeNewlyHired, WelcomeLetter as PermanentContractualWelcomeLetter
-
 from rsp.views.viewsCosJo import JobOffer as CosJoJobOffer, NoticeNewlyHired as CosJoNoticeNewlyHired, WelcomeLetter as CosJoWelcomeLetter, RequirementsList as CosJoRequirementsList
+from rsp.views.viewsNeop import Neop, GetLibNeopActivities, PostLibNeopActivities, ListNewlyHiredNeop, PostNeopStaffInfo
+
 app_name = 'rsp'
 
 urlpatterns = [
@@ -37,7 +38,11 @@ urlpatterns = [
     path('cos-jo/welcome-letter', CosJoWelcomeLetter, name='CosJoWelcomeLetter'),
     path('cos-jo/requirements-list', CosJoRequirementsList, name='CosJoRequirementsList'),
 
-    
+    path('neop',Neop,name="Neop"),
+    path('neop/lib/activities', GetLibNeopActivities, name="GetLibNeopActivities"),
+    path('neop/staff/activities/save', PostLibNeopActivities, name="PostLibNeopActivities"),
+    path('neop/staff/list', ListNewlyHiredNeop, name="ListNewlyHiredNeop"),
+     path('neop/staff/save', PostNeopStaffInfo, name="PostNeopStaffInfo"),
     # path('error', DashboardsView.as_view(template_name = 'non-exist-file.html'), name='Error Page'),
 ]
 
