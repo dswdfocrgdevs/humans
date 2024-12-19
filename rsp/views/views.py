@@ -13,11 +13,32 @@ from django.views.decorators.csrf import csrf_exempt
 import requests
 import os
 from rsp.models import NewlyHiredStaff
+from ..utils import search_employees
+from django.db.models import Count, Case, When, Value, CharField
 
 def dashboard(request):
+    count_hired_emp_status = NewlyHiredStaff.objects.values('emp_status').annotate(count=Count('id')).order_by('-count')
+    count_hired_nature = (
+        NewlyHiredStaff.objects.annotate(
+            grouped_nature=Case(
+                When(nature__isnull=True, then=Value('N/A')),
+                When(nature='N/A', then=Value('N/A')),
+                default='nature',
+                output_field=CharField()
+            )
+        )
+        .values('grouped_nature')
+        .annotate(count=Count('id'))
+        .order_by('grouped_nature')
+        .order_by('-count')
+    )
+
     context = {
-        'title': 'Dashboard'
+        'title': 'Dashboard',
+        'count_hired_emp_status': count_hired_emp_status,
+        'count_hired_nature' : count_hired_nature
     }
+
     return render(request, 'rsp/Dashboard.html', context)
 
 def onboarding_forms(request):
@@ -105,3 +126,13 @@ def list_newly_hired_staff(request):
             'recordsTotal': 0,
             'recordsFiltered': 0,
         }, status=200)
+
+
+def employee_search_data(request):
+    query = request.GET.get('query', '')
+    
+    # Use the utility function to get the employee data
+    employee_data = search_employees(query)
+    
+    # Return the data as a JSON response
+    return JsonResponse({'results': employee_data})
