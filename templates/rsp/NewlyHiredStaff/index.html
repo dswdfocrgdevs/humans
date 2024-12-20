@@ -1,5 +1,6 @@
 {% extends 'layout.html' %}
 {% block content %}
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="{% static 'assets/plugins/custom/prismjs/prismjs.bundle.css' %}" />
 <link rel="stylesheet" href="{% static 'assets/plugins/custom/datatables/datatables.bundle.css' %}" />
 <link rel="stylesheet" href="{% static 'assets/plugins/global/plugins.bundle.css' %}" />
@@ -15,7 +16,12 @@
     text-decoration: underline; /* Adds underline on hover */
     color: darkblue; /* Changes color slightly on hover */
 }
-
+.select2-container {
+    z-index: 9999 !important;
+}
+.select2-container--open {
+    z-index: 99999 !important;
+}
 </style>
 
 <div class="d-flex flex-column flex-column-fluid">
@@ -74,19 +80,46 @@
                     <!--begin::Header-->
                     <div class="card-header border-0 pt-5 d-flex justify-content-between align-items-center">
                         <div class="d-flex">
-                            <a href="#" class="btn btn-sm fw-bold btn-primary me-2" data-bs-toggle="modal" data-bs-target="#kt_modal_create_app">
+                            <a href="{% url 'rsp:list_endorse_applicants' %}" target="_blank" class="btn btn-sm fw-bold btn-primary me-2>
                                 <i class="fas fa-list"></i> List of Transmittal
                             </a>
-                            <a href="#" class="btn btn-sm fw-bold btn-secondary">
+                            <a href="{% url 'rsp:newly-hired-staff-streamline' %}" target="_blank" class="btn btn-sm fw-bold btn-secondary">
                                 <i class="fas fa-stream"></i> List of Streamline Applicants
                             </a>
                         </div>
                     
                         <div class="d-flex">
+                            <div class="dropdown">
+                                <button class="btn btn-sm me-2 btn-primary dropdown-toggle" type="button" id="actionDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Generate Onboarding Forms
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#on_boarding_modals" id="cong-letter" data-id="3" data-title="Congratulatory Letter">
+                                            Congratulatory Letter
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#on_boarding_modals" id="not-hired" data-id="2" data-title="Intro Letter">
+                                            Intro Letter
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#on_boarding_modals" id="wel-letter" data-id="1" data-title="Welcome Letter">
+                                            Welcome Letter
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#on_boarding_modals" id="job-offer" data-id="4" data-title="Certificate of Completion">
+                                            Certificate of Completion
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
                             <a href="#" class="btn btn-sm fw-bold btn-success me-2" data-bs-toggle="modal" data-bs-target="#kt_modal_create_app">
                                 <i class="fas fa-file-excel"></i> Generate Transmittal
                             </a>
-                            <a href="#" class="btn btn-sm fw-bold btn-info">
+                            <a href="{% url 'rsp:print_req_checklist' 0 %}" id="generate-template-btn" target="_blank" class="gen_template btn btn-sm fw-bold btn-info">
                                 <i class="fas fa-file-excel"></i> Generate Checklist
                             </a>
                         </div>
@@ -116,12 +149,112 @@
 
     </div>
 </div>
+<div class="modal fade" role="dialog" aria-hidden="true" data-bs-backdrop="static" id="on_boarding_modals">
+    <div class="modal-dialog modal-dialog-centered mw-900px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="ki-duotone ki-cross fs-2x"><span class="path1"></span><span class="path2"></span></i>
+                </div>
+            </div>
+            <div class="modal-body">
+                <h2>Search Employees</h2>
+                <form id="employee-form">
+                    <div class="mb-3">
+                        <input type="hidden" id="type_id">
+                        <label for="employees" class="form-label">Select Employees</label>
+                        <select id="employees" class="form-control" name="employees[]" multiple="multiple"></select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock content %}
 
 {% block script %}
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script type="text/javascript">
+    $('#generate-template-btn').on('click', function(e) {
+        var selectedIds = $('.row-select:checked').length;
+        if (selectedIds === 0) {
+            e.preventDefault(); // Prevent the default action of the button
+            Swal.fire("Information", 'No record seleted !', "info");
+        }
+    });
+
+    $(document).on('change', '.row-select', function () {
+        var selectedIds = [];
+        $('.row-select:checked').each(function () {
+            selectedIds.push($(this).val());
+        });
+
+        $(document).on('click', '.gen_template', function (e) {
+            if ($(this).hasClass('gen_template')) {
+                var href = "{% url 'rsp:print_req_checklist' 0 %}".replace('0', selectedIds.join(','));
+                $(this).attr('href', href);
+            }
+        });
+    });
 
     $(document).ready(function () {
+        // Initialize Select2 with AJAX
+        $('#employees').select2({
+            placeholder: 'Search for employees',
+            ajax: {
+                url: '{% url "rsp:employee_search_data" %}', // Django URL for searching employees
+                dataType: 'json',
+                delay: 250, // Delay in milliseconds
+                data: function(params) {
+                    return {
+                        term: params.term // Search term sent to the server
+                    };
+                },
+                processResults: function(data) {
+                    console.log(data.results)
+                    return {
+                       
+                        results: data.results.map(item => ({
+                            id: item.id,
+                            text: item.full_name
+                        }))
+                    };
+                }
+            },
+            minimumInputLength: 1 // Minimum characters to start the search
+        });
+
+        // Handle form submission
+        $('#employee-form').on('submit', function(e) {
+            e.preventDefault();
+            const selectedEmployees = $('#employees').val();
+            console.log('Selected employees:', selectedEmployees)
+
+            if (!selectedEmployees || selectedEmployees.length === 0) {
+                alert('Please select at least one employee.');
+                return;
+            }
+
+            // Example logic for generating the URL
+            const pk = $('#type_id').val(); // Replace with actual name logic if needed
+            const ids = selectedEmployees.join(','); // Assuming you want the first selected employee's ID for the URL
+
+            const url = `/rsp/print/onboarding/form/${pk}/${ids}`;
+            console.log('Redirecting to:', url);
+
+            // Redirect to the generated URL
+            window.open(url, '_blank');
+        });
+
+        $(".dropdown-item").click(function () {
+            var modalTitle = $(this).data("title");
+            var typeid = $(this).data("id");
+            $("#on_boarding_modals .modal-title").text(modalTitle);
+            $("#on_boarding_modals #type_id").val(typeid);
+        });
+        
         var table = $("#hired-table").DataTable({
             processing: true, 
             serverSide: true, 
@@ -163,7 +296,7 @@
                 sortable: false,
                 targets: 0,
                 render: function(data) {
-                    return `<input type="checkbox" class="dt-checkboxes form-check-input checkbox-items" value="${data}">`;
+                    return `<input type="checkbox" class="dt-checkboxes row-select form-check-input checkbox-items" value="${data}">`;
                 },
             },
             {
@@ -179,9 +312,8 @@
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="actionDropdown">
                                 <li><a class="dropdown-item" href="/checklist">Requirements Checklist</a></li>
-                                <li><a class="dropdown-item" href="/checklist22">Onboarding Checklist</a></li>
                                 <li><a class="dropdown-item" href="/checklist33">Remarks</a></li>
-                                <li><a class="dropdown-item" href="/print">PRINT</a></li>
+                                <li><a class="dropdown-item" href='/rsp/print/notice-of-appointed-applicants/${data}' target='_blank' title='PRINT'>Print</a></li>
                             </ul>
                         </div>
                     `;

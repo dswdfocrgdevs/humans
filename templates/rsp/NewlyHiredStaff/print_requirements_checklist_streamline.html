@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+{% load static %}
+{% load tags %}
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="shortcut icon" type="image/png" href="#"/>
+	<title>Print Notice of Appointed Applicants</title>
+    <link rel="shortcut icon" href="{% static 'assets/media/logos/favicon.ico' %}" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
+    <link href="{% static 'assets/plugins/global/plugins.bundle.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'assets/css/style.bundle.css' %}" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="{% static 'assets/plugins/custom/prismjs/prismjs.bundle.css' %}" />
+	<link href="{% static 'assets/css/print.css' %}" rel="stylesheet">
+	<style type="text/css">
+        @media print {
+            .page-break {
+                page-break-before: always; /* Forces a break before the element */
+                page-break-after: always; /* Forces a break after the element */
+            }
+            .containerX {
+                zoom: 70%;
+            }
+            .no-print {
+                display: none !important; /* Hide the navbar and other elements */
+            }
+            page {
+                margin: 0.4in 0.39in 0.39in 0.67in; /* Set margins: top 0.4in, right 0.39in, bottom 0.39in, left 0.67in */
+                border: 0.5px solid transparent;
+                height: 297mm !important;
+            }
+            .col-lg-9, .col-lg-3 {
+                width: 100% !important;
+                float: none !important;
+                margin: 0 !important;
+            }
+            #footerImage {
+                position: absolute;
+                margin-bottom: 460px !important;
+                left: 0;
+                width: 100%;
+                text-align: center;
+                display: block;
+            }
+            .box.no-print {
+                display: none; /* Hide the box when printing */
+            }
+            ::-webkit-input-placeholder { /* WebKit browsers */
+                color: transparent;
+            }
+            :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+                color: transparent;
+            }
+            ::-moz-placeholder { /* Mozilla Firefox 19+ */
+                color: transparent;
+            }
+            :-ms-input-placeholder { /* Internet Explorer 10+ */
+                color: transparent;
+            }
+
+            .containerX {
+                zoom: 60%;
+            }
+
+            #print-date {
+                display: block !important; /* Ensure the print date is visible when printing */
+            }
+        }
+
+       body {
+           font-family: 'Inter', sans-serif;
+           font-size: 12px;
+           color: black;
+       }
+
+       .containerX {
+           zoom: 90%;
+       }
+   </style>
+</head>
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm no-print">
+    <div class="container">
+        <!-- Brand -->
+        <a class="navbar-brand font-weight-bold" href="#">
+            Print Requirements Checklist
+        </a>
+        <div id="navbar" class="navbar-collapse collapse">
+			<ul class="navbar-nav ms-auto">
+				<li><button type="button" class="btn btn-primary" class="print-button" id="printButton" title="Print" style="font-size: 14px; margin-top: 8px;"><i class="fas fa-print"></i> Print</button>&emsp;</li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<body style="font-family: Inter">
+    {% if all %}
+	{% for xx in all %}
+	<page size="A4" class="page" style="padding: 50px;height: auto; font-family: 'Inter'; page-break-after: always;">
+		<div class="containerX">
+			<div class="pull-left" style="font-size: 13px;">
+                <img src="{% static 'assets/media/logos/dswd_new_logo.png' %}" width="130px;" style="mix-blend-mode: multiply;">
+				<img src="{% static 'assets/media/logos/Bagong_Pilipinas_logo.png' %}" width="60px;" style="mix-blend-mode: multiply; margin-top: -10px;">
+            </div>
+            <hr>
+            <center>
+				<p>Field Office Caraga <br>Butuan City</p>
+				<h4 class="no-margins"><strong>REQUIREMENTS CHECKLIST</strong></h4>
+				{% now 'l - M d, Y' as today %}
+				<p contenteditable>Date Generate: {{today}}</p>
+			</center>
+			<br>
+			<p class="bold">{{xx.full_name}}</p>
+			<p class="mb-3 bold">{{xx.position}}</p>
+            <table class="table table-bordered" id="req_table">
+                <thead>
+                    <tr style="font-size: 12px">
+                        <th>#</th>
+                        <th>Particulars</th>
+                        <th class="text-center">Date Submitted</th>
+                        <th class="text-center">Remarks</th>
+                    </tr>
+                </thead>   
+                <tbody>
+                    {% get_empstatus_hired_streamline_req xx.emp_status as req %}
+                    {% for row in req %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ row.name|safe }}</td>
+                        <td class="text-center">
+                        </td>
+                        <td class="text-center">
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="pull-left">
+                        <p class="bold">Prepared By:</p>
+                        <div  class="col-sm-12" style="margin-top: 10px;">
+                            <p class="bold" id="set_prepared_by_name">{{pi.user.first_name}} {{pi.user.middle_name|make_list|first}}. {{pi.user.last_name}}</p>
+                            <p id="set_prepared_by_pos">
+                            {% for data in HrppmsUserDetails %}
+                                {% if data.pi.user.id == request.user.id %}
+                                {{data.pos.name}}
+                                {% endif %}
+                            {% endfor %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </page>
+	{% endfor %}
+	{% endif %}
+	<br>
+	<script src="{% static 'assets/plugins/global/plugins.bundle.js' %}"></script>
+    <script src="{% static 'assets/js/scripts.bundle.js' %}"></script>
+    <script src="{% static 'assets/plugins/custom/prismjs/prismjs.bundle.js' %}"></script>
+	<script src="{% static 'assets/js/function.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script type="text/javascript">
+		$(document).on('keydown', function(e) {
+			if(e.ctrlKey && (e.key == "p" || e.charCode == 16 || e.charCode == 112 || e.keyCode == 80) ){
+				Swal.fire("Print Warning",
+				"Please use the PRINT button on the upper left part of the page for better rendering of the document in the print dialog.",
+				"warning");
+				e.cancelBubble = true;
+				e.preventDefault();
+				e.stopImmediatePropagation();
+			}
+		});
+
+        $('#printButton').on('click', function () {
+            window.print();
+        });
+	</script>
+</body>
+</html>

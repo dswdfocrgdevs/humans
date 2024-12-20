@@ -36,15 +36,24 @@ class Command(BaseCommand):
                 NewlyHiredStaff.objects.create(
                     requirements_ok=item.get('requirements_ok',''),
                     full_name=item.get('full_name', ''),
+                    first_name=item.get('first_name', ''),
+                    middle_name=item.get('middle_name', ''),
+                    last_name=item.get('last_name', ''),
                     position=item.get('position', ''),
                     area_of_assignment=item.get('area_of_assignment', ''),
                     former_incumbent=item.get('former_incumbent', ''),
                     salary=item.get('salary', 0),
+                    salary_grade=item.get('salary_grade', 0),
                     effectivity_of_contract=item.get('effectivity_of_contract'),
                     end_of_contract=item.get('end_of_contract'),
+                    created_at=item.get('created_at'),
+                    updated_at=item.get('updated_at'),
                     emp_status=item.get('emp_status', ''),
+                    fundsource=item.get('fundsource', ''),
+                    program=item.get('program', ''),
                     nature=item.get('nature', ''),
                     remarks=item.get('remarks', ''),
+                    picture=item.get('picture', ''),
                 )
                 print()
             
