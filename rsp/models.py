@@ -60,22 +60,18 @@ class NewlyHiredStaffStreamline(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)  # Automatically set on creation
     updated_at = models.DateTimeField(auto_now=True)      # Automatically update on save
     remarks = models.TextField(null=True)
-    picture = models.CharField(max_length=100,null=True)
+    picture = models.CharField(max_length=120,null=True)
     
 
     def __str__(self):
         return f"{self.full_name} - {self.position}"
     
-    class Meta:
-        managed = False
-        db_table = 'rsp_newlyhiredstaff_streamline'
 
 
 class RspFormType(models.Model):
     name = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'rsp_form_type'
 
 
@@ -84,7 +80,6 @@ class RspOnboardingLayout(models.Model):
     content = models.TextField(blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'rsp_onboarding_layout'
 
 
@@ -110,7 +105,6 @@ class RspHiredreq(models.Model):
     upload_by = models.ForeignKey(CustomUser, models.DO_NOTHING)
 
     class Meta:
-        managed = False
         db_table = 'rsp_hired_requirements'
 
 
@@ -122,7 +116,6 @@ class RspHiredStreamlinereq(models.Model):
     upload_by = models.ForeignKey(CustomUser, models.DO_NOTHING)
 
     class Meta:
-        managed = False
         db_table = 'rsp_hired_requirements_streamline'
 
 
