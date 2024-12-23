@@ -1,0 +1,98 @@
+{% extends 'layout.html' %}
+{% block content %}
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+<div class="d-flex flex-column flex-column-fluid">
+    <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+            <!--begin::Toolbar container-->
+            <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
+                <!--begin::Page title-->
+                <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+                    <!--begin::Title-->
+                    <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0">{{title}}</h1>
+                    <!--end::Title-->
+                    <!--begin::Breadcrumb-->
+                    <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+                        <!--begin::Item-->
+                        <li class="breadcrumb-item text-muted">
+                            <a href="#" class="text-muted text-hover-primary">Permanent-Contractual-Congratulatory-Letter</a>
+                        </li>
+                        <!--end::Item-->
+                        <!--begin::Item-->
+                        <li class="breadcrumb-item">
+                            <span class="bullet bg-gray-500 w-5px h-2px"></span>
+                        </li>
+                        <!--end::Item-->
+                        <!--begin::Item-->
+                        <li class="breadcrumb-item text-muted">{{title}}</li>
+                        <!--end::Item-->
+                    </ul>
+                    <!--end::Breadcrumb-->
+                </div>
+                <!--end::Page title-->
+                <!--begin::Actions-->
+
+                <!--end::Actions-->
+            </div>
+            <!--end::Toolbar container-->
+        </div>
+        <!--end::Toolbar-->
+        <!--begin::Content-->
+        <div id="kt_app_content" class="app-content flex-column-fluid">
+            <!--begin::Content container-->
+            <div id="kt_app_content_container" class="app-container container-fluid">
+                <h1>Congratulatory Letter</h1>
+                <h2>Search Employees</h2>
+                <form id="employee-form">
+                    <div class="mb-3">
+                        <label for="employees" class="form-label">Select Employees</label>
+                        <select id="employees" class="form-control" name="employees[]" multiple="multiple"></select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+
+{% block script %}
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // Initialize Select2 with AJAX
+        $('#employees').select2({
+            placeholder: 'Search for employees',
+            ajax: {
+                url: '{% url "rsp:employee_search_data" %}', // Django URL for searching employees
+                dataType: 'json',
+                delay: 250, // Delay in milliseconds
+                data: function(params) {
+                    return {
+                        term: params.term // Search term sent to the server
+                    };
+                },
+                processResults: function(data) {
+                    console.log(data.results)
+                    return {
+                       
+                        results: data.results.map(item => ({
+                            id: item.id,
+                            text: item.full_name
+                        }))
+                    };
+                }
+            },
+            minimumInputLength: 1 // Minimum characters to start the search
+        });
+
+        // Handle form submission
+        $('#employee-form').on('submit', function(e) {
+            e.preventDefault();
+            const selectedEmployees = $('#employees').val();
+            console.log('Selected employees:', selectedEmployees)
+        });
+    });
+</script>
+{% endblock script %}

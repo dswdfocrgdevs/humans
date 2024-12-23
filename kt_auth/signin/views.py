@@ -23,7 +23,7 @@ Refer to urls.py file for more pages.
 """
 
 class AuthSigninView(TemplateView):
-    template_name = 'pages/auth/signin.html'
+    template_name = 'auth/signin.html'
 
     def dispatch(self, request, *args, **kwargs):
 
@@ -50,8 +50,12 @@ class AuthSigninView(TemplateView):
         })
 
         return context
-    
+
+
 class TemporarySigninView(APIView):
+    def get(self, request, *args, **kwargs):
+        return JsonResponse({"detail": "Method \"GET\" not allowed."})
+
     def post(self, request, *args, **kwargs):
         validated_response = validate_signin(request)
         if validated_response['status_code'] == 200 :
@@ -61,7 +65,6 @@ class TemporarySigninView(APIView):
         else:
             return render(request, 'pages/auth/signin.html')
             return JsonResponse({'msg': 'Invalid username and password.'})
-
 
 
 class LoginSerializer(serializers.Serializer):
@@ -100,6 +103,8 @@ def validate_signin(request):
 
                     if response_employee_details.status_code == 200:
                         # Return successful response with the employee details
+
+                        breakpoint()
                         return {
                             'status_code': 200,
                             'status': 'success',

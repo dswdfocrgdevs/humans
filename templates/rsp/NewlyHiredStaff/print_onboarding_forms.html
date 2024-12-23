@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+{% load static %}
+{% load tags %}
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="shortcut icon" type="image/png" href="#"/>
+	<title>Print Notice of Appointed Applicants</title>
+    <link rel="shortcut icon" href="{% static 'assets/media/logos/favicon.ico' %}" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
+    <link href="{% static 'assets/plugins/global/plugins.bundle.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'assets/css/style.bundle.css' %}" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="{% static 'assets/plugins/custom/prismjs/prismjs.bundle.css' %}" />
+	<link href="{% static 'assets/css/print.css' %}" rel="stylesheet">
+	<style type="text/css">
+         @media print {
+            body * {
+                visibility: hidden; /* Hide everything initially */
+            }
+            .containerX, .containerX * {
+                visibility: visible; /* Show only the content to print */
+            }
+            .containerX {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+            .no-print {
+                display: none !important; /* Hide the navbar and other elements */
+            }
+
+            page {
+				margin: 0px;
+				border: 0.5px solid transparent;
+				height: 297mm !important;
+			}
+		  	::-webkit-input-placeholder { /* WebKit browsers */
+		      	color: transparent;
+		  	}
+		  	:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+		      	color: transparent;
+		  	}
+		  	::-moz-placeholder { /* Mozilla Firefox 19+ */
+		      	color: transparent;
+		  	}
+		  	:-ms-input-placeholder { /* Internet Explorer 10+ */
+		      	color: transparent;
+		  	}
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            font-size: 12px;
+            color: black;
+        }
+
+        .containerX {
+            zoom: 90%;
+        }
+	</style>
+</head>
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm no-print">
+    <div class="container">
+        <!-- Brand -->
+        <a class="navbar-brand font-weight-bold" href="#">
+            Print {% if pk == 4 %} Certificate of Completion {% elif pk == 1 %} Welcome Letter {% elif pk == 2 %} Intro Letter {% elif pk == 3 %} Congratulatory Letter {% endif %}
+        </a>
+        <div id="navbar" class="navbar-collapse collapse">
+			<ul class="navbar-nav ms-auto">
+				<li><button type="button" class="btn btn-primary" class="print-button" id="printButton" title="Print" style="font-size: 14px; margin-top: 8px;"><i class="fas fa-print"></i> Print</button>&emsp;</li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<body style="font-family: Inter">
+    {% now 'F j, Y' as today %}
+    {% for row in app %}
+    <page size="A4flex" class="page" style="padding: 50px; color: black !important;">
+        <div class="containerX">
+            <img src="{% static 'assets/media/logos/dswd_new_logo.png' %}" width="17%">&emsp;
+            <img src="{% static 'assets/media/logos/Bagong_Pilipinas_logo.png' %}" width="10%" style="margin-top: -14px;">
+            <br><br>
+            {% if pk == 4 %}
+            <span id="docs-internal-guid-c0961e05-7fff-abb9-ac6c-42e7201a74a4">
+                <span id="docs-internal-guid-bbe4be05-7fff-3879-7c2f-ced4249653fe">
+                    <br><br>
+                    <p dir="ltr" style="line-height:1.2;margin-right: 1.5pt;text-align: center;margin-top:0pt;margin-bottom:0pt;"><span style="font-size: 18pt; font-family: Arial, sans-serif; background-color: transparent; font-weight: 700; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-variant-position: normal; vertical-align: baseline; white-space-collapse: preserve;">CERTIFICATE OF COMPLETION</span></p>
+                    <br><br><br>
+                    <p dir="ltr" style="line-height:1.2;margin-right: 1.5pt;text-align: center;margin-top:0pt;margin-bottom:0pt;"><span style="font-size: 12pt; font-family: Arial, sans-serif; background-color: transparent; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-variant-position: normal; vertical-align: baseline; white-space-collapse: preserve;">This certification is hereby granted to</span></p>
+                    <br>
+                    <p dir="ltr" style="line-height:1.2;margin-right: 1.5pt;text-align: center;margin-top:0pt;margin-bottom:0pt;"><span style="font-size: 24pt; font-family: Arial, sans-serif; background-color: transparent; font-weight: 700; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-variant-position: normal; vertical-align: baseline; white-space-collapse: preserve;"><u>{{ row.full_name }}</u></span></p>
+                    <br>
+                    <p dir="ltr" style="line-height:1.2;margin-right: 1.5pt;text-align: center;margin-top:0pt;margin-bottom:0pt;"><span style="font-size: 12pt; font-family: Arial, sans-serif; background-color: transparent; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-variant-position: normal; vertical-align: baseline; white-space-collapse: preserve;">for having successfully completed the</span></p>
+                    <br>
+                    <p dir="ltr" style="line-height:1.2;margin-right: 1.5pt;text-align: center;margin-top:0pt;margin-bottom:0pt;"><span style="font-size: 12pt; font-family: Arial, sans-serif; background-color: transparent; font-weight: 700; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-variant-position: normal; vertical-align: baseline; white-space-collapse: preserve;">New Employee Onboarding Program</span><span style="font-size: 12pt; font-family: Arial, sans-serif; background-color: transparent; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-variant-position: normal; vertical-align: baseline; white-space-collapse: preserve;"> of the</span></p>
+                    <br>
+                    <p dir="ltr" style="line-height:1.2;margin-right: 1.5pt;text-align: center;margin-top:0pt;margin-bottom:0pt;"><span style="font-size: 12pt; font-family: Arial, sans-serif; background-color: transparent; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-variant-position: normal; vertical-align: baseline; white-space-collapse: preserve;">Department of Social Welfare and Development</span></p>
+                    <br>
+                    <p dir="ltr" style="line-height:1.2;margin-right: 1.5pt;text-align: center;margin-top:0pt;margin-bottom:0pt;"><span style="font-size: 12pt; font-family: Arial, sans-serif; background-color: transparent; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-variant-position: normal; vertical-align: baseline; white-space-collapse: preserve;">from </span><span style="font-size: 12pt; font-family: Arial, sans-serif; background-color: transparent; font-weight: 700; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-variant-position: normal; vertical-align: baseline; white-space-collapse: preserve;"><u>{{row.effectivity_of_contract}}</u></span><span style="font-size: 12pt; font-family: Arial, sans-serif; background-color: transparent; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-variant-position: normal; vertical-align: baseline; white-space-collapse: preserve;">&nbsp;to&nbsp; </span><span style="font-size: 12pt; font-family: Arial, sans-serif; background-color: transparent; font-weight: 700; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-variant-position: normal; vertical-align: baseline; white-space-collapse: preserve;">{% if row.end_of_contract %}<u>{{row.end_of_contract}}</u>{% endif %}</span></p>
+                    <br>
+                    <p dir="ltr" style="line-height:1.2;margin-right: 1.5pt;text-align: center;margin-top:0pt;margin-bottom:0pt;"><span style="font-size: 12pt; font-family: Arial, sans-serif; background-color: transparent; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-variant-position: normal; vertical-align: baseline; white-space-collapse: preserve;">as </span><span style="font-size: 12pt; font-family: Arial, sans-serif; background-color: transparent; font-weight: 700; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-variant-position: normal; vertical-align: baseline; white-space-collapse: preserve;"><u>{{row.position}}</u></span><span style="font-size: 12pt; font-family: Arial, sans-serif; background-color: transparent; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-variant-position: normal; vertical-align: baseline; white-space-collapse: preserve;">,</span></p>
+                    <br>
+                    <p dir="ltr" style="line-height:1.2;margin-right: 1.5pt;text-align: center;margin-top:0pt;margin-bottom:0pt;"><span style="font-size: 12pt; font-family: Arial, sans-serif; background-color: transparent; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-variant-position: normal; vertical-align: baseline; white-space-collapse: preserve;">with Item Number/Code </span><span style="font-size: 12pt; font-family: Arial, sans-serif; background-color: transparent; font-weight: 700; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-variant-position: normal; vertical-align: baseline; white-space-collapse: preserve;"><u>{{employee.app.vacancies.item_number}}</u></span><span style="font-size: 12pt; font-family: Arial, sans-serif; background-color: transparent; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-variant-position: normal; vertical-align: baseline; white-space-collapse: preserve;">,</span></p>
+                    <br>
+                    <p dir="ltr" style="line-height:1.2;margin-right: 1.5pt;text-align: center;margin-top:0pt;margin-bottom:0pt;"><span style="font-size: 12pt; font-family: Arial, sans-serif; background-color: transparent; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-variant-position: normal; vertical-align: baseline; white-space-collapse: preserve;">SG-{{row.salary_grade}}, on <u>{{row.emp_status}}</u> status,</span></p>
+                    <br>
+                    <p dir="ltr" style="line-height:1.2;margin-right: 1.5pt;text-align: center;margin-top:0pt;margin-bottom:0pt;"><span style="font-size: 12pt; font-family: Arial, sans-serif; background-color: transparent; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-variant-position: normal; vertical-align: baseline; white-space-collapse: preserve;">under the {% if row.program %}<u>{{ row.program }}</u>{% else %}________________________{% endif %}, Central/Field Office Caraga.</span></p>
+                    <br><br><br>
+                    <p dir="ltr" style="line-height:1.2;margin-right: 1.5pt;text-align: center;margin-top:0pt;margin-bottom:0pt;"><span style="font-size: 12pt; font-family: Arial, sans-serif; background-color: transparent; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-variant-position: normal; vertical-align: baseline; white-space-collapse: preserve;">Issued this {% now 'j' %} day of {% now 'F' %}, {% now 'Y' %} </span></p>
+                    <br>
+                    <p dir="ltr" style="line-height:1.2;margin-right: 1.5pt;text-align: center;margin-top:0pt;margin-bottom:0pt;"><span style="font-size: 12pt; font-family: Arial, sans-serif; background-color: transparent; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-variant-position: normal; vertical-align: baseline; white-space-collapse: preserve;">at the DSWD Central/Field Office Caraga, ___________________.</span></p>
+                    <br><br><br><br>
+                    <p dir="ltr" style="line-height:1.295;margin-left: -0.05pt;margin-right: 14.1pt;text-indent: -0.05pt;text-align: center;margin-top:4.65pt;margin-bottom:8pt;padding:0pt 0pt 0pt 0.05pt;"><span style="font-size: 12pt; font-family: Arial, sans-serif; background-color: transparent; font-weight: 700; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-variant-position: normal; vertical-align: baseline; white-space-collapse: preserve;">MARI-FLOR A. DOLLAGA-LIBANG</span></p>
+                    <p dir="ltr" style="line-height:1.2349999999999999;margin-left: 152.5pt;margin-right: 166.6pt;text-align: center;margin-top:0.45pt;margin-bottom:0pt;"><span style="font-size: 12pt; font-family: &quot;Arial MT&quot;; background-color: transparent; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-variant-position: normal; vertical-align: baseline; white-space-collapse: preserve;">Director IV</span></p>
+                    <br>
+                </span>
+            </span>
+            {% elif pk == 3 %}
+            <div id="cong-letter-id">
+                <p><span style="font-size: 14.67px; font-weight: 700;">{{today}}</span></p>
+                <p><span style="font-size: 14.67px; font-weight: 700;"><br></span></p>
+                <p dir="ltr" style="line-height:1.2;margin-left: -0.1pt;text-indent: -0.1pt;text-align: justify;margin-top:0pt;margin-bottom:0pt;padding:0pt 0pt 0pt 0.1pt;"><span style="font-size:11pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:700;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">{{ row.full_name }}</span></p>
+                <p dir="ltr" style="line-height:1.2;margin-left: -0.1pt;text-indent: -0.1pt;text-align: justify;margin-top:0pt;margin-bottom:0pt;padding:0pt 0pt 0pt 0.1pt;"><span style="font-size:11pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">{{ row.address }}</span></p>
+                <p><b style="font-weight:normal;" id="docs-internal-guid-0cbcfb78-7fff-e076-6798-dcb039570750"><br><br></b></p>
+                <p dir="ltr" style="line-height:1.2;margin-left: -0.1pt;text-indent: -0.1pt;text-align: justify;margin-top:0pt;margin-bottom:0pt;padding:0pt 0pt 0pt 0.1pt;"><span style="font-size:11pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">Dear </span><span style="font-size:11pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:700;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">{{ row.get_ma_status }} <u>{{ row.last_name }}</u>,
+                </span></p>
+                <p><b style="font-weight:normal;"><br></b></p>
+                <p dir="ltr" style="line-height:1.2;margin-left: -0.1pt;text-indent: -0.1pt;text-align: justify;margin-top:0pt;margin-bottom:0pt;padding:0pt 0pt 0pt 0.1pt;"><span style="font-size:11pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">Congratulations!</span></p>
+                <p><b style="font-weight:normal;"><br></b></p>
+                <p dir="ltr" style="line-height:1.2;margin-left: -0.1pt;text-indent: -0.1pt;text-align: justify;margin-top:0pt;margin-bottom:0pt;padding:0pt 0pt 0pt 0.1pt;"><span style="font-size:11pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">You have successfully completed the Department’s New Employee Onboarding Program during your six-month probationary period. We hope that your journey of discovery and immersion all throughout your probation has been meaningful and delightful.</span></p>
+                <p><b style="font-weight:normal;"><br></b></p>
+                <p dir="ltr" style="line-height:1.2;margin-left: -0.1pt;text-indent: -0.1pt;text-align: justify;margin-top:0pt;margin-bottom:0pt;padding:0pt 0pt 0pt 0.1pt;"><span style="font-size:11pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">Always be reminded that you are an asset to our organization. Through your passion, dedication, hard work, and competency, you have earned this recognition and we hope this will serve as a motivation for your continuous outstanding performance. In addition, always strive hard and acquire the necessary wisdom, skills, behaviors, and relationships to become an effective DSWD employee.</span></p>
+                <p><b style="font-weight:normal;"><br></b></p>
+                <p dir="ltr" style="line-height:1.2;margin-left: -0.1pt;text-indent: -0.1pt;text-align: justify;margin-top:0pt;margin-bottom:0pt;padding:0pt 0pt 0pt 0.1pt;"><span style="font-size:11pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">To this end, we sincerely extend our gratitude for your unwavering participation. Please do not hesitate to reach us should you have any concerns. Lastly, may you never forget DSWD’s values of </span><span style="font-size:11pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:italic;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">Maagap at Mapagkalingang Serbisyo</span><span style="font-size:11pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">, </span><span style="font-size:11pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:italic;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">Serbisyong Walang Puwang sa Katiwalian</span><span style="font-size:11pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">, and </span><span style="font-size:11pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:italic;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">Patas na Pagtrato sa Komunidad</span><span style="font-size:11pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;"> throughout your stay with the Department.</span></p>
+                <p><b style="font-weight:normal;"><br></b></p>
+                <p dir="ltr" style="line-height:1.2;margin-left: -0.1pt;text-indent: -0.1pt;text-align: justify;margin-top:0pt;margin-bottom:0pt;padding:0pt 0pt 0pt 0.1pt;"><span style="font-size:11pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">We wish you well.</span></p>
+                <p><b style="font-weight:normal;"><br></b></p>
+                <p dir="ltr" style="line-height:1.2;margin-left: -0.1pt;text-indent: -0.1pt;text-align: justify;margin-top:0pt;margin-bottom:0pt;padding:0pt 0pt 0pt 0.1pt;"><span style="font-size:11pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">Sincerely,</span></p>
+                <p><b style="font-weight:normal;"><br><br><br></b></p>
+                <p dir="ltr" style="line-height:1.2;margin-left: -0.1pt;text-indent: -0.1pt;text-align: justify;margin-top:0pt;margin-bottom:0pt;padding:0pt 0pt 0pt 0.1pt;"><span style="font-size:11pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:700;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">BENNETTE DAVE C. CALO</span></p>
+                <p dir="ltr" style="line-height:1.2;margin-left: -0.1pt;text-indent: -0.1pt;text-align: justify;margin-top:0pt;margin-bottom:0pt;padding:0pt 0pt 0pt 0.1pt;"><span style="font-size:11pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">Administrative Officer V</span></p>
+                <p dir="ltr" style="line-height:1.2;margin-left: -0.1pt;text-indent: -0.1pt;text-align: justify;margin-top:0pt;margin-bottom:0pt;padding:0pt 0pt 0pt 0.1pt;"><span style="font-size:11pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">Head, Human Resource Management and Development Division</span></p>
+                <p dir="ltr" style="line-height:1.2;margin-left: -0.1pt;text-indent: -0.1pt;text-align: justify;margin-top:0pt;margin-bottom:0pt;padding:0pt 0pt 0pt 0.1pt;"><span style="font-size:11pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">DSWD Field Office Caraga</span></p>
+                <p><br><br><br><br><br><br><br><br></p>
+                <p dir="ltr" style="line-height:1.2;margin-left: -0.05pt;text-indent: -0.05pt;margin-top:0pt;margin-bottom:0pt;padding:0pt 0pt 0pt 0.05pt;"><span style="font-size:9pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">&nbsp;Officer-In-Charge of HRMDS/HRMDD</span></p>
+            </div>
+            {% elif pk == 2 %}
+            <div id="intro-letter-id">
+                <p><span style="font-size: 14.67px; font-weight: 700;">{{today}}</span></p>
+                <br>
+                <p style="font-size: 14.67px" class="no-margins"><strong>[GOVERNOR/MAYOR’S NAME]</strong></p>
+                <p style="font-size: 14.67px" class="no-margins"><strong>Governor/Mayor</strong></p>
+                <p style="font-size: 14.67px" class="no-margins"><strong>[PROVINCE]</strong></p>
+                <br>
+                <p style="font-size: 14.67px" class="no-margins">ATTENTION: <strong>[P/MSWDO’S NAME]</strong></p>
+                <p style="font-size: 14.67px; margin-left: 150px;">P/MSWDO</p>
+                <br>
+                <p style="font-size: 14.67px;"><em>Dear <strong>____________________:</strong></em></p>
+                <p style="font-size: 14.67px;">We are pleased to introduce <strong>{{ employee.app.pi.get_ma_status }} {{ employee.app.pi.user.get_fullname }}</strong> as the <b>{{ employee.app.vacancies.pos.name }}</b> of the <b>{{ employee.app.vacancies.program.acronym }}</b> in your Province. 
+                He/she will assume the duties and responsibilities left by his/her predecessor <b>{% if employee.get_former_incumbent %}{{ employee.get_former_incumbent }}{% else %}[NAME OF INCUMBENT]{% endif %}</b>, who concluded his/her tenure with the agency on <b>{% if employee.effectivity_of_contract %}{{ employee.effectivity_of_contract }}{% else %}[EFFECTIVE DATE]{% endif%}</b>.
+                </p>
+                <br>
+                <p class="MsoNormal text-danger" style="font-size: 14.67px;margin-top:0cm;margin-right:0cm;margin-bottom:0cm;
+                margin-left:-.05pt;text-align:justify;text-indent:0cm;line-height:normal"><b><span style="font-family:&quot;Arial&quot;,sans-serif;mso-fareast-font-family:&quot;Times New Roman&quot;;
+                color:red">[YOU MAY INSERT BRIEF FUNCTIONS OF STAFF-FREESTYLE]<o:p></o:p></span></b></p>
+                <p class="MsoNormal" style="font-size: 14.67px;margin-bottom:0cm;text-align:justify;text-indent:
+                0cm;line-height:normal"><i><span style="font-family:&quot;Arial&quot;,sans-serif;
+                mso-fareast-font-family:&quot;Times New Roman&quot;;color:red">&nbsp;</span></i></p>
+                <p class="MsoNormal text-danger" style="font-size: 14.67px;margin-top:0cm;margin-right:0cm;margin-bottom:0cm;
+                margin-left:-.05pt;text-align:justify;text-indent:0cm;line-height:normal"><i><span style="font-family:&quot;Arial&quot;,sans-serif;mso-fareast-font-family:&quot;Times New Roman&quot;;
+                color:red">As a {{ employee.app.vacancies.pos.name }}, Mr./Ms.&nbsp; is tasked to dispense the following
+                functions:<o:p></o:p></span></i></p>
+                <p class="MsoNormal text-danger" style="font-size: 14.67px;margin-top:0cm;margin-right:0cm;margin-bottom:0cm;
+                margin-left:-.05pt;text-align:justify;text-indent:0cm;line-height:normal"><i><span style="font-family:&quot;Arial&quot;,sans-serif;mso-fareast-font-family:&quot;Times New Roman&quot;;
+                color:red">1.<o:p></o:p></span></i></p>
+                <p class="MsoNormal text-danger" style="font-size: 14.67px;margin-top:0cm;margin-right:0cm;margin-bottom:0cm;
+                margin-left:-.05pt;text-align:justify;text-indent:0cm;line-height:normal"><i><span style="font-family:&quot;Arial&quot;,sans-serif;mso-fareast-font-family:&quot;Times New Roman&quot;;
+                color:red">2.<o:p></o:p></span></i></p>
+                <p class="MsoNormal text-danger" style="font-size: 14.67px;margin-top:0cm;margin-right:0cm;margin-bottom:0cm;
+                margin-left:-.05pt;text-align:justify;text-indent:0cm;line-height:normal"><i><span style="font-family:&quot;Arial&quot;,sans-serif;mso-fareast-font-family:&quot;Times New Roman&quot;;
+                color:red">3.<o:p></o:p></span></i></p>
+                <p class="MsoNormal text-danger" style="font-size: 14.67px;margin-top:0cm;margin-right:0cm;margin-bottom:0cm;
+                margin-left:-.05pt;text-align:justify;text-indent:0cm;line-height:normal"><i><span style="font-family:&quot;Arial&quot;,sans-serif;mso-fareast-font-family:&quot;Times New Roman&quot;;
+                color:red">…<o:p></o:p></span></i></p>
+                <br>
+                <p style="font-size: 14.67px;font-style: italic;" class="text-danger">
+                    The above-mentioned staff will provide technical assistance to target recipient Provincial/City/Municipal/Barangay Local Government Units (LGUs) in the preparation, implementation, 
+                    monitoring, evaluation and reporting of the Risk Resiliency Program thru Cash for Work Activities. 
+                </p>
+                <br>
+                <p style="font-size: 14.67px;">
+                    He/She will report directly to [NAME OF IMMEDIATE SUPERVISOR AND POSITION] and will be based at 
+                    <b>{% if employee.app.vacancies.location  %}{{ employee.app.vacancies.location }}{% else %}[AREA OF ASSIGNMENT AND ADDRESS]{% endif %}</b>. You can reach out to him/her via mobile at <b>{% if employee.app.pi.mobile_no  %}{{ employee.app.pi.mobile_no }}{% else %}[mobile number]{% endif %}</b> or email at <b>{% if employee.app.pi.user.email %}{{ employee.app.pi.user.email }}{% else %}[email address]{% endif %}</b>.
+                </p>
+                <br>
+                <p style="font-size: 14.67px;">
+                    Relative thereto, we would like to request your continued support to ensure the successful 
+                    implementation of the program. Please be assured that he/she will adhere to the LGU’s policies and protocols.
+                </p>
+                <br>
+                <p style="font-size: 14.67px;">Thank you.</p>
+                <br>
+                <p style="font-size: 14.67px;">Respectfully yours</p>
+                <br><br>
+                <p style="font-size: 14.67px;" class="no-margins"><strong>MARI-FLOR A. DOLLAGA-LIBANG</strong></p>
+                <p style="font-size: 14.67px;">Regional Director</p>
+            </div>
+            {% elif pk == 1 %}
+            <div id="welcome-letter-id">
+                <span id="docs-internal-guid-2a5d4cd6-7fff-34d0-8e77-8c216822eb22">
+                    <p><span style="font-size: 14.67px; font-weight: 700;">{{today}}</span></p>
+                    <p dir="ltr" style="line-height:1.2;margin-left: -0.1pt;text-indent: -0.1pt;text-align: justify;margin-top:0pt;margin-bottom:0pt;padding:0pt 0pt 0pt 0.1pt;"><br style="text-align: start; text-indent: 0px;"></p>
+                    <p class="no-margins" style="font-size: 14.67px;"><span style="font-weight: 700;">[GOVERNOR/MAYOR’S NAME]</span></p>
+                    <p class="no-margins" style="font-size: 14.67px;"><span style="font-weight: 700;">Governor/Mayor</span></p>
+                    <p class="no-margins" style="font-size: 14.67px;"><span style="font-weight: 700;">[PROVINCE]</span></p>
+                    <p dir="ltr" style="line-height:1.2;margin-left: -0.1pt;text-indent: -0.1pt;text-align: justify;margin-top:0pt;margin-bottom:0pt;padding:0pt 0pt 0pt 0.1pt;"><br style="text-align: start; text-indent: 0px;"></p>
+                    <p class="no-margins" style="font-size: 14.67px;">ATTENTION:&nbsp;<span style="font-weight: 700;">[P/MSWDO’S NAME]</span></p>
+                    <p style="margin-left: 150px; font-size: 14.67px;">P/MSWDO</p>
+                    <p style="font-size: 14.67px;"><b style="font-weight:normal;"><br></b></p>
+                    <p dir="ltr" style="line-height:1.2;margin-left: -0.1pt;text-indent: -0.1pt;text-align: justify;margin-top:0pt;margin-bottom:0pt;padding:0pt 0pt 0pt 0.1pt;"><span style="font-size:11pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">Dear </span><span style="font-size:11pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:700;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">{{ employee.app.pi.get_ma_status }} <u>{{ employee.app.pi.user.last_name }}</u></span><span style="font-size:11pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">:</span></p>
+                    <p style="font-size: 14.67px;"><b style="font-weight:normal;"><br></b></p>
+                    <p dir="ltr" style="line-height:1.2;margin-left: -0.1pt;text-indent: -0.1pt;text-align: justify;margin-top:0pt;margin-bottom:0pt;padding:0pt 0pt 0pt 0.1pt;"><span style="font-size:11pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">Welcome to the Department of Social Welfare and Development </span><span style="font-size:11pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:700;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">Field Office Caraga</span><span style="font-size:11pt;font-family:Calibri,sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">!</span><span style="font-size:11pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;"> It is the Department’s pleasure to have you join us in the fulfilment of our mission to lead in the formulation, implementation, and coordination of social welfare and development policies and programs for and with the poor, vulnerable, and disadvantaged.</span></p>
+                    <p style="font-size: 14.67px;"><b style="font-weight:normal;"><br></b></p>
+                    <p dir="ltr" style="line-height:1.2;margin-left: -0.1pt;text-indent: -0.1pt;text-align: justify;margin-top:0pt;margin-bottom:0pt;padding:0pt 0pt 0pt 0.1pt;"><span style="font-size:11pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">To assist you in your new journey with the DSWD, you will be joining the New Employee Onboarding Program </span><span style="font-size:11pt;font-family:Arial,sans-serif;color:#ff0000;background-color:transparent;font-weight:700;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">during your six-month probationary period</span><span style="font-size:11pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">. This program hopes that you will be familiarized and accustomed to the DSWD’s culture of service excellence. Thus, to ensure that you are properly onboarded, please be reminded of the following details:</span></p>
+                    <p style="font-size: 14.67px;"><b style="font-weight:normal;"><br></b></p>
+                    <div dir="ltr" style="margin-left:0pt;" align="center">
+                        <table style="border:none;border-collapse:collapse;">
+                            <colgroup>
+                                <col width="172">
+                                <col width="392">
+                            </colgroup>
+                            <thead>
+                                <tr style="height:0pt">
+                                    <th style="border-left:solid #ffffff 1pt;border-right:solid #ffffff 1pt;border-bottom:solid #ffffff 1pt;border-top:solid #ffffff 1pt;vertical-align:middle;padding:1.8pt 1.8pt 1.8pt 1.8pt;overflow:hidden;overflow-wrap:break-word;" scope="col">
+                                        <p dir="ltr" style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;"><span style="font-size:11pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">Start Date and Time:</span></p>
+                                    </th>
+                                    <th style="border-left:solid #ffffff 1pt;border-right:solid #ffffff 1pt;border-bottom:solid #000000 1pt;border-top:solid #ffffff 1pt;vertical-align:middle;padding:1.8pt 1.8pt 1.8pt 1.8pt;overflow:hidden;overflow-wrap:break-word;" scope="col">
+                                        <p dir="ltr" style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;"><span style="font-size:10.5pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:700;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">08 JANUARY 2024, 08:00 AM</span></p>
+                                    </th>
+                                </tr>
+                                <tr style="height:0pt">
+                                    <th style="border-left:solid #ffffff 1pt;border-right:solid #ffffff 1pt;border-bottom:solid #ffffff 1pt;border-top:solid #ffffff 1pt;vertical-align:middle;padding:1.8pt 1.8pt 1.8pt 1.8pt;overflow:hidden;overflow-wrap:break-word;" scope="col">
+                                        <p dir="ltr" style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;"><span style="font-size:11pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">Location:</span></p>
+                                    </th>
+                                    <th style="border-left:solid #ffffff 1pt;border-right:solid #ffffff 1pt;border-bottom:solid #000000 1pt;border-top:solid #000000 1pt;vertical-align:middle;padding:1.8pt 1.8pt 1.8pt 1.8pt;overflow:hidden;overflow-wrap:break-word;" scope="col">
+                                        <p dir="ltr" style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;"><span style="font-size:10.5pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:700;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">DSWD Field Office Caraga</span></p>
+                                    </th>
+                                </tr>
+                                <tr style="height:0pt">
+                                    <th style="border-left:solid #ffffff 1pt;border-right:solid #ffffff 1pt;border-bottom:solid #ffffff 1pt;border-top:solid #ffffff 1pt;vertical-align:middle;padding:1.8pt 1.8pt 1.8pt 1.8pt;overflow:hidden;overflow-wrap:break-word;" scope="col">
+                                        <p dir="ltr" style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;"><span style="font-size:11pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">Immediate Supervisor:</span></p>
+                                    </th>
+                                    <th style="border-left:solid #ffffff 1pt;border-right:solid #ffffff 1pt;border-bottom:solid #000000 1pt;border-top:solid #000000 1pt;vertical-align:middle;padding:1.8pt 1.8pt 1.8pt 1.8pt;overflow:hidden;overflow-wrap:break-word;" scope="col">
+                                        <p dir="ltr" style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;"><span style="font-size:10.5pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:700;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">Archie D. Turtur</span><span style="font-size:10.5pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">, Project Development Officer III, 09</span></p>
+                                    </th>
+                                </tr>
+                                <tr style="height:0pt">
+                                    <th style="border-left:solid #ffffff 1pt;border-right:solid #ffffff 1pt;border-bottom:solid #ffffff 1pt;border-top:solid #ffffff 1pt;vertical-align:middle;padding:1.8pt 1.8pt 1.8pt 1.8pt;overflow:hidden;overflow-wrap:break-word;" scope="col">
+                                        <p dir="ltr" style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;"><span style="font-size:11pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">Peer Buddy:</span></p>
+                                    </th>
+                                    <th style="border-left:solid #ffffff 1pt;border-right:solid #ffffff 1pt;border-bottom:solid #000000 1pt;border-top:solid #000000 1pt;vertical-align:middle;padding:1.8pt 1.8pt 1.8pt 1.8pt;overflow:hidden;overflow-wrap:break-word;" scope="col">
+                                        <p dir="ltr" style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;"><span style="font-size:10.5pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:700;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">Emelyn L. Mintal</span><span style="font-size:10.5pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">, Social Welfare Officer II, 09</span></p>
+                                    </th>
+                                </tr>
+                                <tr style="height:0pt">
+                                    <th style="border-left:solid #ffffff 1pt;border-right:solid #ffffff 1pt;border-bottom:solid #ffffff 1pt;border-top:solid #ffffff 1pt;vertical-align:middle;padding:1.8pt 1.8pt 1.8pt 1.8pt;overflow:hidden;overflow-wrap:break-word;" scope="col">
+                                        <p dir="ltr" style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;"><span style="font-size:11pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">Onboarding Coordinator:</span></p>
+                                    </th>
+                                    <th style="border-left:solid #ffffff 1pt;border-right:solid #ffffff 1pt;border-bottom:solid #000000 1pt;border-top:solid #000000 1pt;vertical-align:middle;padding:1.8pt 1.8pt 1.8pt 1.8pt;overflow:hidden;overflow-wrap:break-word;" scope="col">
+                                        <p dir="ltr" style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;"><span style="font-size:10.5pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:700;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">Sheena-Mae V. Mate</span><span style="font-size:10.5pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">, Administrative Officer III, 09</span></p>
+                                    </th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <p style="font-size: 14.67px;"><b style="font-weight:normal;"><br></b></p>
+                    <p dir="ltr" style="line-height:1.2;margin-left: -0.1pt;text-indent: -0.1pt;text-align: justify;margin-top:0pt;margin-bottom:0pt;padding:0pt 0pt 0pt 0.1pt;"><span style="font-size:11pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">On your first day, stop by the security desk at the lobby first for logging purposes, then proceed to the Human Resource Management and Development</span><span style="font-size:11pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:700;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;"> </span><span style="font-size:11pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">Division - Human Resource Planning Performance Management Section office to meet with your Onboarding Coordinator, who will assist you throughout your journey.</span></p>
+                    <p style="font-size: 14.67px;"><b style="font-weight:normal;"><br></b></p>
+                    <p dir="ltr" style="line-height:1.2;margin-left: -0.1pt;text-indent: -0.1pt;text-align: justify;margin-top:0pt;margin-bottom:0pt;padding:0pt 0pt 0pt 0.1pt;"><span style="font-size:11pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">You may contact your Onboarding Coordinator should you have any questions. In order to learn more about the DSWD, we encourage you to read up on the DSWD Employee Handbook by accessing the link, </span><a href="https://bit.ly/3wV4dOH" style="text-decoration:none;"><span style="font-size:11pt;font-family:'Proxima Nova',sans-serif;color:#2a5bd7;background-color:#ffffff;font-weight:700;font-style:normal;font-variant:normal;text-decoration:underline;-webkit-text-decoration-skip:none;text-decoration-skip-ink:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">bit.ly/3wV4dOH</span></a><span style="font-size:11pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">, </span><span style="background-color: transparent; font-size: 11pt; font-family: Arial, sans-serif; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-variant-position: normal; vertical-align: baseline; white-space-collapse: preserve;">&nbsp;or scanning the QR Code:</span><span style="background-color: transparent; font-size: 11pt; font-family: Arial, sans-serif; font-weight: 700; font-style: italic; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-variant-position: normal; vertical-align: baseline; white-space-collapse: preserve;"> </span></p>
+                    <span id="docs-internal-guid-2a5d4cd6-7fff-34d0-8e77-8c216822eb22" class="pull-right">
+                        <p style="font-size: 14.67px;"><span id="docs-internal-guid-1c6bb51c-7fff-fb10-2efa-6ea1a14239ba"><span style="border:none;display:inline-block;overflow:hidden;width:123px;height:121px;"><img src="https://lh7-us.googleusercontent.com/docsz/AD_4nXdt33mZufKcf_O3wfbduXM1935m2UCeqr6NIfMMIafM9kAU_DEjuRGwN6-FKixSbTpGb7RBCWKZ5SNFg3pkq4ZWPrkwhWyLLDSWu1X1SlC4SeMuBcEl9g7UEUZmldxvurCCIQgkNM65vT-vy9q5KFhT9XpL9_YER3P29fl6D1wn-QXCE7xBgGo?key=COniNcqpFgD9tQc5n2pLiA" width="123" height="121" style="margin-left:0px;margin-top:0px;"></span></span><br></p>
+                    </span>
+                    <p dir="ltr" style="line-height:1.2;margin-left: -0.1pt;text-indent: -0.1pt;text-align: justify;margin-top:0pt;margin-bottom:0pt;padding:0pt 0pt 0pt 0.1pt;"><span style="font-size:11pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:700;font-style:italic;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;"><br></span></p>
+                    <p dir="ltr" style="line-height:1.2;margin-left: -0.1pt;text-indent: -0.1pt;text-align: justify;margin-top:0pt;margin-bottom:0pt;padding:0pt 0pt 0pt 0.1pt;"><span style="background-color: transparent; font-family: Arial, sans-serif; font-size: 11pt; white-space-collapse: preserve; text-indent: -0.1pt;">Again, welcome to the team!</span></p>
+                    <p style="font-size: 14.67px;"><b style="font-weight:normal;"><br></b></p>
+                    <p dir="ltr" style="line-height:1.2;margin-left: -0.1pt;text-indent: -0.1pt;text-align: justify;margin-top:0pt;margin-bottom:0pt;padding:0pt 0pt 0pt 0.1pt;"><span style="font-size:11pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">Sincerely,</span></p>
+                    <p style="font-size: 14.67px;"><b style="font-weight:normal;"><br><br></b></p>
+                    <p dir="ltr" style="line-height:1.2;margin-left: -0.1pt;text-indent: -0.1pt;text-align: justify;margin-top:0pt;margin-bottom:0pt;padding:0pt 0pt 0pt 0.1pt;"><span style="font-size:11pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:700;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">BENNETTE DAVE C. CALO</span></p>
+                    <p dir="ltr" style="line-height:1.2;margin-left: -0.1pt;text-indent: -0.1pt;text-align: justify;margin-top:0pt;margin-bottom:0pt;padding:0pt 0pt 0pt 0.1pt;"><span style="font-size:11pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">Administrative Officer V</span></p>
+                    <p dir="ltr" style="line-height:1.2;margin-left: -0.1pt;text-indent: -0.1pt;text-align: justify;margin-top:0pt;margin-bottom:0pt;padding:0pt 0pt 0pt 0.1pt;"><span style="font-size:11pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">Head, Human Resource Management and Development Division</span></p>
+                    <p dir="ltr" style="line-height:1.2;margin-left: -0.1pt;text-indent: -0.1pt;text-align: justify;margin-top:0pt;margin-bottom:0pt;padding:0pt 0pt 0pt 0.1pt;"><span style="font-size:11pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">DSWD Field Office Caraga</span></p>
+                    <p style="font-size: 14.67px;"><b style="font-weight:normal;"><br></b></p>
+                    <p dir="ltr" style="line-height:1.2;margin-left: -0.1pt;text-indent: -0.1pt;text-align: justify;margin-top:0pt;margin-bottom:0pt;padding:0pt 0pt 0pt 0.1pt;"><span style="font-size:11pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">cc: </span><span style="font-size:9pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">ALDIE MAE ANDOY</span></p>
+                    <p style="font-size: 14.67px;"><br></p>
+                    <p dir="ltr" style="line-height:1.295;margin-left: 4.95pt;text-indent: -0.04999999999999982pt;margin-top:1.55pt;margin-bottom:8pt;padding:0pt 0pt 0pt 0.04999999999999982pt;"><span style="font-size:9pt;font-family:Calibri,sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;"><span style="font-size:0.6em;vertical-align:super;">1</span></span><span style="font-size:9pt;font-family:Calibri,sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;"> Officer-In-Charge of HRMDS/HRMDD</span></p>
+                </span>
+            </div>
+            {% endif %}
+        </div>
+    </page>
+    {% endfor %}
+	<br>
+	<script src="{% static 'assets/plugins/global/plugins.bundle.js' %}"></script>
+    <script src="{% static 'assets/js/scripts.bundle.js' %}"></script>
+    <script src="{% static 'assets/plugins/custom/prismjs/prismjs.bundle.js' %}"></script>
+	<script src="{% static 'assets/js/function.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script type="text/javascript">
+        $(document).ready(function () {
+
+        });
+
+		$(document).on('keydown', function(e) {
+			if(e.ctrlKey && (e.key == "p" || e.charCode == 16 || e.charCode == 112 || e.keyCode == 80) ){
+				Swal.fire("Print Warning",
+				"Please use the PRINT button on the upper left part of the page for better rendering of the document in the print dialog.",
+				"warning");
+				e.cancelBubble = true;
+				e.preventDefault();
+				e.stopImmediatePropagation();
+			}
+		});
+
+        $('#printButton').on('click', function () {
+            window.print();
+        });
+	</script>
+</body>
+</html>

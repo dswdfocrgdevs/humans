@@ -1,0 +1,160 @@
+{% extends 'master.html' %}
+
+{% load i18n %}
+
+{% block title %}{% translate "Login" %}{% endblock %}
+
+{% block layout %}
+<div class="d-flex flex-column flex-lg-row flex-column-fluid">
+    <!--begin::Body-->
+    <div class="d-flex flex-column flex-lg-row-fluid w-lg-50 p-10 order-2 order-lg-1">
+        <!--begin::Form-->
+        <div class="d-flex flex-center flex-column flex-lg-row-fluid">
+            <!--begin::Wrapper-->
+            <div class="w-lg-500px p-10">
+                <!--begin::Form-->
+                <form class="form w-100" id="submitformlogin">
+                    {% csrf_token %}
+                    <!--begin::Heading-->
+                    <div class="text-center mb-11">
+                        <!--begin::Title-->
+                        <h1 class="text-gray-900 fw-bolder mb-3">
+                            Sign In
+                        </h1>
+                        <!--end::Title-->
+
+                        <!--begin::Subtitle-->
+                        <div class="text-gray-500 fw-semibold fs-6">
+                            Your DSWD Field Office Caraga Pillars
+                        </div>
+                        <!--end::Subtitle--->
+                    </div>
+                    <!--begin::Heading-->
+
+                    <!--begin::Input group--->
+                    <div class="fv-row mb-8">
+                        <!--begin::Username-->
+                        <input type="text" placeholder="Username" name="username" autocomplete="off" class="form-control bg-transparent" required/> 
+                        <!--end::Username-->
+                    </div>
+
+                    <!--end::Input group--->
+                    <div class="fv-row mb-3">    
+                        <!--begin::Password-->
+                        <input type="password" placeholder="Password" name="password" autocomplete="off" class="form-control bg-transparent" required/>
+                        <!--end::Password-->
+                    </div>
+                    <!--end::Input group--->
+                    <!--begin::Wrapper-->
+                    <div class="d-flex flex-stack flex-wrap gap-3 fs-base fw-semibold mb-8">
+                        <!-- <script src='https://www.google.com/recaptcha/api.js'></script>
+                        <div class="g-recaptcha" data-sitekey="6Ld5YckZAAAAALTzJgO8_zK0Jz0gcq0jtXu68kbq"></div> -->
+                        <div></div>
+
+                        <!--begin::Link-->
+                        <a href="/reset-password" class="link-primary">
+                            Forgot Password ?
+                        </a>
+                        <!--end::Link-->
+                    </div>
+                    <!--end::Wrapper-->    
+
+                    <!--begin::Submit button-->
+                    <div class="d-grid mb-10">
+                        <button type="button" id="kt_sign_in_submit" class="btn btn-primary">
+                            <span class="indicator-label">Login</span>
+                            <!--end::Indicator label-->
+                            <!--begin::Indicator progress-->
+                            <span class="indicator-progress">Please wait... 
+                            <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+                        </button>
+                    </div>
+                    <!--end::Submit button-->
+
+                    <!--begin::Sign up-->
+                    <div class="text-gray-500 text-center fw-semibold fs-6">
+                        Not a member yet? 
+                        <strong>
+                            Contact the personnel seciton for verification.
+                        </strong>
+                    </div>
+                    <!--end::Sign up-->
+                </form>
+                <!--end::Form--> 
+            </div>
+            <!--end::Wrapper-->
+        </div>
+    </div>
+        <!--end::Form-->
+    <div class="d-flex flex-lg-row-fluid w-lg-50 bgi-size-cover bgi-position-center order-1 order-lg-2" style="background-image: url({% static 'assets/media/misc/auth-bg.png' %})">
+        <!--begin::Content-->
+        <div class="d-flex flex-column flex-center py-7 py-lg-15 px-5 px-md-15 w-100">
+            <!--begin::Logo-->
+            <a href="index.html" class="mb-0 mb-lg-12">
+                <img alt="Logo" src="{% static 'assets/media/logos/custom-1.png' %}" class="h-60px h-lg-75px" />
+            </a>
+            <!--end::Logo-->
+            <!--begin::Image-->
+            <img class="d-none d-lg-block mx-auto w-275px w-md-50 w-xl-500px mb-10 mb-lg-20" src="{% static 'assets/media/misc/auth-screens.png' %}" alt="" />
+            <!--end::Image-->
+            <!--begin::Title-->
+            <h1 class="d-none d-lg-block text-white fs-2qx fw-bolder text-center mb-7">Fast, Efficient and Productive</h1>
+            <!--end::Title-->
+            <!--begin::Text-->
+            <div class="d-none d-lg-block text-white fs-base text-center">In this kind of post, 
+            <a href="#" class="opacity-75-hover text-warning fw-bold me-1">the blogger</a>introduces a person they’ve interviewed 
+            <br />and provides some background information about 
+            <a href="#" class="opacity-75-hover text-warning fw-bold me-1">the interviewee</a>and their 
+            <br />work following this is a transcript of the interview.</div>
+            <!--end::Text-->
+        </div>
+        <!--end::Content-->
+    </div>
+    <!--end::Aside-->
+</div>
+{% endblock layout %}
+{% block script %}
+<script>
+    $(document).ready(function() {
+        $('#submitformlogin').on('click', function(e) {
+            e.preventDefault();
+            var form = new FormData(document.getElementById('submitformlogin').closest('form'));
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You want to sign in!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, sign in!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '{% url "kt_auth:temporary-signin" %}',
+                        data: form,
+                        processData: false,
+                        contentType: false,
+                        success: function(response) {
+                            Swal.fire(
+                                'Signed In!',
+                                'You have been successfully signed in.',
+                                'success'
+                            ).then(() => {
+                                window.location.href = '/pillars';
+                            });
+                        },
+                        error: function() {
+                            Swal.fire(
+                                'Error!',
+                                'There was an error signing in. Please try again.',
+                                'error'
+                            );
+                        }
+                    });
+                }
+            });
+        });
+    });
+</script>
+{% endblock script %}

@@ -56,5 +56,61 @@ Django development
 ```
 
 
-.ENV
-https://drive.google.com/drive/folders/1UuRRye4r5JtbDT4cuJsg8oROvEAzuLNS?usp=drive_link
+## Installation
+
+```bash
+  python -m venv .venv
+```
+```bash
+pip install -r requirements.txt
+```
+
+```bash
+npm install
+```
+
+```bash
+npm run dev
+```
+
+```bash
+python manage.py migrate
+```
+
+```bash
+python manage.py runserver
+```
+## Production
+
+```bash
+npm run build
+```
+
+```bash
+python manage.py collectstatic
+```
+
+```bash
+python manage.py runserver
+```
+
+## Custom Commands
+
+#### Get Newly Hired From IRIS
+- can be used for crons or sync button
+
+```bash
+python manage.py fetch_hired_applicants
+```
+- fetch hired applicants streamline
+```bash
+python manage.py fetch_hired_applicants_streamline
+```
+
+#### Seeder
+- to seed NEOP activities libraries
+
+```bash
+python manage.py seed_neop_activities
+```
+
