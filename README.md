@@ -102,6 +102,10 @@ python manage.py runserver
 ```bash
 python manage.py fetch_hired_applicants
 ```
+- fetch hired applicants streamline
+```bash
+python manage.py fetch_hired_applicants_streamline
+```
 
 #### Seeder
 - to seed NEOP activities libraries
@@ -109,3 +113,4 @@ python manage.py fetch_hired_applicants
 ```bash
 python manage.py seed_neop_activities
 ```
+
