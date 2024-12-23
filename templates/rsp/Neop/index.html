@@ -196,6 +196,10 @@
                     d.page = Math.floor(d.start / d.length) + 1;  // Set page number
                     d.length = d.length;  // Number of records per page
                 },
+                dataSrc: function(json) {
+                    console.log("Response Data:", json); // Log the result to the console
+                    return json.data; // Return the data to DataTables
+                }
             },
             columns: [
                 { 
