@@ -64,7 +64,7 @@ def ListNewlyHiredNeop(request):
         search_value = request.GET.get('search[value]', '').strip()  # Get search query
 
         # Fetch data and apply search filter if search term exists
-        newly_hired_data = NewlyHiredStaff.objects.all()
+        newly_hired_data = NewlyHiredStaff.objects.filter(onboarding_type='neop')
 
         if search_value:
             newly_hired_data = newly_hired_data.filter(

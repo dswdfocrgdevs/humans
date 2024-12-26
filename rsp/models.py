@@ -30,7 +30,8 @@ class NewlyHiredStaff(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)  # Automatically set on creation
     updated_at = models.DateTimeField(auto_now=True)      # Automatically update on save
     remarks = models.TextField(null=True)
-    picture = models.CharField(max_length=100,null=True)
+    picture = models.CharField(max_length=255,null=True)
+    onboarding_type = models.CharField(max_length=100,null=True)
     
 
     def __str__(self):
