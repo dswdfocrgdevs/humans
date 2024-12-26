@@ -4,6 +4,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.db import connection
 from rsp.models import LibNeopActivities, NewlyHiredStaff, StaffNeopActivities, StaffNeopInfo
+from datetime import datetime
 import json
 
 
@@ -135,7 +136,9 @@ def ListNewlyHiredNeop(request):
         }, status=200)
         
 def Neop (request):
-    return render(request, 'rsp/Neop/index.html', {})
+    return render(request, 'rsp/Neop/index.html', {
+        'title': 'NEOP'
+    })
 
 def GetLibNeopActivities(request):
     # Get the 'milestone' and 'staff_id' parameters from the URL query string
@@ -216,15 +219,16 @@ def PostNeopStaffInfo(request):
         date_end_third = data.get('data', {}).get('date_end_third')
         date_end_sixth = data.get('data', {}).get('date_end_sixth')
 
-        # Ensure all required fields are present
-        if not staff_id or not assumption_date or not date_end_third or not date_end_sixth:
-            return JsonResponse({"error": "Missing required fields"}, status=400)
+        # Helper function to safely parse date strings
+        def parse_date(date_str):
+            if date_str:
+                return datetime.strptime(date_str, '%Y-%m-%d').date()
+            return None
 
-        # Convert the date strings to date objects
-        from datetime import datetime
-        assumption_date = datetime.strptime(assumption_date, '%Y-%m-%d').date()
-        date_end_third = datetime.strptime(date_end_third, '%Y-%m-%d').date()
-        date_end_sixth = datetime.strptime(date_end_sixth, '%Y-%m-%d').date()
+        # Safely convert the date strings to date objects
+        assumption_date = parse_date(assumption_date)
+        date_end_third = parse_date(date_end_third)
+        date_end_sixth = parse_date(date_end_sixth)
 
         # Get the staff instance
         try:

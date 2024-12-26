@@ -103,7 +103,7 @@
 </div>
 
 
-<div class="d-flex flex-column flex-column-fluid">
+<div class="">
     <!--begin::Toolbar-->
     <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
         <!--begin::Toolbar container-->
@@ -202,7 +202,13 @@
                     render: function(data, type, row) {
                         return `
                             <div class="d-flex align-items-center">
-                                <a href="#" class="text-decoration-none text-primary" onclick="staff.viewStaffModal(${row.id},'${row.full_name}')"><span class='fa fa-edit'></span></a>
+                                <a href="#" class="text-decoration-none text-primary" onclick="staff.viewStaffModal(
+                                ${row.id},
+                                '${row.full_name}',
+                                '${row.assumption_date}',
+                                '${row.date_end_third}',
+                                '${row.date_end_sixth}',
+                                )"><span class='fa fa-edit'></span></a>
                             </div>
                         `;
                     }
@@ -330,10 +336,14 @@
 
     var staff = {
         selectedStaff: null,
-        viewStaffModal(staff_id,full_name){
+        viewStaffModal(staff_id,full_name,assumption_date,date_end_third,date_end_sixth){
             staff.selectedStaff = staff_id;
             $('#staff_modal').modal('show');
             $('#staff-name').html(full_name);
+
+            $('#assumption_date').val(assumption_date);
+            $('#date_end_third').val(date_end_third);
+            $('#date_end_sixth').val(date_end_sixth);
         },
         saveStaff(){
 
