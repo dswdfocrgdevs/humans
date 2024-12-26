@@ -17,6 +17,7 @@ from ..utils import search_employees
 from django.db.models import Count, Case, When, Value, CharField
 from django.db.models import Q
 from django.template import Context, Template
+import json
 
 def dashboard(request):
     count_hired_emp_status = NewlyHiredStaff.objects.values('emp_status').annotate(count=Count('id')).order_by('-count')
@@ -119,6 +120,12 @@ def list_newly_hired_staff(request):
             'area_of_assignment': item.area_of_assignment,
             'requirements_ok': item.requirements_ok,
             'remarks': item.remarks,
+            'onboarding_type': (
+                'NEOP' if item.onboarding_type == 'neop' else
+                'COS with guidelines' if item.onboarding_type == 'cos_with_guidelines' else
+                'Internal Staff' if item.onboarding_type == 'internal_staff' else
+                item.onboarding_type
+            )
         } for item in paginated_data]
 
         return JsonResponse({
@@ -240,3 +247,42 @@ def print_req_checklist_streamline(request, pk=None):
             'all': all,
         }
     return render(request, 'rsp/NewlyHiredStaff/print_requirements_checklist_streamline.html', context)
+
+@csrf_exempt
+def PatchNewlyHiredOnboarding(request):
+    try:
+        # Parse JSON data from the request body
+        data = json.loads(request.body)
+
+        # Extract the relevant data from the payload
+        staff_ids = data.get("data", {}).get("staffIds", [])
+        onboarding_type = data.get("data", {}).get("type", None)
+
+        # Validate that required data is present
+        if not staff_ids or onboarding_type is None:
+            return JsonResponse({"error": "Missing required fields: staffIds or type"}, status=400)
+
+        # Iterate over the staff IDs and update their onboarding_type
+        updated_count = 0
+        not_found_ids = []
+        for staff_id in staff_ids:
+            staff_neop_info = NewlyHiredStaff.objects.filter(id=staff_id).first()
+            if staff_neop_info:
+                staff_neop_info.onboarding_type = onboarding_type
+                staff_neop_info.save()
+                updated_count += 1
+            else:
+                not_found_ids.append(staff_id)
+
+        # Build the response message
+        response_message = {
+            "updated_count": updated_count,
+            "not_found_ids": not_found_ids,
+        }
+
+        return JsonResponse(response_message, status=200)
+
+    except json.JSONDecodeError:
+        return JsonResponse({"error": "Invalid JSON data"}, status=400)
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
