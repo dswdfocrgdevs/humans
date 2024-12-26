@@ -108,9 +108,18 @@ python manage.py fetch_hired_applicants_streamline
 ```
 
 #### Seeder
-- to seed NEOP activities libraries
 
 ```bash
+python manage.py seed_all
+```
+
+- to seed NEOP activities libraries
+```bash
 python manage.py seed_neop_activities
+```
+
+- to seed COS with Guidelines activities libraries
+```bash
+python manage.py seed_cos_guidlines_activities
 ```
 

@@ -3,9 +3,12 @@ from django.conf import settings
 from .views.views import dashboard, onboarding_forms, newly_hired_staff, neop, cos_with_guidelines, reports_generation, list_newly_hired_staff, employee_search_data, print_notice_of_appointed_applicants, print_onboarding_forms, \
     print_req_checklist, list_newly_hired_staff_streamline, newly_hired_staff_streamline, print_req_checklist_streamline
 from rsp.transmittal.views import list_endorse_applicants, list_endorse_applicants_data
-from rsp.views.viewsPermanentContractual import CongratulatoryLetter as PermanentContractualCongratulatoryLetter, NoticeNewlyHired as PermanentContractualNoticeNewlyHired, WelcomeLetter as PermanentContractualWelcomeLetter
-from rsp.views.viewsCosJo import JobOffer as CosJoJobOffer, NoticeNewlyHired as CosJoNoticeNewlyHired, WelcomeLetter as CosJoWelcomeLetter, RequirementsList as CosJoRequirementsList
-from rsp.views.viewsNeop import Neop, GetLibNeopActivities, PostLibNeopActivities, ListNewlyHiredNeop, PostNeopStaffInfo
+
+from rsp.views.rsp.viewsPermanentContractual import CongratulatoryLetter as PermanentContractualCongratulatoryLetter, NoticeNewlyHired as PermanentContractualNoticeNewlyHired, WelcomeLetter as PermanentContractualWelcomeLetter
+from rsp.views.rsp.viewsCosJo import JobOffer as CosJoJobOffer, NoticeNewlyHired as CosJoNoticeNewlyHired, WelcomeLetter as CosJoWelcomeLetter, RequirementsList as CosJoRequirementsList
+from rsp.views.rsp.viewsNeop import Neop, GetLibNeopActivities, PostLibNeopActivities, ListNewlyHiredNeop, PostNeopStaffInfo
+
+from rsp.views.rsp.viewsCosGuidelines import GetCosGuideLines, GetCosGuideLinesStaffList, GetLibCosGuideLinesActivities, PostLibCostGuideLinesActivities, PostCosGuideLinesStaffInfo
 
 app_name = 'rsp'
 
@@ -41,7 +44,14 @@ urlpatterns = [
     path('neop/lib/activities', GetLibNeopActivities, name="GetLibNeopActivities"),
     path('neop/staff/activities/save', PostLibNeopActivities, name="PostLibNeopActivities"),
     path('neop/staff/list', ListNewlyHiredNeop, name="ListNewlyHiredNeop"),
-     path('neop/staff/save', PostNeopStaffInfo, name="PostNeopStaffInfo"),
+    path('neop/staff/save', PostNeopStaffInfo, name="PostNeopStaffInfo"),
     # path('error', DashboardsView.as_view(template_name = 'non-exist-file.html'), name='Error Page'),
+
+    path('cos-guidelines', GetCosGuideLines, name="GetCosGuideLines"),
+    path('cos-guidelines/lib/activities', GetLibCosGuideLinesActivities, name="GetLibCosGuideLinesActivities"),
+    path('cos-guidelines/staff/activities/save', PostLibCostGuideLinesActivities, name="PostLibCostGuideLinesActivities"),
+    path('cos-guidelines/staff/list', GetCosGuideLinesStaffList, name="GetCosGuideLinesStaffList"),
+    path('cos-guidelines/staff/save', PostCosGuideLinesStaffInfo, name="PostCosGuideLinesStaffInfo"),
+
 ]
 
