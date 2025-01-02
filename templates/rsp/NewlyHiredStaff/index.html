@@ -24,7 +24,53 @@
 }
 </style>
 
-<div class="d-flex flex-column flex-column-fluid">
+
+
+<!--begin::Modal - Create App-->
+<div class="modal fade" id="onboarding_modal" tabindex="-1" aria-hidden="true">
+	<!--begin::Modal dialog-->
+	<div class="modal-dialog modal-dialog-centered mw-500px">
+		<!--begin::Modal content-->
+		<div class="modal-content">
+			<!--begin::Modal header-->
+			<div class="modal-header">
+				<!--begin::Modal title-->
+				<h2>Update Staff : <span id="staff-name"></span></h2>
+				<!--end::Modal title-->
+				<!--begin::Close-->
+				<div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">{% getIcon 'cross' 'fs-1' %}</div>
+				<!--end::Close-->
+			</div>
+			<!--end::Modal header-->
+			<!--begin::Modal body-->
+            <div class="modal-body py-lg-10 px-lg-10">
+                <!-- Title -->
+                <h5 class="modal-title mb-5 text-center fw-bold">Staff Information</h5>
+        
+                <!-- Form Inputs -->
+                <label for="selectOnboarding" class="form-label fw-bold">Select Onboarding Type</label>
+                <select id="selectOnboarding" class="form-select form-select-lg">
+                    <option value="" disabled selected>Select Option</option>
+                    <option value="neop">NEOP</option>
+                    <option value="cos_with_guidelines">COS with GuideLines</option>
+                    <option value="internal_staff">Internal Staff</option>
+                </select>
+                <!-- Save Button -->
+                <div class="d-flex justify-content-end mt-5">
+                    <a href="#" class="btn btn-sm fw-bold btn-success me-2" onclick="onboarding.save()">
+                        <i class="fas fa-check"></i> Save
+                    </a>
+                </div>
+            </div>
+			<!--end::Modal body-->
+		</div>
+		<!--end::Modal content-->
+	</div>
+	<!--end::Modal dialog-->
+</div>
+
+
+<div class="">
     <!--begin::Toolbar-->
     <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
         <!--begin::Toolbar container-->
@@ -89,6 +135,9 @@
                         </div>
                     
                         <div class="d-flex">
+                            <a href="#" class="btn btn-sm fw-bold btn-success me-2" onclick="onboarding.viewModal()">
+                                <i class="fas fa-check"></i> Set Onboarding Type
+                            </a>
                             <div class="dropdown">
                                 <button class="btn btn-sm me-2 btn-primary dropdown-toggle" type="button" id="actionDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                     Generate Onboarding Forms
@@ -199,7 +248,7 @@
         });
     });
 
-    $(document).ready(function () {
+
         // Initialize Select2 with AJAX
         $('#employees').select2({
             placeholder: 'Search for employees',
@@ -285,7 +334,9 @@
                 { data: 'nature', title: 'Nature' },
                 { data: 'area_of_assignment', title: 'Area of Assignment' },
                 { data: 'requirements_ok', title: 'Requirements' },
-                { data: 'remarks', title: 'Remarks' }
+                { data: 'remarks', title: 'Remarks' },
+                { data: 'onboarding_type', title: 'Onboarding Type' }
+                 
             ],
             headerCallback: function (thead, data, start, end, display) {
                 $(thead).find('th').addClass('text-center'); // Add center class to all headers
@@ -363,6 +414,52 @@
                 }
             ],
         });   
-   });
+ 
+
+
+   var onboarding = {
+        selectedIds: [],
+        viewModal(){
+            // Gather all selected IDs
+            $('.dt-checkboxes:checked').each(function() {
+                onboarding.selectedIds.push($(this).val());
+            });
+            if (onboarding.selectedIds.length > 0) {
+                $('#onboarding_modal').modal('show');
+            }else{
+                alert("Please Select Staff");
+            }
+        },
+        save(){
+            var type = $('#selectOnboarding').val();
+            if(type){
+                var data = {
+                    type: type,
+                    staffIds: onboarding.selectedIds
+                }
+                $.ajax({
+                    url: "{% url 'rsp:PatchNewlyHiredOnboarding' %}",
+                    type: "POST",
+                    contentType: "application/json",  // Set the correct content type
+                    data: JSON.stringify({data: data}),  // Convert the data to a JSON string
+                    success: function(data) {
+                        
+                        $('#onboarding_modal').modal('hide');
+                        setTimeout(function(){
+                            table.ajax.reload(null, false);
+                        },1000)  
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            }else{
+                alert("Please Select Onboarding Type");
+            }
+           
+
+
+        }
+   }
 </script>
 {% endblock script %}

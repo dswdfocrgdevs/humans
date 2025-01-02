@@ -8,6 +8,7 @@ from django.db import models
 from django.db import models
 
 class NewlyHiredStaff(models.Model):
+    iris_id = models.IntegerField(null=True)
     requirements_ok = models.CharField(max_length=100,default=False,null=True)  # True if requirements are met
     full_name = models.CharField(max_length=255,null=True)  # Full name of the staff
     first_name = models.CharField(max_length=255,null=True)
@@ -27,10 +28,11 @@ class NewlyHiredStaff(models.Model):
     fundsource = models.CharField(max_length=100,null=True)
     program = models.CharField(max_length=100,null=True)
     nature = models.CharField(max_length=100,null=True)  # Nature of employment (e.g., permanent, temporary)
-    created_at = models.DateTimeField(auto_now_add=True)  # Automatically set on creation
-    updated_at = models.DateTimeField(auto_now=True)      # Automatically update on save
+    created_at = models.DateTimeField(auto_now_add=True,null=True)  # Automatically set on creation
+    updated_at = models.DateTimeField(auto_now=True,null=True)      # Automatically update on save
     remarks = models.TextField(null=True)
-    picture = models.CharField(max_length=100,null=True)
+    picture = models.CharField(max_length=255,null=True)
+    onboarding_type = models.CharField(max_length=100,null=True)
     
 
     def __str__(self):
@@ -38,6 +40,7 @@ class NewlyHiredStaff(models.Model):
     
 
 class NewlyHiredStaffStreamline(models.Model):
+    iris_id = models.IntegerField(null=True)
     requirements_ok = models.CharField(max_length=100,default=False,null=True)  # True if requirements are met
     full_name = models.CharField(max_length=255,null=True)  # Full name of the staff
     first_name = models.CharField(max_length=255,null=True)
@@ -57,8 +60,8 @@ class NewlyHiredStaffStreamline(models.Model):
     fundsource = models.CharField(max_length=100,null=True)
     program = models.CharField(max_length=100,null=True)
     nature = models.CharField(max_length=100,null=True)  # Nature of employment (e.g., permanent, temporary)
-    created_at = models.DateTimeField(auto_now_add=True)  # Automatically set on creation
-    updated_at = models.DateTimeField(auto_now=True)      # Automatically update on save
+    created_at = models.DateTimeField(auto_now_add=True,null=True)  # Automatically set on creation
+    updated_at = models.DateTimeField(auto_now=True,null=True)      # Automatically update on save
     remarks = models.TextField(null=True)
     picture = models.CharField(max_length=100,null=True)
     
@@ -142,4 +145,25 @@ class StaffNeopInfo(models.Model):
     assumption_date = models.DateField(null=True, blank=True)
     date_end_third = models.DateField(null=True, blank=True)
     date_end_sixth = models.DateField(null=True, blank=True)
+
+
+class LibCosGuidelinesActivities(models.Model):
+    name = models.CharField(max_length=100,null=True)
+    description = models.CharField(max_length=255,null=True)
+    created_at = models.DateTimeField(auto_now_add=True)  # Automatically set on creation
+    updated_at = models.DateTimeField(auto_now=True)      # Automatically update on save
+
+class StaffCosGuidelinesActivities(models.Model):
+    staff_id = models.ForeignKey(NewlyHiredStaff, on_delete=models.CASCADE, related_name='cos_activities')
+    lib_cos_guidelines_id = models.ForeignKey(LibCosGuidelinesActivities, on_delete=models.CASCADE, related_name='staff_cos_activities')
+    date = models.DateField(null=True)  # Field to store the date of the activity
+    remarks = models.TextField(blank=True, null=True)  # Field to store additional remarks (optional)
+
+class StaffCosGuidelinesInfo(models.Model):
+    staff_id = models.ForeignKey(NewlyHiredStaff, on_delete=models.CASCADE, related_name='cos_guidelines_info_activities')
+    assumption_date = models.DateField(null=True, blank=True)
+    requirements_submission_date = models.DateField(null=True, blank=True)
+    ccef_submission_date = models.DateField(null=True, blank=True)
+    agency_orientation = models.DateField(null=True, blank=True)
+
     
