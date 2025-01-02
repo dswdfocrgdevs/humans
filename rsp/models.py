@@ -8,6 +8,7 @@ from django.db import models
 from django.db import models
 
 class NewlyHiredStaff(models.Model):
+    iris_id = models.IntegerField(null=True)
     requirements_ok = models.CharField(max_length=100,default=False,null=True)  # True if requirements are met
     full_name = models.CharField(max_length=255,null=True)  # Full name of the staff
     first_name = models.CharField(max_length=255,null=True)
@@ -27,8 +28,8 @@ class NewlyHiredStaff(models.Model):
     fundsource = models.CharField(max_length=100,null=True)
     program = models.CharField(max_length=100,null=True)
     nature = models.CharField(max_length=100,null=True)  # Nature of employment (e.g., permanent, temporary)
-    created_at = models.DateTimeField(auto_now_add=True)  # Automatically set on creation
-    updated_at = models.DateTimeField(auto_now=True)      # Automatically update on save
+    created_at = models.DateTimeField(auto_now_add=True,null=True)  # Automatically set on creation
+    updated_at = models.DateTimeField(auto_now=True,null=True)      # Automatically update on save
     remarks = models.TextField(null=True)
     picture = models.CharField(max_length=255,null=True)
     onboarding_type = models.CharField(max_length=100,null=True)
@@ -39,6 +40,7 @@ class NewlyHiredStaff(models.Model):
     
 
 class NewlyHiredStaffStreamline(models.Model):
+    iris_id = models.IntegerField(null=True)
     requirements_ok = models.CharField(max_length=100,default=False,null=True)  # True if requirements are met
     full_name = models.CharField(max_length=255,null=True)  # Full name of the staff
     first_name = models.CharField(max_length=255,null=True)
@@ -58,8 +60,8 @@ class NewlyHiredStaffStreamline(models.Model):
     fundsource = models.CharField(max_length=100,null=True)
     program = models.CharField(max_length=100,null=True)
     nature = models.CharField(max_length=100,null=True)  # Nature of employment (e.g., permanent, temporary)
-    created_at = models.DateTimeField(auto_now_add=True)  # Automatically set on creation
-    updated_at = models.DateTimeField(auto_now=True)      # Automatically update on save
+    created_at = models.DateTimeField(auto_now_add=True,null=True)  # Automatically set on creation
+    updated_at = models.DateTimeField(auto_now=True,null=True)      # Automatically update on save
     remarks = models.TextField(null=True)
     picture = models.CharField(max_length=120,null=True)
     
