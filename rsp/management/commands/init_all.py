@@ -6,6 +6,9 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         commands = [
+            'truncate_tables',
+            'fetch_hired_applicants',
+            'fetch_hired_applicants_streamline',
             'seed_cos_guidlines_activities', 
             'seed_neop_activities',          
         ]

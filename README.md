@@ -96,6 +96,13 @@ python manage.py runserver
 
 ## Custom Commands
 
+Initialize All Fetchers & Seeders
+```bash
+python manage.py init_all
+```
+
+or Alternatively,
+
 #### Get Newly Hired From IRIS
 - can be used for crons or sync button
 
@@ -108,10 +115,6 @@ python manage.py fetch_hired_applicants_streamline
 ```
 
 #### Seeder
-
-```bash
-python manage.py seed_all
-```
 
 - to seed NEOP activities libraries
 ```bash

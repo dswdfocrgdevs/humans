@@ -10,6 +10,8 @@ from rsp.views.rsp.viewsNeop import Neop, GetLibNeopActivities, PostLibNeopActiv
 
 from rsp.views.rsp.viewsCosGuidelines import GetCosGuideLines, GetCosGuideLinesStaffList, GetLibCosGuideLinesActivities, PostLibCostGuideLinesActivities, PostCosGuideLinesStaffInfo
 
+from rsp.views.rsp.viewsInternalStaff import GetInternalStaff, ListNewlyHiredInternalStaff
+
 app_name = 'rsp'
 
 urlpatterns = [
@@ -54,6 +56,11 @@ urlpatterns = [
     path('cos-guidelines/staff/save', PostCosGuideLinesStaffInfo, name="PostCosGuideLinesStaffInfo"),
 
     path('list-of-newly-hired/oboarding-type/update', PatchNewlyHiredOnboarding, name="PatchNewlyHiredOnboarding"),
+
+    path('internal-staff', GetInternalStaff, name="GetInternalStaff"),
+    path('internal-staff/staff/list', ListNewlyHiredInternalStaff, name="ListNewlyHiredInternalStaff"),
+    
+    
 
 ]
 
