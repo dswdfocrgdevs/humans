@@ -6,6 +6,7 @@ from django.db import connection
 from rsp.models import LibNeopActivities, NewlyHiredStaff, StaffNeopActivities, StaffNeopInfo
 from datetime import datetime
 import json
+from rsp.views.rsp.functions import safe_decode
 
 def check_activities_exist(milestone, staff_id):
     """Check if all activities for a given staff member exist based on the milestone, 
@@ -46,12 +47,6 @@ def check_activities_exist(milestone, staff_id):
         """
         cursor.execute(query, [milestone, staff_id, staff_id, milestone, milestone])
         result = cursor.fetchone()
-
-    # Decode bytes if necessary and handle null cases
-    def safe_decode(value):
-        if isinstance(value, bytes):
-            return value.decode('utf-8')
-        return value
 
     return {
         'all_activities_exist': True if result and result[0] == 'TRUE' else False,

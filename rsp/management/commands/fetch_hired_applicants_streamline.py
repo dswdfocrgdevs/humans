@@ -35,6 +35,7 @@ class Command(BaseCommand):
                 # Check if the entry already exists
                 applicant, created = NewlyHiredStaffStreamline.objects.update_or_create(
                     iris_id=iris_id,
+                    app_id=item.get('app_id'),
                     defaults={
                         'requirements_ok': item.get('requirements_ok', ''),
                         'full_name': item.get('full_name', ''),
@@ -56,6 +57,9 @@ class Command(BaseCommand):
                         'nature': item.get('nature', ''),
                         'remarks': item.get('remarks', ''),
                         'picture': item.get('picture', ''),
+                        'gender': item.get('gender', ''),
+                        'contact_no': item.get('contact_no', ''),
+                        'email': item.get('email', ''),
                     }
                 )
 

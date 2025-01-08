@@ -8,7 +8,7 @@ from django.db import connection
 from rsp.models import LibCosGuidelinesActivities, NewlyHiredStaff, StaffCosGuidelinesActivities, StaffCosGuidelinesInfo
 from datetime import datetime
 import json
-
+from rsp.views.rsp.functions import safe_decode
 @csrf_exempt
 
 
@@ -51,7 +51,7 @@ def check_activities_exist(staff_id):
     # Return a dictionary with both existence and progress
     return {
         'all_activities_exist': True if result and result[0] == 'TRUE' else False,
-        'progress': result[1] if result else '0/0'  # Default to '0/0' if no result
+        'progress': safe_decode(result[1]) if result else '0/0'  # Default to '0/0' if no result
     }
 
 def GetCosGuideLines (request):
