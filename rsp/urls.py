@@ -1,7 +1,8 @@
 from django.urls import path
 from django.conf import settings
 from .views.views import dashboard, onboarding_forms, newly_hired_staff, neop, cos_with_guidelines, reports_generation, list_newly_hired_staff, employee_search_data, print_notice_of_appointed_applicants, print_onboarding_forms, \
-    print_req_checklist, list_newly_hired_staff_streamline, newly_hired_staff_streamline, print_req_checklist_streamline,PatchNewlyHiredOnboarding
+    print_req_checklist, list_newly_hired_staff_streamline, newly_hired_staff_streamline, print_req_checklist_streamline,PatchNewlyHiredOnboarding, GetLibEndorsedActivities, PostLibEndorsedActivities, view_hired_requirements, \
+    hiredreq_not_complete, hiredreq_complete, delete_hiredreq_compliance
 from rsp.transmittal.views import list_endorse_applicants, list_endorse_applicants_data
 
 from rsp.views.rsp.viewsPermanentContractual import CongratulatoryLetter as PermanentContractualCongratulatoryLetter, NoticeNewlyHired as PermanentContractualNoticeNewlyHired, WelcomeLetter as PermanentContractualWelcomeLetter
@@ -29,8 +30,13 @@ urlpatterns = [
     path('print/onboarding/form/<int:pk>/<str:ids>', print_onboarding_forms, name='view_print_notice_of_appointed'),
     path('print/requirements/checklist/form/<str:pk>', print_req_checklist, name='print_req_checklist'),
     path('print/requirements/checklist/streamline/form/<str:pk>', print_req_checklist_streamline, name='print_req_checklist_streamline'),
+    path('endorse/lib/activities', GetLibEndorsedActivities, name="GetLibEndorsedActivities"),
+    path('endorse/staff/activities/save', PostLibEndorsedActivities, name="PostLibEndorsedActivities"),
+    path('view_hired_requirements/<int:pk>', view_hired_requirements, name='view_hired_requirements'),
+    path('hiredreq_not_complete/', hiredreq_not_complete, name='hiredreq_not_complete'),
+    path('hiredreq_complete/', hiredreq_complete, name='hiredreq_complete'),
+    path('delete_hiredreq_compliance/', delete_hiredreq_compliance, name='delete_hiredreq_compliance'),
 
-    #
     path('employee_search_data', employee_search_data, name='employee_search_data'),
 
     path('permanent-contractual/congratulatory-letter', PermanentContractualCongratulatoryLetter, name='PermanentContractualCongratulatoryLetter'),

@@ -6,7 +6,7 @@ from django.db import connection
 from rsp.models import LibNeopActivities, NewlyHiredStaff, StaffNeopActivities, StaffNeopInfo
 from datetime import datetime
 import json
-
+from rsp.views.rsp.functions import safe_decode
 
 def check_activities_exist(milestone, staff_id):
     """Check if all activities for a given staff member exist based on the milestone, 
@@ -45,15 +45,13 @@ def check_activities_exist(milestone, staff_id):
                  WHERE lib.milestone = %s)
             ) AS progress;
         """
-        cursor.execute(query, [milestone, staff_id, staff_id, milestone, milestone])  # Pass both `milestone` and `staff_id`
+        cursor.execute(query, [milestone, staff_id, staff_id, milestone, milestone])
         result = cursor.fetchone()
 
-    # Return a dictionary with both existence and progress
     return {
         'all_activities_exist': True if result and result[0] == 'TRUE' else False,
-        'progress': result[1] if result else '0/0'  # Default to '0/0' if no result
+        'progress': safe_decode(result[1]) if result and result[1] else '0/0'  # Decode and default to '0/0'
     }
-    
 
 @csrf_exempt
 def ListNewlyHiredNeop(request):
@@ -120,7 +118,6 @@ def ListNewlyHiredNeop(request):
                 'date_end_third': date_end_third,    # Add date_end_third
                 'date_end_sixth': date_end_sixth    # Add date_end_sixth
             })
-
         return JsonResponse({
             'data': data,
             'recordsTotal': total,  # Total records without filtering

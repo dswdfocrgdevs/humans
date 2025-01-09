@@ -69,6 +69,48 @@
 	<!--end::Modal dialog-->
 </div>
 
+<div class="modal fade" id="endorsed_modal" tabindex="-1" aria-hidden="true">
+	<!--begin::Modal dialog-->
+	<div class="modal-dialog modal-dialog-centered mw-900px">
+		<!--begin::Modal content-->
+		<div class="modal-content">
+			<!--begin::Modal header-->
+			<div class="modal-header">
+				<!--begin::Modal title-->
+				<h2>Endorsed to <span class="endorsed_name"></span> Activities</h2>
+				<!--end::Modal title-->
+				<!--begin::Close-->
+				<div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">{% getIcon 'cross' 'fs-1' %}</div>
+				<!--end::Close-->
+			</div>
+			<!--end::Modal header-->
+			<!--begin::Modal body-->
+			<div class="modal-body py-lg-10 px-lg-10">
+                <div id="neop-content">
+                    <table id="table-neop-content" class="table table-bordered table-striped">
+                        <thead>
+                            <th>Details</th>
+                            <th>Complied</th>
+                            <th>Date</th>
+                            <th>Remarks</th>
+                        </thead>
+                        <tbody  id="table-endorse-content-tbody">
+                            
+                        </tbody>
+                    </table>
+                    <div class="d-flex justify-content-end mt-3">
+                        <a href="#" class="btn btn-sm fw-bold btn-success me-2" onclick="endorse.saveEndorsed()">
+                            <i class="fas fa-check"></i> Save
+                        </a>
+                    </div>
+                </div>
+			</div>
+			<!--end::Modal body-->
+		</div>
+		<!--end::Modal content-->
+	</div>
+	<!--end::Modal dialog-->
+</div>
 
 <div class="">
     <!--begin::Toolbar-->
@@ -221,6 +263,14 @@
         </div>
     </div>
 </div>
+<div class="modal" id="view-modal-requirements" role="dialog" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content animated bounceInRight">
+            <div class="modal-content">
+            </div> 
+        </div>
+    </div>
+</div>
 {% endblock content %}
 
 {% block script %}
@@ -303,6 +353,37 @@
             $("#on_boarding_modals .modal-title").text(modalTitle);
             $("#on_boarding_modals #type_id").val(typeid);
         });
+
+        $(document).on('click', 'a[data-role=delete]', function(){
+            if(confirm("Are you sure you want to delete?")){
+                emp_id = $(this).data('id')[2];
+                $.ajax({
+                    url: "{% url 'rsp:delete_hiredreq_compliance' %}",
+                    data: {
+                        emp_id: $(this).data('id')[1],
+                        req_id: $(this).data('id')[0]
+                    },
+                    type: "POST"
+                })
+                .done(function(data){
+                    if(data.data == "success"){
+                        Swal.fire({
+                            title: "Good job!",
+                            text: "Requirements status successfully deleted!",
+                            icon: "success",
+                            confirmButtonColor: "#3498DB",
+                            allowOutsideClick: false,
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                $('#view-modal-requirements').modal('show').find('.modal-content').load("/rsp/view_hired_requirements/"+ emp_id);
+                            }
+                        });
+                    }else{
+                        Swal.fire("Warning", data.error, "warning");
+                    }
+                });
+            }
+        });
         
         var table = $("#hired-table").DataTable({
             processing: true, 
@@ -335,7 +416,51 @@
                 { data: 'area_of_assignment', title: 'Area of Assignment' },
                 { data: 'requirements_ok', title: 'Requirements' },
                 { data: 'remarks', title: 'Remarks' },
-                { data: 'onboarding_type', title: 'Onboarding Type' }
+                { 
+                    title: 'Endorse to Welfare',
+                    render: function(data, type, row) {
+                        return `
+                            <div class="d-flex align-items-center">
+                                <input type="checkbox" class="form-check-input me-2" disabled ${row.endorse_welfare ? 'checked' : '' }/>
+                                <a href="#" class="text-decoration-none text-primary" onclick="endorse.viewEndorsement(${row.id},'1')">View <span class="badge bg ">(${row.endorse_welfareprogress})</a>
+                            </div>
+                        `;
+                    }
+                },
+                { 
+                    title: 'Endorse to LDS',
+                    render: function(data, type, row) {
+                        return `
+                            <div class="d-flex align-items-center">
+                                <input type="checkbox" class="form-check-input me-2" disabled ${row.endorse_lds ? 'checked' : '' }/>
+                                <a href="#" class="text-decoration-none text-primary" onclick="endorse.viewEndorsement(${row.id},'2')">View <span class="badge bg ">(${row.endorse_ldsprogress})</a>
+                            </div>
+                        `;
+                    }
+                },
+                { 
+                    title: 'Endorse to PMS',
+                    render: function(data, type, row) {
+                        return `
+                            <div class="d-flex align-items-center">
+                                <input type="checkbox" class="form-check-input me-2" disabled ${row.endorse_pms ? 'checked' : '' }/>
+                                <a href="#" class="text-decoration-none text-primary" onclick="endorse.viewEndorsement(${row.id},'3')">View <span class="badge bg ">(${row.endorse_pmsprogress})</a>
+                            </div>
+                        `;
+                    }
+                },
+                { 
+                    title: 'Endorse to PAS',
+                    render: function(data, type, row) {
+                        return `
+                            <div class="d-flex align-items-center">
+                                <input type="checkbox" class="form-check-input me-2" disabled ${row.endorse_pas ? 'checked' : '' }/>
+                                <a href="#" class="text-decoration-none text-primary" onclick="endorse.viewEndorsement(${row.id},'4')">View <span class="badge bg ">(${row.endorse_pasprogress})</a>
+                            </div>
+                        `;
+                    }
+                },
+                { data: 'onboarding_type', title: 'Onboarding Type' },
                  
             ],
             headerCallback: function (thead, data, start, end, display) {
@@ -355,15 +480,15 @@
                 title: 'Action',
                 orderable: false,
                 searchable: false,
-                render: function (data) {
+                render: function (data, type, row) {
                     return `
                         <div class="dropdown">
                             <button class="btn btn-secondary dropdown-toggle" type="button" id="actionDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                 Actions
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="actionDropdown">
-                                <li><a class="dropdown-item" href="/checklist">Requirements Checklist</a></li>
-                                <li><a class="dropdown-item" href="/checklist33">Remarks</a></li>
+                                <li><a class="dropdown-item" href="javascript:void(0)" data-role="view-req" data-id="${data}">Requirements Checklist</a></li>
+                                <li><a class="dropdown-item" href="javascript:void(0)" data-role="remarks" data-id="${data}">Remarks</a></li>
                                 <li><a class="dropdown-item" href='/rsp/print/notice-of-appointed-applicants/${data}' target='_blank' title='PRINT'>Print</a></li>
                             </ul>
                         </div>
@@ -415,7 +540,10 @@
             ],
         });   
  
-
+    $(document).on('click', 'a[data-role=view-req]',function(){
+		$('#view-modal-requirements').modal('show').find('.modal-content').empty();
+		$('#view-modal-requirements').modal('show').find('.modal-content').load('/rsp/view_hired_requirements/' + $(this).data('id'));
+	});
 
    var onboarding = {
         selectedIds: [],
@@ -461,5 +589,114 @@
 
         }
    }
+
+   var endorse = {
+        selectedEndorsed: null,
+        selectedStaff: null,
+        viewEndorsement(staff_id, endorsed){
+            endorse.selectedEndorsed = endorsed;
+            endorse.selectedStaff = staff_id;
+            if(endorsed==1){
+                $('.endorsed_name').html('Welfare');
+            }else if(endorsed==2){
+                $('.endorsed_name').html('LDS');
+            }else if(endorsed==3){
+                $('.endorsed_name').html('PMS');
+            }else{
+                $('.endorsed_name').html('PAS');
+            }
+            $('#endorsed_modal').modal('show');
+            endorse.getEndorsedList(staff_id, endorsed);
+        },
+        getEndorsedList(staff_id, endorsed) {
+            $.get("{% url 'rsp:GetLibEndorsedActivities' %}?endorsed=" + endorsed + "&staff_id=" + staff_id, function(data){
+                console.log(data)
+                endorse.writeModalContent(data);
+            });
+        },
+        writeModalContent(data){
+            var contentHtml = "";
+            data.lib_endorsed_activities.forEach(function(item) {
+                contentHtml += `<tr>`;
+                    contentHtml += `<td>${item.name}</td>`;
+                    contentHtml += `<td class="text-center align-middle"><input type="checkbox" class="form-check-input me-2" ${item?.date ? 'checked' : ''}/></td>`;
+                    contentHtml += `<td><input type="date" name="endorsed_date[]" class="form-control me-2" data-id="${item.id}" value="${item?.date ? item.date : ''}"/></td>`;
+                    contentHtml += `<td><input type="text" name="endorsed_remarks[]" class="form-control me-2" placeHolder="Remarks" value="${item?.remarks ? item.remarks : ''}"/></td>`;
+                contentHtml += `</tr>`;
+            });
+            $('#table-endorse-content-tbody').html(contentHtml);
+        },
+        saveEndorsed(){
+            var activitiesData = [];
+
+            $("input[name='endorsed_date[]']").each(function(index) {
+                // Get the corresponding remarks value
+                if($(this).val()){
+                    let date = $(this).val();
+                    let id = $(this).attr('data-id');
+                    let remarks = $("input[name='endorsed_remarks[]']").eq(index).val();
+                    // Create an object and push it to the activitiesData array
+                    activitiesData.push({ id:id,user_id:endorse.selectedStaff, date: date, remarks: remarks });
+                    $('#endorsed_modal').modal('hide');
+                    setTimeout(function(){
+                        table.ajax.reload(null, false);
+                    },1000)  
+                }
+            });
+            
+            $.ajax({
+                url: "{% url 'rsp:PostLibEndorsedActivities' %}",
+                type: "POST",
+                contentType: "application/json",  // Set the correct content type
+                data: JSON.stringify({data: activitiesData}),  // Convert the data to a JSON string
+                success: function(data) {
+                    console.log(data);
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        }
+   }
+
+   $(document).on('click', 'a[data-role=remarks]',function(){
+		var checkfirst = prompt("Please enter remarks :", "");
+		if(checkfirst){
+			id = $(this).data('id');
+			$.ajax({
+				url: "{% url 'rsp:newly-hired-staff' %}",
+				data: {
+					id: id,
+					remarks: checkfirst,
+				},
+				type: "POST"
+			})
+			.done(function(data){
+				if(data.data == "success"){
+					Swal.fire({
+						title: "Good job!",
+						text: "Remarks successfully changes!",
+						icon: "success",
+						confirmButtonColor: "#3498DB",
+						allowOutsideClick: false,
+					}).then((result) => {
+						if (result.isConfirmed) {
+							$('#hired-table').DataTable().ajax.reload();
+						}
+					});
+				}else{
+					Swal.fire("Warning", data.error, "warning");
+				}
+			});
+		} else {
+			Swal.fire({
+				title: "Error",
+				text: "Message cannot be empty!",
+				icon: "error",
+				confirmButtonColor: "#3498DB",
+				allowOutsideClick: false,
+			});
+		}
+	});
 </script>
 {% endblock script %}
