@@ -1,13 +1,14 @@
 import requests
 from django.core.management.base import BaseCommand
-from rsp.models import NewlyHiredStaff
+from rsp.models import NewlyHiredStaffStreamline
 import os
+from django.utils import timezone  # Import Django's timezone module for timezone-aware datetime
 
 class Command(BaseCommand):
     help = 'Fetch and store hired applicants from the external API'
 
     def handle(self, *args, **kwargs):
-        base_url = os.getenv("IRIS_API_NEWLY_HIRED")
+        base_url = os.getenv("IRIS_API_NEWLY_HIRED_STREAMLINE")
         iris_token = os.getenv("IRIS_API_TOKEN")
         headers = {"Authorization": "Token " + iris_token}
 
@@ -29,9 +30,11 @@ class Command(BaseCommand):
 
             # Store or update the data in the database
             for item in data['results']:
-                # Update or create each applicant
-                obj, created = NewlyHiredStaff.objects.update_or_create(
-                    iris_id=item.get('id'),
+                iris_id = item.get('id')
+
+                # Check if the entry already exists
+                applicant, created = NewlyHiredStaffStreamline.objects.update_or_create(
+                    iris_id=iris_id,
                     app_id=item.get('app_id'),
                     defaults={
                         'requirements_ok': item.get('requirements_ok', ''),
@@ -46,8 +49,8 @@ class Command(BaseCommand):
                         'salary_grade': item.get('salary_grade', 0),
                         'effectivity_of_contract': item.get('effectivity_of_contract'),
                         'end_of_contract': item.get('end_of_contract'),
-                        'created_at': item.get('created_at'),
-                        'updated_at': item.get('updated_at'),
+                        'created_at': item.get('created_at'),  # Use timezone.now() if 'created_at' is None
+                        'updated_at': item.get('updated_at'),  # Use timezone.now() if 'updated_at' is None
                         'emp_status': item.get('emp_status', ''),
                         'fundsource': item.get('fundsource', ''),
                         'program': item.get('program', ''),
@@ -59,10 +62,11 @@ class Command(BaseCommand):
                         'email': item.get('email', ''),
                     }
                 )
+
                 if created:
-                    self.stdout.write(self.style.SUCCESS(f'Created new entry: {item.get("full_name", "")}'))
+                    print(f"Created new entry: {item.get('full_name')}")
                 else:
-                    self.stdout.write(self.style.SUCCESS(f'Updated entry: {item.get("full_name", "")}'))
+                    print(f"Updated entry: {item.get('full_name')}")
 
             self.stdout.write(self.style.SUCCESS(f'Successfully fetched and processed data from page {page}'))
 

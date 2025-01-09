@@ -72,6 +72,7 @@ TEMPLATES = [
             ],
             'libraries': {
                 'theme': '_keenthemes.templatetags.theme',
+                'tags': 'kt_auth.template_tags.tags',
             },
             'builtins': [
                 'django.templatetags.static',

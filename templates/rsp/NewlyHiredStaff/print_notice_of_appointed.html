@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+{% load static %}
+{% load tags %}
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="shortcut icon" type="image/png" href="#"/>
+	<title>Print Notice of Appointed Applicants</title>
+    <link rel="shortcut icon" href="{% static 'assets/media/logos/favicon.ico' %}" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
+    <link href="{% static 'assets/plugins/global/plugins.bundle.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'assets/css/style.bundle.css' %}" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="{% static 'assets/plugins/custom/prismjs/prismjs.bundle.css' %}" />
+	<link href="{% static 'assets/css/print.css' %}" rel="stylesheet">
+	<style type="text/css">
+         @media print {
+            body * {
+                visibility: hidden; /* Hide everything initially */
+            }
+            .containerX, .containerX * {
+                visibility: visible; /* Show only the content to print */
+            }
+            .containerX {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+            .no-print {
+                display: none !important; /* Hide the navbar and other elements */
+            }
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            font-size: 12px;
+            color: black;
+        }
+
+        .containerX {
+            zoom: 90%;
+        }
+	</style>
+</head>
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm no-print">
+    <div class="container">
+        <!-- Brand -->
+        <a class="navbar-brand font-weight-bold" href="#">
+            Print Notice of Appointed Applicants
+        </a>
+        <div id="navbar" class="navbar-collapse collapse">
+			<ul class="navbar-nav ms-auto">
+				<li><button type="button" class="btn btn-primary" class="print-button" id="printButton" title="Print" style="font-size: 14px; margin-top: 8px;"><i class="fas fa-print"></i> Print</button>&emsp;</li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<body style="font-family: Inter">
+    <page size="long" layout="landscape" class="page" style="padding: 45px; position: relative;page-break-after: always;">
+        <div class="containerX">
+            <img src="{% static 'assets/media/logos/dswd_new_logo.png' %}" width="14%">&emsp;
+            <img src="{% static 'assets/media/logos/Bagong_Pilipinas_logo.png' %}" width="7%">
+            <br><br>
+            <h1 class="text-center" style="font-family: Georgia;font-size: 50px"><b>NOTICE</b></h1>
+            <h3 style="font-family: Georgia;font-size: 25px;font-weight: normal;">
+                The public is hereby informed that the following have been appointed to the position stated below having met the minimum and competency requirements of the position.
+            </h3>
+            <br><br><br>
+            <h1 class="text-center" style="font-family: Georgia;font-size: 50px"><u><b>{{ applicants.position }}</b></u></h1>
+            <p class="text-center" style="font-family: Cambria;font-style: italic;font-size: 25px;">({{ applicants.emp_status }})</p>
+            <h1 class="text-center" style="font-family: Georgia;text-transform: uppercase;font-size: 55px;">
+                {{ applicants.full_name|upper }}
+            </h1>
+            <br><br><br>
+            <h3 style="font-family: Lucida Fax;font-size: 25px;">&emsp;&emsp;&emsp;Pursuant to Memorandum Circular No. 15, s. 2008 (Implementing Guidelines on DSWD Merit Selection Plan), those who wish to contest or protest the appointment may do so within fifteen (15) days from date of posting. Only written grievance/protest shall be entertained.</h3>
+            <br><br>
+            <div class="text-center">
+                <h3 style="font-family: Lucida Fax;font-size: 25px;text-transform: uppercase;"><b contenteditable="True">Genelyn P. Marturillas</b></h3>
+                <h3 style="font-family: Lucida Fax;font-size: 25px;font-style: italic;">HRPPMS Head</h3>
+                {% now 'F d, Y' as today %}
+                <h3 style="font-family: Lucida Fax;font-size: 25px;">{{ today }}</h3>
+            </div>
+        </div>
+    </page>
+	<br>
+	<script src="{% static 'assets/plugins/global/plugins.bundle.js' %}"></script>
+    <script src="{% static 'assets/js/scripts.bundle.js' %}"></script>
+    <script src="{% static 'assets/plugins/custom/prismjs/prismjs.bundle.js' %}"></script>
+	<script src="{% static 'assets/js/function.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script type="text/javascript">
+		$(document).on('keydown', function(e) {
+			if(e.ctrlKey && (e.key == "p" || e.charCode == 16 || e.charCode == 112 || e.keyCode == 80) ){
+				Swal.fire("Print Warning",
+				"Please use the PRINT button on the upper left part of the page for better rendering of the document in the print dialog.",
+				"warning");
+				e.cancelBubble = true;
+				e.preventDefault();
+				e.stopImmediatePropagation();
+			}
+		});
+
+        $('#printButton').on('click', function () {
+            window.print();
+        });
+	</script>
+</body>
+</html>

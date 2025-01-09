@@ -86,5 +86,11 @@ __pycache__/
 local_settings.py
 
 .env
+<<<<<<< HEAD
+db.sqlite3
+
+.venv
+=======
 venv
 db.sqlite3
+>>>>>>> 1fe1b2f884a3825ae1a80416972b2f35ce483555
