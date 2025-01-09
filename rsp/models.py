@@ -9,6 +9,7 @@ from django.db import models
 
 class NewlyHiredStaff(models.Model):
     iris_id = models.IntegerField(null=True)
+    app_id = models.IntegerField(null=True)
     requirements_ok = models.CharField(max_length=100,default=False,null=True)  # True if requirements are met
     full_name = models.CharField(max_length=255,null=True)  # Full name of the staff
     first_name = models.CharField(max_length=255,null=True)
@@ -33,7 +34,9 @@ class NewlyHiredStaff(models.Model):
     remarks = models.TextField(null=True)
     picture = models.CharField(max_length=255,null=True)
     onboarding_type = models.CharField(max_length=100,null=True)
-    
+    gender = models.CharField(max_length=100,null=True)
+    contact_no = models.CharField(max_length=100,null=True)
+    email = models.CharField(max_length=100,null=True)
 
     def __str__(self):
         return f"{self.full_name} - {self.position}"
@@ -41,6 +44,7 @@ class NewlyHiredStaff(models.Model):
 
 class NewlyHiredStaffStreamline(models.Model):
     iris_id = models.IntegerField(null=True)
+    app_id = models.IntegerField(null=True)
     requirements_ok = models.CharField(max_length=100,default=False,null=True)  # True if requirements are met
     full_name = models.CharField(max_length=255,null=True)  # Full name of the staff
     first_name = models.CharField(max_length=255,null=True)
@@ -63,13 +67,16 @@ class NewlyHiredStaffStreamline(models.Model):
     created_at = models.DateTimeField(auto_now_add=True,null=True)  # Automatically set on creation
     updated_at = models.DateTimeField(auto_now=True,null=True)      # Automatically update on save
     remarks = models.TextField(null=True)
-    picture = models.CharField(max_length=120,null=True)
+    picture = models.CharField(max_length=100,null=True)
+    gender = models.CharField(max_length=100,null=True)
+    contact_no = models.CharField(max_length=100,null=True)
+    email = models.CharField(max_length=100,null=True)
+
     
 
     def __str__(self):
         return f"{self.full_name} - {self.position}"
     
-
 
 class RspFormType(models.Model):
     name = models.CharField(max_length=255, blank=True, null=True)
@@ -167,4 +174,41 @@ class StaffCosGuidelinesInfo(models.Model):
     ccef_submission_date = models.DateField(null=True, blank=True)
     agency_orientation = models.DateField(null=True, blank=True)
 
+class EndorsementActivities(models.Model):
+    name = models.CharField(max_length=100,null=True)
+    description = models.CharField(max_length=255,null=True)
+    endorsed = models.PositiveSmallIntegerField(null=True)
+    created_at = models.DateTimeField(auto_now_add=True)  # Automatically set on creation
+    updated_at = models.DateTimeField(auto_now=True)      # Automatically update on save
+
+class StaffEndorsementActivities(models.Model):
+    staff_id = models.ForeignKey(NewlyHiredStaff, on_delete=models.CASCADE)
+    lib_endorsed_id = models.ForeignKey(EndorsementActivities, on_delete=models.CASCADE)
+    date = models.DateField(null=True)  # Field to store the date of the activity
+    remarks = models.TextField(blank=True, null=True)  # Field to store additional remarks (optional)
+
+    def __str__(self):
+        return f'{self.staff_id.full_name} - {self.lib_endorsed_id.name}'
     
+
+class Hiredreq(models.Model):
+    name = models.CharField(max_length=255)
+    empstatus = models.ForeignKey(RspEmpstatus, on_delete=models.CASCADE)
+    is_required = models.IntegerField()
+    status = models.IntegerField()
+    upload_by_id = models.IntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'rsp_hiredreq'
+
+
+class HiredreqCompliance(models.Model):
+    app_id = models.IntegerField(blank=True, null=True)
+    hired_req = models.ForeignKey(Hiredreq, on_delete=models.CASCADE)
+    remarks = models.CharField(max_length=255, blank=True, null=True)
+    datetime = models.DateTimeField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'rsp_hiredreq_compliance'

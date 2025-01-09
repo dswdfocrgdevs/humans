@@ -1,0 +1,276 @@
+{% load tags %}
+<div class="modal-header">
+    <!--begin::Modal title-->
+    <h2>Applicants Requirements</h2>
+    <!--end::Modal title-->
+    <!--begin::Close-->
+    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">{% getIcon 'cross' 'fs-1' %}</div>
+    <!--end::Close-->
+</div>
+<div class="modal-body">
+    <div class="row mb-4">
+        <!-- Main Information -->
+        <div class="col-lg-3 col-md-4 col-sm-12">
+            <h3 class="fw-bold text-primary">Main Information</h3>
+            <p>Name <br><strong>{{ app.full_name|upper }}</strong></p>
+            <p>Sex <br><strong>{{ app.gender }}</strong></p>
+            <p>Position <br><strong>{{ app.position }}</strong></p>
+            <p>Employment Status <br><strong>{{ app.emp_status }}</strong></p>
+            <p>Program <br><strong>{{ app.program }}</strong></p>
+            <p>Fundsource <br><strong>{{ app.fundsource }}</strong></p>
+            <p>Salary Rate <br><strong>{{ app.salary }} - SG {{ app.salary_grade }} </strong></p>
+        </div>
+
+        <!-- Requirements and Actions -->
+        <div class="col-lg-9 col-md-8 col-sm-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="fw-bold text-dark">{{ app.emp_status }} Requirements</h3>
+                <div class="d-flex">
+                    <!-- Print Button -->
+                    <a href="{% url 'rsp:print_req_checklist' pk %}" target="_blank" class="btn btn-sm btn-light-success me-2">
+                        <i class="fas fa-print"></i> Print Checklist
+                    </a>
+
+                    <!-- Dropdown Menu -->
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="actionDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                           Download Actions {{app.emp_status}}
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="actionDropdown">
+                            {% if app.emp_status == 'COS with ATH' or app.emp_status == 'Job Order Savings' or app.emp_status == 'COS Savings' %}
+                                <li>
+                                    <a class="dropdown-item" href="../../static/staticfiles/assets/templates/MOA-Template.docx" target="_blank">
+                                        MOA Contract
+                                    </a>
+                                </li>
+                            {% elif app.emp_status == 'Permanent' or app.emp_status == 'Regular Contractual' or app.emp_status == 'Contractual' %}
+                                <li>
+                                    <a class="dropdown-item" href="../../static/staticfiles/assets/templates/Contractual-template.doc" target="_blank">
+                                        Contractual Contract
+                                    </a>
+                                </li>
+                            {% endif %}
+                            {% if app.emp_status == 'COS with ATH' or app.emp_status == 'Job Order Savings' or app.emp_status == 'COS Savings' %}
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="dropdown-item" href="../../static/staticfiles/assets/templates/MOA-Requirements-Checklist.xlsx" target="_blank">
+                                        Requirements to Comply
+                                    </a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div>                    
+                </div>
+            </div>
+
+            <!-- Compliance Form -->
+            <form id="submitComplianceForm">
+                <div class="table-responsive">
+                    <table class="table align-middle table-bordered table-hover">
+                        <thead class="table-light">
+                            <tr class="text-center" style="font-size: 12px;">
+                                <th>#</th>
+                                <th>Requirements</th>
+                                <th>Date Submitted<br>
+                                    <small class="text-danger">Please fill this field to avoid errors.</small>
+                                </th>
+                                <th>Remarks<br>
+                                    <small class="text-danger">Please fill this field to avoid errors.</small>
+                                </th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% get_empstatus_hired_req app.emp_status as req %}
+                            {% for row in req %}
+                                {% getcompliance app.app_id row.id as compliance %}
+                                <tr id="{{ row.id }}">
+                                    <input type="hidden" value="{{ row.id }}" name="req_id[]" id="req_id">
+                                    <input type="hidden" value="{{ app.app_id }}" name="app_id[]" id="app_id">
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>
+                                        {{ row.name }}
+                                        {% if row.is_required == 1 %}
+                                            <span class="badge badge-danger">Required</span>
+                                        {% else %}
+                                            <span class="badge badge-dark">If Applicable</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="date" class="form-control form-control-sm" name="date_compliance[]" value="{{ compliance.datetime|date:'Y-m-d' }}">
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="text" class="form-control form-control-sm" name="date_remarkscompliance[]" value="{% if compliance %}{{ compliance.remarks }}{% endif %}">
+                                    </td>
+                                    <td class="text-center">
+                                        {% if compliance %}
+                                            <span class="text-success d-block">Submitted Documents <i class="fas fa-check-circle"></i></span>
+                                            <hr>
+                                            <a href="#" class="text-danger mt-2" data-role="delete" data-id="[{{ row.id }}, {{ app.app_id }}, {{ app.id }}]">
+                                                Remove <i class="fas fa-times fa-lg"></i>
+                                            </a>
+                                        {% else %}
+                                            <span class="text-warning d-block">Not Yet Submitted <i class="fas fa-times-circle"></i></span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Save Changes Button -->
+                <div class="text-end mt-4">
+                    <button type="submit" class="btn btn-primary btn-sm">
+                        <i class="fas fa-check"></i> Save Changes
+                    </button>
+                </div>
+            </form>
+            <div class="d-flex justify-content-start align-items-center" style="margin-top: -35px;">
+                <form id="complete" class="me-3">
+                    <input type="hidden" name="app_id" value="{{ app.id }}">
+                    <button type="submit" class="btn btn-primary btn-sm" {% if app_hired %}disabled{% endif %}>
+                        <span class="spinner-border spinner-border-sm d-none" role="status"></span>
+                        <i class="fas fa-check-circle me-1"></i> Complete
+                    </button>
+                </form>
+            
+                <form id="not-complete">
+                    <input type="hidden" name="app_id_not_completed" value="{{ app.id }}">
+                    <button type="submit" class="btn btn-danger btn-sm">
+                        <span class="spinner-border spinner-border-sm d-none" role="status"></span>
+                        <i class="fas fa-times-circle me-1"></i> Not Complete
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $('#submitComplianceForm').on('submit', function(e){
+        var form = new FormData(this);
+        Swal.fire({
+            title: "Are you sure",
+            text: "You want update this requirements checklist?",
+            icon: "info",
+            showCancelButton: true,
+            confirmButtonColor: "#3498DB",
+            confirmButtonText: "Yes",
+            closeOnConfirm: false,
+            allowOutsideClick: false,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.showLoading()
+                $.ajax({
+                    data        : form,
+                    url         : "{% url 'rsp:view_hired_requirements' pk %}",
+                    type        : 'POST',
+                    cache       : false,
+                    contentType : false,
+                    processData : false
+                })
+                .done(function(data){
+                    if (data){
+                        Swal.fire({
+							title: "Good job!",
+							text: "Requirements status successfully changes!",
+                          	icon: "info",
+                          	confirmButtonColor: "#3498DB",
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+								$('#view-modal-requirements').modal('show').find('.modal-content').load("{% url 'rsp:view_hired_requirements' pk %}");
+							}
+                        });
+                    }else{
+                    	Swal.fire("Warning", data.error, "warning");
+                    }
+                });
+            }
+        });
+        e.preventDefault();
+    });
+
+    $('#not-complete').on('submit', function(e){
+		e.preventDefault();
+		var message = prompt("Please enter message :", "");
+		if(message){
+			app_id = $('#app_id_not_completed').val();
+			$.ajax({
+				url: "{% url 'rsp:hiredreq_not_complete' %}",
+				data: {
+					app_id: app_id,
+					remarks: message,
+				},
+				type: "POST"
+			})
+			.done(function(data){
+				if(data.data == "success"){
+					Swal.fire({
+						title: "Information!",
+						text: "Applicant requirements not-completed it will successfully notify to receiver!",
+						icon: "success",
+						confirmButtonColor: "#3498DB",
+						allowOutsideClick: false,
+					}).then((result) => {
+						if (result.isConfirmed) {
+							$('#view-modal-requirements').modal('show').find('.modal-content').load("{% url 'rsp:view_hired_requirements' pk %}");
+                            $('#hired-table').DataTable().ajax.reload();
+						}
+					});
+				}else{
+					Swal.fire("Warning", data.error, "warning");
+				}
+			});
+		} else {
+			Swal.fire({
+				title: "Error",
+				text: "Message cannot be empty!",
+				icon: "error",
+				confirmButtonColor: "#3498DB",
+				allowOutsideClick: false,
+			});
+		}
+	});
+
+    $('#complete').on('submit', function(e){
+    	var form = new FormData(this);
+		e.preventDefault();
+		Swal.fire({
+		  title: "Confirmation",
+		  text: "Are you sure that this applicant done with the requirements?",
+		  icon: "info",
+		  showCancelButton: true,
+		  confirmButtonColor: "#3498DB",
+		  confirmButtonText: "Yes",
+		  allowOutsideClick: false,
+		  showLoaderOnConfirm: true,
+		  preConfirm: function (){
+			return $.ajax({
+				data: form,
+				url: "{% url 'rsp:hiredreq_complete' %}",
+				type        : 'POST',
+				cache       : false,
+				contentType : false,
+				processData : false,
+			});
+		},
+		}).then(function (data){
+			if(data.value.data == "success"){
+				Swal.fire({
+				  title: "Good job!",
+				  text: "Applicant requirements successfully completed!",
+				  icon: "success",
+				  confirmButtonColor: "#3498DB",
+				  allowOutsideClick: false,
+				}).then((result) => {
+					if (result.isConfirmed) {
+						$('#view-modal-requirements').modal('show').find('.modal-content').load("{% url 'rsp:view_hired_requirements' pk %}");
+                        $('#hired-table').DataTable().ajax.reload();
+					}
+				});
+			}else{
+				Swal.fire("Warning", data.value.error, "warning");
+			}
+		});
+	});
+</script>
