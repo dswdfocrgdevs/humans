@@ -51,9 +51,9 @@
                 <label for="selectOnboarding" class="form-label fw-bold">Select Onboarding Type</label>
                 <select id="selectOnboarding" class="form-select form-select-lg">
                     <option value="" disabled selected>Select Option</option>
-                    <option value="neop">NEOP</option>
-                    <option value="cos_with_guidelines">COS with GuideLines</option>
-                    <option value="internal_staff">Internal Staff</option>
+                    {% for row in status %}
+                    <option value="{{row.id}}">{{row.name}}</option>
+                    {% endfor %}
                 </select>
                 <!-- Save Button -->
                 <div class="d-flex justify-content-end mt-5">
@@ -207,9 +207,6 @@
                                     </li>
                                 </ul>
                             </div>
-                            <a href="#" class="btn btn-sm fw-bold btn-success me-2" data-bs-toggle="modal" data-bs-target="#kt_modal_create_app">
-                                <i class="fas fa-file-excel"></i> Generate Transmittal
-                            </a>
                             <a href="{% url 'rsp:print_req_checklist' 0 %}" id="generate-template-btn" target="_blank" class="gen_template btn btn-sm fw-bold btn-info">
                                 <i class="fas fa-file-excel"></i> Generate Checklist
                             </a>
@@ -489,7 +486,7 @@
                             <ul class="dropdown-menu" aria-labelledby="actionDropdown">
                                 <li><a class="dropdown-item" href="javascript:void(0)" data-role="view-req" data-id="${data}">Requirements Checklist</a></li>
                                 <li><a class="dropdown-item" href="javascript:void(0)" data-role="remarks" data-id="${data}">Remarks</a></li>
-                                <li><a class="dropdown-item" href='/rsp/print/notice-of-appointed-applicants/${data}' target='_blank' title='PRINT'>Print</a></li>
+                                <li><a class="dropdown-item" href='/rsp/print/notice-of-appointed-applicants/${data}' target='_blank' title='PRINT'>Print Notice Newly Hired</a></li>
                             </ul>
                         </div>
                     `;
@@ -558,35 +555,34 @@
                 alert("Please Select Staff");
             }
         },
-        save(){
+        save() {
             var type = $('#selectOnboarding').val();
-            if(type){
+            if (type) {
                 var data = {
                     type: type,
                     staffIds: onboarding.selectedIds
-                }
+                };
                 $.ajax({
                     url: "{% url 'rsp:PatchNewlyHiredOnboarding' %}",
                     type: "POST",
                     contentType: "application/json",  // Set the correct content type
                     data: JSON.stringify({data: data}),  // Convert the data to a JSON string
                     success: function(data) {
+                        // Reset selectedIds array after successful save
+                        onboarding.selectedIds = [];
                         
                         $('#onboarding_modal').modal('hide');
-                        setTimeout(function(){
+                        setTimeout(function() {
                             table.ajax.reload(null, false);
-                        },1000)  
+                        }, 1000);
                     },
                     error: function(error) {
                         console.log(error);
                     }
                 });
-            }else{
+            } else {
                 alert("Please Select Onboarding Type");
             }
-           
-
-
         }
    }
 

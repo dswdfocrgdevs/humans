@@ -12,7 +12,7 @@ from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 import requests
 import os
-from rsp.models import NewlyHiredStaff, RspOnboardingLayout, NewlyHiredStaffStreamline, StaffEndorsementActivities, EndorsementActivities, HiredreqCompliance
+from rsp.models import NewlyHiredStaff, RspOnboardingLayout, NewlyHiredStaffStreamline, StaffEndorsementActivities, EndorsementActivities, HiredreqCompliance, OnboardingStatus, OnboardingStatusNewlyhired
 from ..utils import search_employees
 from django.db.models import Count, Case, When, Value, CharField
 from django.db.models import Q
@@ -20,6 +20,7 @@ from django.template import Context, Template
 import json
 from django.db import connection
 from rsp.views.rsp.functions import safe_decode
+from datetime import date
 
 def check_activities_exist(endorsed, staff_id):
     """Check if all activities for a given staff member exist based on the endorsement, 
@@ -67,6 +68,7 @@ def check_activities_exist(endorsed, staff_id):
     }
 
 def dashboard(request):
+    today = date.today()
     count_hired_emp_status = NewlyHiredStaff.objects.values('emp_status').annotate(count=Count('id')).order_by('-count')
     count_hired_nature = (
         NewlyHiredStaff.objects.annotate(
@@ -82,11 +84,18 @@ def dashboard(request):
         .order_by('grouped_nature')
         .order_by('-count')
     )
-
+    count_onboardstaff_today = OnboardingStatusNewlyhired.objects.filter(datetime_created__date=today).count()
+    count_onboardstaff_neop_today = OnboardingStatusNewlyhired.objects.filter(onboarding_type_id=1, datetime_created__date=today).count()
+    count_onboardstaff_cosguide_today = OnboardingStatusNewlyhired.objects.filter(onboarding_type_id=2, datetime_created__date=today).count()
+    count_onboardstaff_internal_today = OnboardingStatusNewlyhired.objects.filter(onboarding_type_id=3, datetime_created__date=today).count()
     context = {
         'title': 'Dashboard',
         'count_hired_emp_status': count_hired_emp_status,
-        'count_hired_nature' : count_hired_nature
+        'count_hired_nature' : count_hired_nature,
+        'count_onboardstaff_today': count_onboardstaff_today,
+        'count_onboardstaff_neop_today': count_onboardstaff_neop_today,
+        'count_onboardstaff_cosguide_today': count_onboardstaff_cosguide_today,
+        'count_onboardstaff_internal_today': count_onboardstaff_internal_today
     }
 
     return render(request, 'rsp/Dashboard.html', context)
@@ -108,7 +117,8 @@ def newly_hired_staff(request):
         except Exception as e:
             return JsonResponse({'data': 'error', 'msg': str(e)})
     context = {
-        'title': 'Newly Hired Staff'
+        'title': 'Newly Hired Staff',
+        'status': OnboardingStatus.objects.filter(status=1).all()
     }
     return render(request, 'rsp/NewlyHiredStaff/index.html', context)
 
@@ -177,10 +187,10 @@ def list_newly_hired_staff(request):
             'requirements_ok': item.requirements_ok,
             'remarks': item.remarks,
             'onboarding_type': (
-                'NEOP' if item.onboarding_type == 'neop' else
-                'COS with guidelines' if item.onboarding_type == 'cos_with_guidelines' else
-                'Internal Staff' if item.onboarding_type == 'internal_staff' else
-                item.onboarding_type
+                'NEOP' if item.onboarding_type_id == 1 else
+                'COS with guidelines' if item.onboarding_type_id == 2 else
+                'Internal Staff' if item.onboarding_type_id == 3 else
+                item.onboarding_type_id
             ),
             'endorse_welfare': check_activities_exist(1, item.id)['all_activities_exist'],
             'endorse_welfareprogress': check_activities_exist(1, item.id)['progress'],
@@ -505,9 +515,15 @@ def PatchNewlyHiredOnboarding(request):
         for staff_id in staff_ids:
             staff_neop_info = NewlyHiredStaff.objects.filter(id=staff_id).first()
             if staff_neop_info:
-                staff_neop_info.onboarding_type = onboarding_type
+                staff_neop_info.onboarding_type_id = onboarding_type
                 staff_neop_info.save()
                 updated_count += 1
+                check = OnboardingStatusNewlyhired.objects.filter(app_id = staff_id).first()
+                if not check:
+                    OnboardingStatusNewlyhired.objects.create(app_id = staff_id, onboarding_type_id = onboarding_type)
+                else:
+                    check.onboarding_type_id = onboarding_type
+                    check.save()
             else:
                 not_found_ids.append(staff_id)
 
