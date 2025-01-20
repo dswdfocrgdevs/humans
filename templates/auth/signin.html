@@ -61,7 +61,7 @@
 
                     <!--begin::Submit button-->
                     <div class="d-grid mb-10">
-                        <button type="button" id="kt_sign_in_submit" class="btn btn-primary">
+                        <button type="submit" class="btn btn-primary">
                             <span class="indicator-label">Login</span>
                             <!--end::Indicator label-->
                             <!--begin::Indicator progress-->
@@ -115,13 +115,21 @@
 {% endblock layout %}
 {% block script %}
 <script>
-    $(document).ready(function() {
-        $('#submitformlogin').on('click', function(e) {
+    $(document).ready(function () {
+        $('#submitformlogin').on('click', function (e) {
             e.preventDefault();
-            var form = new FormData(document.getElementById('submitformlogin').closest('form'));
+
+            const form = $('#submitformlogin').closest('form')[0];
+            if (!form) {
+                Swal.fire('Error!', 'Form not found!', 'error');
+                return;
+            }
+
+            const formData = new FormData(form);
+
             Swal.fire({
                 title: 'Are you sure?',
-                text: "You want to sign in!",
+                text: 'You want to sign in!',
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -132,24 +140,20 @@
                     $.ajax({
                         type: 'POST',
                         url: '{% url "kt_auth:temporary-signin" %}',
-                        data: form,
+                        data: formData,
                         processData: false,
                         contentType: false,
-                        success: function(response) {
-                            Swal.fire(
-                                'Signed In!',
-                                'You have been successfully signed in.',
-                                'success'
-                            ).then(() => {
-                                window.location.href = '/pillars';
-                            });
+                        success: function (response) {
+                            if (response.data === 'Success') {
+                                Swal.fire('Signed In!', 'You have been successfully signed in.', 'success').then(() => {
+                                    window.location.href = '/pillars';
+                                });
+                            } else {
+                                Swal.fire('Error!', response.msg || 'Invalid credentials. Please try again.', 'error');
+                            }
                         },
-                        error: function() {
-                            Swal.fire(
-                                'Error!',
-                                'There was an error signing in. Please try again.',
-                                'error'
-                            );
+                        error: function () {
+                            Swal.fire('Error!', 'An unexpected error occurred. Please try again.', 'error');
                         }
                     });
                 }

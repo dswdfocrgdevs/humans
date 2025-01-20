@@ -3,9 +3,10 @@ from kt_auth.models import CustomUser
 # Create your models here.
 
 
-from django.db import models
+class OnboardingStatus(models.Model):
+    name = models.CharField(max_length=255,null=True)
+    status = models.IntegerField(null=True)
 
-from django.db import models
 
 class NewlyHiredStaff(models.Model):
     iris_id = models.IntegerField(null=True)
@@ -33,7 +34,7 @@ class NewlyHiredStaff(models.Model):
     updated_at = models.DateTimeField(auto_now=True,null=True)      # Automatically update on save
     remarks = models.TextField(null=True)
     picture = models.CharField(max_length=255,null=True)
-    onboarding_type = models.CharField(max_length=100,null=True)
+    onboarding_type = models.ForeignKey(OnboardingStatus, models.DO_NOTHING)
     gender = models.CharField(max_length=100,null=True)
     contact_no = models.CharField(max_length=100,null=True)
     email = models.CharField(max_length=100,null=True)
@@ -41,6 +42,11 @@ class NewlyHiredStaff(models.Model):
     def __str__(self):
         return f"{self.full_name} - {self.position}"
     
+class OnboardingStatusNewlyhired(models.Model):
+    app = models.ForeignKey(NewlyHiredStaff, models.DO_NOTHING)
+    onboarding_type = models.ForeignKey(OnboardingStatus, models.DO_NOTHING)
+    datetime_created = models.DateTimeField(auto_now_add=True)
+
 
 class NewlyHiredStaffStreamline(models.Model):
     iris_id = models.IntegerField(null=True)
