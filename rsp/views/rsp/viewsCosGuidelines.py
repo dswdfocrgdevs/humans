@@ -67,7 +67,7 @@ def GetCosGuideLinesStaffList(request):
         search_value = request.GET.get('search[value]', '').strip()  # Get search query
 
         # Fetch data and apply search filter if search term exists
-        newly_hired_data = NewlyHiredStaff.objects.filter(onboarding_type='cos_with_guidelines')
+        newly_hired_data = NewlyHiredStaff.objects.filter(onboarding_type_id=2)
 
 
         if search_value:

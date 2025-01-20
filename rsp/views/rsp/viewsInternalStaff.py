@@ -69,7 +69,7 @@ def ListNewlyHiredInternalStaff(request):
         search_value = request.GET.get('search[value]', '').strip()  # Get search query
 
         # Fetch data and apply search filter if search term exists
-        newly_hired_data = NewlyHiredStaff.objects.filter(onboarding_type='internal_staff')
+        newly_hired_data = NewlyHiredStaff.objects.filter(onboarding_type_id=3)
 
         if search_value:
             newly_hired_data = newly_hired_data.filter(
