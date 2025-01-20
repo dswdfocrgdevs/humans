@@ -54,17 +54,20 @@ class AuthSigninView(TemplateView):
 
 class TemporarySigninView(APIView):
     def get(self, request, *args, **kwargs):
-        return JsonResponse({"detail": "Method \"GET\" not allowed."})
+        return JsonResponse({"detail": "Method 'GET' not allowed."}, status=405)
 
     def post(self, request, *args, **kwargs):
         validated_response = validate_signin(request)
-        if validated_response['status_code'] == 200 :
+
+        if validated_response.get("status_code") == 200:
             authenticate(request)
-            results = signin_service(request, validated_response)
-            return JsonResponse({'data': 'Success'})
+            user_data = signin_service(request, validated_response)
+            return JsonResponse({"data": "Success", "user": user_data}, status=200)
         else:
-            return render(request, 'pages/auth/signin.html')
-            return JsonResponse({'msg': 'Invalid username and password.'})
+            return JsonResponse({
+                "msg": validated_response.get("message", "Invalid username and password.")
+            }, status=validated_response.get("status_code", 400))
+
 
 
 class LoginSerializer(serializers.Serializer):
@@ -72,136 +75,126 @@ class LoginSerializer(serializers.Serializer):
     password = serializers.CharField(required=True, write_only=True)
 
 def validate_signin(request):
-        # Initialize the serializer with the request data
-        serializer = LoginSerializer(data=request.data)
+    serializer = LoginSerializer(data=request.data)
 
-        # Validate the data
-        if serializer.is_valid():
-            # Extract the validated data
-            username = serializer.validated_data['username']
-            password = serializer.validated_data['password']
+    if serializer.is_valid():
+        username = serializer.validated_data['username']
+        password = serializer.validated_data['password']
 
-            try:
-                # Get the external API URLs from environment variables
-                portal_api_login = f"{os.getenv('PORTAL_API_URL')}/api/rest-auth/login/"
-                portal_api_employee_details = f"{os.getenv('PORTAL_API_URL')}/api/employee/list/search/?q="
+        try:
+            portal_api_login = f"{os.getenv('PORTAL_API_URL')}/api/rest-auth/login/"
+            portal_api_employee_details = f"{os.getenv('PORTAL_API_URL')}/api/employee/list/search/?q="
 
-                # Perform login request to external API
-                response = requests.post(portal_api_login, data={
-                    'username': username,
-                    'password': password
+            # Login API Request
+            response = requests.post(portal_api_login, data={
+                'username': username,
+                'password': password
+            })
+
+            if response.status_code == 200:
+                api_key = response.json().get('key')
+
+                # Fetch Employee Details
+                employee_response = requests.get(f"{portal_api_employee_details}{username}", headers={
+                    'Authorization': f"Token {api_key}"
                 })
 
-                if response.status_code == 200:
-                    results = response.json()
-                    api_key = results['key']
-
-                    # Fetch employee details using the token received
-                    response_employee_details = requests.get(f"{portal_api_employee_details}{username}", headers={
-                        'Authorization': f"Token {api_key}"
-                    })
-
-                    if response_employee_details.status_code == 200:
-                        # Return successful response with the employee details
-
-                        breakpoint()
-                        return {
-                            'status_code': 200,
-                            'status': 'success',
-                            'data': {
-                                'key': api_key,
-                                'username': username,
-                                'employee_details': response_employee_details.json()
-                            }
-                        }
-                    else:
-                        # Handle case when no employee details are found
-                        return {
-                            'status_code': 422,
-                            'status': 'error',
-                            'message': 'No user found in portal'
-                        }
-
-                else:
-                    # Handle login failure
+                if employee_response.status_code == 200:
                     return {
-                        'status_code': response.status_code,
-                        'status': 'error',
-                        'message': 'Invalid username or password'
+                        'status_code': 200,
+                        'status': 'success',
+                        'data': {
+                            'key': api_key,
+                            'username': username,
+                            'employee_details': employee_response.json()
+                        }
                     }
-
-            except requests.exceptions.RequestException as e:
-                # Handle errors with external API communication
                 return {
-                    'status_code': 500,
+                    'status_code': 404,
                     'status': 'error',
-                    'message': f'Error connecting to external API: {str(e)}'
+                    'message': 'Employee details not found.'
                 }
 
-        # Handle validation failure from serializer
-        return {
-            'status_code': 400,
-            'status': 'error',
-            'message': serializer.errors
-        }
+            return {
+                'status_code': response.status_code,
+                'status': 'error',
+                'message': 'Invalid username or password.'
+            }
+
+        except requests.exceptions.RequestException as e:
+            return {
+                'status_code': 500,
+                'status': 'error',
+                'message': f'Error connecting to API: {e}'
+            }
+
+    return {
+        'status_code': 400,
+        'status': 'error',
+        'message': serializer.errors
+    }
 
 def signin_service(request, params):
-        data = params['data']
-        api_key = data['key']
-        portal_api_employee_details = f"{os.getenv('PORTAL_API_URL')}/api/employee/list/search/?q="
-        username = data['username']
-        try:
-            user = User.objects.get(username=username)
-            user.last_login = timezone.now()
-            user.save()
-        except User.DoesNotExist:
-            response_employee_details = requests.get(f"{portal_api_employee_details}{username}", headers={
-                'Authorization': f"Token {api_key}"
-            })
-            api_response_employee_details_data = response_employee_details.json()
-            employee_details_data = api_response_employee_details_data[0]
-            user = CustomUser.objects.create(
-                employee_id=employee_details_data['employee_id'],
-                id_number=employee_details_data['id_number'],
-                last_login=timezone.now(),
-                username=employee_details_data['username'],
-                first_name=employee_details_data['first_name'],
-                middle_name=employee_details_data['middle_name'],
-                last_name=employee_details_data['last_name'],
-                contact=employee_details_data['contact'],
-                account_number=employee_details_data['account_number'],
-                position=employee_details_data['position'],
-                division=employee_details_data['division'],
-                section=employee_details_data['section'],
-                area_of_assignment=employee_details_data['area_of_assignment'],
-                gender=employee_details_data['gender'],
-                birthdate=employee_details_data['birthdate'],
-                image_path=employee_details_data['image_path'],
-                status=employee_details_data['status'],
-            )
+    data = params['data']
+    api_key = data['key']
+    username = data['username']
+    portal_api_employee_details = f"{os.getenv('PORTAL_API_URL')}/api/employee/list/search/?q="
 
-        auth_login(request, user)
-
-        request.session['user_id'] = user.id
-        request.session['user_id_number'] = user.id_number
-        request.session['user_first_name'] = user.first_name
-        request.session['user_middle_name'] = user.middle_name
-        request.session['user_last_name'] = user.last_name
-        request.session['user_position'] = user.position
-        request.session['user_image'] = user.image_path
+    try:
+        user = User.objects.get(username=username)
+        user.last_login = timezone.now()
+        user.save()
+    except User.DoesNotExist:
+        employee_response = requests.get(f"{portal_api_employee_details}{username}", headers={
+            'Authorization': f"Token {api_key}"
+        })
         
+        if employee_response.status_code == 200:
+            employee_details = employee_response.json()[0]
 
-        user_data = {
-            'user_id': user.id,
-            'username': user.username,
-            'first_name': user.first_name,
-            'last_name': user.last_name,
-            'image_path': user.image_path,
-            'position': user.position,
-            'division': user.division,
-            'section': user.section,
-        }
-        return user_data
+            user = CustomUser.objects.create(
+                employee_id=employee_details['employee_id'],
+                id_number=employee_details['id_number'],
+                last_login=timezone.now(),
+                username=employee_details['username'],
+                first_name=employee_details['first_name'],
+                middle_name=employee_details['middle_name'],
+                last_name=employee_details['last_name'],
+                contact=employee_details['contact'],
+                account_number=employee_details['account_number'],
+                position=employee_details['position'],
+                division=employee_details['division'],
+                section=employee_details['section'],
+                area_of_assignment=employee_details['area_of_assignment'],
+                gender=employee_details['gender'],
+                birthdate=employee_details['birthdate'],
+                image_path=employee_details['image_path'],
+                status=employee_details['status'],
+            )
+        else:
+            return {
+                "status_code": 404,
+                "message": "Unable to fetch employee details."
+            }
+
+    # Authenticate and manage session
+    auth_login(request, user)
+    request.session['user_id'] = user.id
+    request.session['user_first_name'] = user.first_name
+    request.session['user_last_name'] = user.last_name
+    request.session['user_position'] = user.position
+    request.session['user_image'] = user.image_path
+
+    return {
+        'user_id': user.id,
+        'username': user.username,
+        'first_name': user.first_name,
+        'last_name': user.last_name,
+        'image_path': user.image_path,
+        'position': user.position,
+        'division': user.division,
+        'section': user.section,
+    }
 
 def signout(request):
     request.session.flush()
