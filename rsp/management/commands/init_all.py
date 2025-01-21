@@ -11,7 +11,8 @@ class Command(BaseCommand):
             'fetch_hired_applicants_streamline',
             'seed_cos_guidlines_activities', 
             'seed_neop_activities', 
-            'seed_endorsement_activities',          
+            'seed_endorsement_activities',
+            'seed_onboarding_status'          
         ]
 
         for command in commands:
