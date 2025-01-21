@@ -1,6 +1,6 @@
 import hashlib
 from django import template
-from rsp.models import RspHiredreq, RspHiredStreamlinereq, Hiredreq, HiredreqCompliance
+from rsp.models import RspHiredreq, RspHiredStreamlinereq, HiredreqCompliance
 from django.db.models import Q
 
 register = template.Library()

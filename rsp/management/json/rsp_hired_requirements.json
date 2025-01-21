@@ -1,0 +1,1284 @@
+{
+  "RECORDS": [
+    {
+      "id": 1,
+      "name": "NBI Clearance (original)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 2,
+      "name": "NBI Clearance (original)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 3,
+      "name": "Pag Ibig ID (Photocopy)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 4,
+      "name": "Pag Ibig ID (Photocopy)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 5,
+      "name": "NBI Clearance (original)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 6,
+      "name": "Pag Ibig ID (Photocopy)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 7,
+      "name": "NBI Clearance (original)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 8,
+      "name": "Pag Ibig ID (Photocopy)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 9,
+      "name": "NBI Clearance (original)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 10,
+      "name": "Pag Ibig ID (Photocopy)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 11,
+      "name": "NBI Clearance (original)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 12,
+      "name": "Pag Ibig ID (Photocopy)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 13,
+      "name": "Philhealth MDR (Photocopy) & O.R of current quarter (Photocopy)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 14,
+      "name": "Medical Certificate",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 15,
+      "name": "Medical Certificate",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 16,
+      "name": "Medical Certificate",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 17,
+      "name": "Medical Certificate",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 18,
+      "name": "Medical Certificate",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 19,
+      "name": "Medical Certificate",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 20,
+      "name": "Philhealth MDR (Photocopy) & O.R of current quarter (Photocopy)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 21,
+      "name": "Philhealth MDR (Photocopy) & O.R of current quarter (Photocopy)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 22,
+      "name": "Philhealth MDR (Photocopy) & O.R of current quarter (Photocopy)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 23,
+      "name": "Philhealth MDR (Photocopy) & O.R of current quarter (Photocopy)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 24,
+      "name": "Philhealth MDR (Photocopy) & O.R of current quarter (Photocopy)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 25,
+      "name": "SSS ID or SSS Form E-1 (Photocopy)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 26,
+      "name": "SSS ID or SSS Form E-1 (Photocopy)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 27,
+      "name": "SSS ID or SSS Form E-1 (Photocopy)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 28,
+      "name": "SSS ID or SSS Form E-1 (Photocopy)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 29,
+      "name": "SSS ID or SSS Form E-1 (Photocopy)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 30,
+      "name": "SSS ID or SSS Form E-1 (Photocopy)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 31,
+      "name": "2pcs: 1x1 picture (to be submitted to personnel section ID in-charge staff upon ID claim)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 32,
+      "name": "2pcs: 1x1 picture (to be submitted to personnel section ID in-charge staff upon ID claim)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 33,
+      "name": "2pcs: 1x1 picture (to be submitted to personnel section ID in-charge staff upon ID claim)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 34,
+      "name": "2pcs: 1x1 picture (to be submitted to personnel section ID in-charge staff upon ID claim)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 35,
+      "name": "2pcs: 1x1 picture (to be submitted to personnel section ID in-charge staff upon ID claim)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 36,
+      "name": "2pcs: 1x1 picture (to be submitted to personnel section ID in-charge staff upon ID claim)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 37,
+      "name": "1pc: Passport size picture with name tag (For PDS)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 38,
+      "name": "3pcs: Passport size picture with name tag (For PDS)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 39,
+      "name": "3pcs: Passport size picture with name tag (For PDS)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 40,
+      "name": "3pcs: Passport size picture with name tag (For PDS)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 41,
+      "name": "1pc: Passport size picture with name tag (For PDS)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 42,
+      "name": "1pc: Passport size picture with name tag (For PDS)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 43,
+      "name": "Contract of Employment (Photocopy and Original) - (will be given at the office upon the contract signing)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 44,
+      "name": "Contract of Employment (Photocopy and Original) - (will be given at the office upon the contract signing)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 45,
+      "name": "Contract of Employment (Photocopy and Original) - (will be given at the office upon the contract signing)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 46,
+      "name": "Form 212 PDS (revised 2017)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 47,
+      "name": "Form 212 PDS (revised 2017)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 48,
+      "name": "Form 212 PDS (revised 2017)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 49,
+      "name": "Authenticated Transcipt of Record and Diploma",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 50,
+      "name": "Authenticated Transcipt of Record and Diploma",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 51,
+      "name": "Authenticated Transcipt of Record and Diploma",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 52,
+      "name": "Eligibility documents (Photocopy)",
+      "is_required": 1,
+      "status": 0,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 53,
+      "name": "Eligibility documents (Photocopy)",
+      "is_required": 1,
+      "status": 0,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 54,
+      "name": "Eligibility documents (Photocopy)",
+      "is_required": 1,
+      "status": 0,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 55,
+      "name": "PSA Birth Certificate (Colored Photocopy)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 56,
+      "name": "PSA Birth Certificate (Colored Photocopy)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 57,
+      "name": "PSA Birth Certificate (Colored Photocopy)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 58,
+      "name": "PSA Marriage Certificate (Colored Photocopy)",
+      "is_required": 1,
+      "status": 0,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 59,
+      "name": "PSA Marriage Certificate (Colored Photocopy)",
+      "is_required": 1,
+      "status": 0,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 60,
+      "name": "PSA Marriage Certificate (Colored Photocopy)",
+      "is_required": 1,
+      "status": 0,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 61,
+      "name": "Certificate of employment (COE) from previous employer (Photocopy)",
+      "is_required": 1,
+      "status": 0,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 62,
+      "name": "Certificate of employment (COE) from previous employer (Photocopy)",
+      "is_required": 1,
+      "status": 0,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 63,
+      "name": "Certificate of employment (COE) from previous employer (Photocopy)",
+      "is_required": 1,
+      "status": 0,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 64,
+      "name": "Cedula (Photocopy)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 65,
+      "name": "Cedula (Photocopy)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 66,
+      "name": "Cedula (Photocopy)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 67,
+      "name": "Certificate of Trainings attended (Photocopy)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 68,
+      "name": "Certificate of Trainings attended (Photocopy)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 69,
+      "name": "Certificate of Trainings attended (Photocopy)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 70,
+      "name": "Solo Parent ID (Photocopy)",
+      "is_required": 1,
+      "status": 0,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 71,
+      "name": "Solo Parent ID (Photocopy)",
+      "is_required": 1,
+      "status": 0,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 72,
+      "name": "Solo Parent ID (Photocopy)",
+      "is_required": 1,
+      "status": 0,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 73,
+      "name": "Registered Social Worker ID/ Certificate of Renewal (Photocopy)",
+      "is_required": 1,
+      "status": 0,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 74,
+      "name": "Registered Social Worker ID/ Certificate of Renewal (Photocopy)",
+      "is_required": 1,
+      "status": 0,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 75,
+      "name": "Registered Social Worker ID/ Certificate of Renewal (Photocopy)",
+      "is_required": 1,
+      "status": 0,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 76,
+      "name": "BIR Certification: BIR Forms 1901, 0605, Annex B-2 (1 Original/Photocopy)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 77,
+      "name": "BIR Certification: BIR Forms 1901, 0605, Annex B-2 (1 Original/Photocopy)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 78,
+      "name": "BIR Certification: BIR Forms 1901, 0605, Annex B-2 (1 Original/Photocopy)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 79,
+      "name": "LBP Certification: LBP Payroll ATM/Slip (Photocopy)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 80,
+      "name": "LBP Certification: LBP Payroll ATM/Slip (Photocopy)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 81,
+      "name": "LBP Certification: LBP Payroll ATM/Slip (Photocopy)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 82,
+      "name": "3 copies of Contract of Service",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 83,
+      "name": "3 copies of Contract of Service",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 84,
+      "name": "3 copies of Contract of Service",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 85,
+      "name": "3 copies of Appointment",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 86,
+      "name": "3 copies of Appointment",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 87,
+      "name": "3 copies of Appointment",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 88,
+      "name": "3 copies of Oath of Office",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 89,
+      "name": "3 copies of Oath of Office",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 90,
+      "name": "3 copies of Oath of Office",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 91,
+      "name": "3 copies of Position Description Form",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 92,
+      "name": "3 copies of Position Description Form",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 93,
+      "name": "3 copies of Position Description Form",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 94,
+      "name": "3 copies Form 212 PDS (revised 2017)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 95,
+      "name": "3 copies Form 212 PDS (revised 2017)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 96,
+      "name": "3 copies Form 212 PDS (revised 2017)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 97,
+      "name": "3 copies of Assumption to Duty Records",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 98,
+      "name": "3 copies of Assumption to Duty Records",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 99,
+      "name": "3 copies of Assumption to Duty Records",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 100,
+      "name": "Authenticated Transcript of Record and Diploma",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 101,
+      "name": "Authenticated Transcript of Record and Diploma",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 102,
+      "name": "Authenticated Transcript of Record and Diploma",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 103,
+      "name": "3 copies of Certificate of Eligibility (Certified True Copy)",
+      "is_required": 1,
+      "status": 0,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 104,
+      "name": "3 copies of Certificate of Eligibility (Certified True Copy)",
+      "is_required": 1,
+      "status": 0,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 105,
+      "name": "3 copies of Certificate of Eligibility (Certified True Copy)",
+      "is_required": 1,
+      "status": 0,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 106,
+      "name": "3 copies SALN latest form",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 107,
+      "name": "3 copies SALN latest form",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 108,
+      "name": "3 copies SALN latest form",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 109,
+      "name": "PSA Birth Certificate (Colored Photocopy)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 110,
+      "name": "PSA Birth Certificate (Colored Photocopy)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 111,
+      "name": "PSA Birth Certificate (Colored Photocopy)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 112,
+      "name": "PSA Marriage Certificate (Colored Photocopy)",
+      "is_required": 1,
+      "status": 0,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 113,
+      "name": "PSA Marriage Certificate (Colored Photocopy)",
+      "is_required": 1,
+      "status": 0,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 114,
+      "name": "PSA Marriage Certificate (Colored Photocopy)",
+      "is_required": 1,
+      "status": 0,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 115,
+      "name": "Certificate of employment (COE) from previous employer (Photocopy)",
+      "is_required": 1,
+      "status": 0,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 116,
+      "name": "Certificate of employment (COE) from previous employer (Photocopy)",
+      "is_required": 1,
+      "status": 0,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 117,
+      "name": "Certificate of employment (COE) from previous employer (Photocopy)",
+      "is_required": 1,
+      "status": 0,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 118,
+      "name": "Clearance Certificate from previous employer (Photocopy)",
+      "is_required": 1,
+      "status": 0,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 119,
+      "name": "Clearance Certificate from previous employer (Photocopy)",
+      "is_required": 1,
+      "status": 0,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 120,
+      "name": "Clearance Certificate from previous employer (Photocopy)",
+      "is_required": 1,
+      "status": 0,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 121,
+      "name": "Cedula (Photocopy)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 122,
+      "name": "Cedula (Photocopy)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 123,
+      "name": "Cedula (Photocopy)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 124,
+      "name": "Certificate of Trainings attended (Photocopy)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 125,
+      "name": "Certificate of Trainings attended (Photocopy)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 126,
+      "name": "Certificate of Trainings attended (Photocopy)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 127,
+      "name": "Solo Parent ID (Photocopy)",
+      "is_required": 1,
+      "status": 0,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 128,
+      "name": "Solo Parent ID (Photocopy)",
+      "is_required": 1,
+      "status": 0,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 129,
+      "name": "Solo Parent ID (Photocopy)",
+      "is_required": 1,
+      "status": 0,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 130,
+      "name": "Registered Social Worker ID/ Certificate of Renewal (Photocopy)",
+      "is_required": 1,
+      "status": 0,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 131,
+      "name": "Registered Social Worker ID/ Certificate of Renewal (Photocopy)",
+      "is_required": 1,
+      "status": 0,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 132,
+      "name": "Registered Social Worker ID/ Certificate of Renewal (Photocopy)",
+      "is_required": 1,
+      "status": 0,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 133,
+      "name": "BIR Certification: BIR Forms 1902 - if previous Employmen is MOA and JO (1 Original/Photocopy)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 134,
+      "name": "BIR Certification: BIR Forms 1902 - if previous Employmen is MOA and JO (1 Original/Photocopy)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 135,
+      "name": "BIR Certification: BIR Forms 1902 - if previous Employmen is MOA and JO (1 Original/Photocopy)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 136,
+      "name": "LBP Certification: LBP Payroll ATM/Slip (Photocopy)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 137,
+      "name": "LBP Certification: LBP Payroll ATM/Slip (Photocopy)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 138,
+      "name": "LBP Certification: LBP Payroll ATM/Slip (Photocopy)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 139,
+      "name": "test",
+      "is_required": 1,
+      "status": 0,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 140,
+      "name": "Vacinnation Card (Original and Photocopy)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 141,
+      "name": "Vacinnation Card (Original and Photocopy)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 142,
+      "name": "Vacinnation Card (Original and Photocopy)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 143,
+      "name": "Vacinnation Card (Original and Photocopy)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 144,
+      "name": "Vacinnation Card (Original and Photocopy)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 145,
+      "name": "Vacinnation Card (Original and Photocopy)",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 146,
+      "name": "Clearance Certificate from previous employer (Photocopy)",
+      "is_required": 1,
+      "status": 0,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 147,
+      "name": "Clearance Certificate from previous employer (Photocopy)",
+      "is_required": 1,
+      "status": 0,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 148,
+      "name": "Clearance Certificate from previous employer (Photocopy)",
+      "is_required": 1,
+      "status": 0,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 149,
+      "name": "SWEAP Membership Form",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 150,
+      "name": "SWEAP Membership Form",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 151,
+      "name": "SWEAP Membership Form",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 152,
+      "name": "SWEAP Membership Form",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 153,
+      "name": "SWEAP Membership Form",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 154,
+      "name": "SWEAP Membership Form",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 155,
+      "name": "Drug Test",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 156,
+      "name": "Drug Test",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 157,
+      "name": "Drug Test",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 158,
+      "name": "Drug Test",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 159,
+      "name": "Drug Test",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    },
+    {
+      "id": 160,
+      "name": "Drug Test",
+      "is_required": 1,
+      "status": 1,
+      "empstatus_id": 1,
+      "upload_by_id": 1
+    }
+  ]
+}

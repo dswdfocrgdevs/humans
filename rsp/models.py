@@ -197,22 +197,11 @@ class StaffEndorsementActivities(models.Model):
 
     def __str__(self):
         return f'{self.staff_id.full_name} - {self.lib_endorsed_id.name}'
-    
-
-class Hiredreq(models.Model):
-    name = models.CharField(max_length=255)
-    empstatus = models.ForeignKey(RspEmpstatus, on_delete=models.CASCADE)
-    is_required = models.IntegerField()
-    status = models.IntegerField()
-    upload_by_id = models.IntegerField()
-
-    class Meta:
-        db_table = 'rsp_hiredreq'
 
 
 class HiredreqCompliance(models.Model):
     app_id = models.IntegerField(blank=True, null=True)
-    hired_req = models.ForeignKey(Hiredreq, on_delete=models.CASCADE)
+    hired_req = models.ForeignKey(RspHiredreq, on_delete=models.CASCADE)
     remarks = models.CharField(max_length=255, blank=True, null=True)
     datetime = models.DateTimeField(blank=True, null=True)
 
