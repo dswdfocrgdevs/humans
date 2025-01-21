@@ -34,7 +34,7 @@ class NewlyHiredStaff(models.Model):
     updated_at = models.DateTimeField(auto_now=True,null=True)      # Automatically update on save
     remarks = models.TextField(null=True)
     picture = models.CharField(max_length=255,null=True)
-    onboarding_type = models.ForeignKey(OnboardingStatus, models.DO_NOTHING)
+    onboarding_type = models.ForeignKey(OnboardingStatus, models.DO_NOTHING, null=True)
     gender = models.CharField(max_length=100,null=True)
     contact_no = models.CharField(max_length=100,null=True)
     email = models.CharField(max_length=100,null=True)
