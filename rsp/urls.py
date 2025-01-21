@@ -2,7 +2,7 @@ from django.urls import path
 from django.conf import settings
 from .views.views import dashboard, onboarding_forms, newly_hired_staff, neop, cos_with_guidelines, reports_generation, list_newly_hired_staff, employee_search_data, print_notice_of_appointed_applicants, print_onboarding_forms, \
     print_req_checklist, list_newly_hired_staff_streamline, newly_hired_staff_streamline, print_req_checklist_streamline,PatchNewlyHiredOnboarding, GetLibEndorsedActivities, PostLibEndorsedActivities, view_hired_requirements, \
-    hiredreq_not_complete, hiredreq_complete, delete_hiredreq_compliance
+    hiredreq_not_complete, hiredreq_complete, delete_hiredreq_compliance, SyncIris
 from rsp.transmittal.views import list_endorse_applicants, list_endorse_applicants_data
 
 from rsp.views.rsp.viewsPermanentContractual import CongratulatoryLetter as PermanentContractualCongratulatoryLetter, NoticeNewlyHired as PermanentContractualNoticeNewlyHired, WelcomeLetter as PermanentContractualWelcomeLetter
@@ -66,7 +66,7 @@ urlpatterns = [
     path('internal-staff', GetInternalStaff, name="GetInternalStaff"),
     path('internal-staff/staff/list', ListNewlyHiredInternalStaff, name="ListNewlyHiredInternalStaff"),
     
-    
+    path('commands/sync-iris', SyncIris, name="SyncIris")
 
 ]
 
