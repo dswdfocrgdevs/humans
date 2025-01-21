@@ -152,7 +152,7 @@ def GetLibNeopActivities(request):
         lib_neop_activities = LibNeopActivities.objects.all()
 
     # Serialize the LibNeopActivities queryset
-    activities_data = list(lib_neop_activities.values('id', 'name', 'description', 'milestone'))
+    activities_data = list(lib_neop_activities.values('id', 'name', 'description', 'is_email_notify', 'milestone'))
 
     # Add the 'test' column with value 1 for each row
     for activity in activities_data:

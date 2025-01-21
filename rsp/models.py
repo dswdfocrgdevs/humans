@@ -139,6 +139,7 @@ class LibNeopActivities(models.Model):
     name = models.CharField(max_length=100,null=True)
     description = models.CharField(max_length=255,null=True)
     milestone = models.PositiveSmallIntegerField(null=True)
+    is_email_notify = models.BooleanField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)  # Automatically set on creation
     updated_at = models.DateTimeField(auto_now=True)      # Automatically update on save
 
@@ -164,6 +165,7 @@ class StaffNeopInfo(models.Model):
 class LibCosGuidelinesActivities(models.Model):
     name = models.CharField(max_length=100,null=True)
     description = models.CharField(max_length=255,null=True)
+    is_email_notify = models.BooleanField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)  # Automatically set on creation
     updated_at = models.DateTimeField(auto_now=True)      # Automatically update on save
 
@@ -205,7 +207,6 @@ class Hiredreq(models.Model):
     upload_by_id = models.IntegerField()
 
     class Meta:
-        managed = False
         db_table = 'rsp_hiredreq'
 
 
@@ -216,5 +217,4 @@ class HiredreqCompliance(models.Model):
     datetime = models.DateTimeField(blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'rsp_hiredreq_compliance'
