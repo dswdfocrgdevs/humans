@@ -36,9 +36,9 @@ class Command(BaseCommand):
             RspHiredStreamlinereq.objects.create(
                 id=item[0],
                 name=item[1],
-                is_required=bool(item[2]),
-                status=bool(item[3]),
-                empstatus_id=item[4],
+                 empstatus_id=item[2],
+                is_required=bool(item[3]),
+                status=bool(item[4]),
                 upload_by_id=item[5]
             )
 
