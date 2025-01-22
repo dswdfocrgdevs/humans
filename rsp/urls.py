@@ -9,7 +9,7 @@ from rsp.views.rsp.viewsPermanentContractual import CongratulatoryLetter as Perm
 from rsp.views.rsp.viewsCosJo import JobOffer as CosJoJobOffer, NoticeNewlyHired as CosJoNoticeNewlyHired, WelcomeLetter as CosJoWelcomeLetter, RequirementsList as CosJoRequirementsList
 from rsp.views.rsp.viewsNeop import Neop, GetLibNeopActivities, PostLibNeopActivities, ListNewlyHiredNeop, PostNeopStaffInfo
 
-from rsp.views.rsp.viewsLibraries import LibrariesNeop, LibrariesCosWithGuidelines, LibrariesAddNeop, LibrariesUpdateNeop
+from rsp.views.rsp.viewsLibraries import LibrariesNeop, LibrariesCosWithGuidelines, LibrariesAddCos, LibrariesUpdateCos,  LibrariesAddNeop, LibrariesUpdateNeop
 from rsp.views.rsp.viewsCosGuidelines import GetCosGuideLines, GetCosGuideLinesStaffList, GetLibCosGuideLinesActivities, PostLibCostGuideLinesActivities, PostCosGuideLinesStaffInfo
 
 from rsp.views.rsp.viewsInternalStaff import GetInternalStaff, ListNewlyHiredInternalStaff
@@ -59,12 +59,14 @@ urlpatterns = [
     path('neop/staff/list', ListNewlyHiredNeop, name="ListNewlyHiredNeop"),
     path('neop/staff/save', PostNeopStaffInfo, name="PostNeopStaffInfo"),
 
-    path('neop/staff/libraries/neop', LibrariesNeop, name="LibrariesNeop"),
+
     path('neop/staff/libraries/cos', LibrariesCosWithGuidelines, name="LibrariesCosWithGuidelines"),
-    path('neop/staff/libraries/save', LibrariesAddNeop, name="LibrariesAddNeop"),
-    path('neop/staff/libraries/update', LibrariesUpdateNeop, name="LibrariesUpdateNeop"),
-    # path('neop/staff/libraries', LibrariesAddCosWithGuidelines, name="LibrariesAddCosWithGuidelines"),
-    # path('error', DashboardsView.as_view(template_name = 'non-exist-file.html'), name='Error Page'),
+    path('neop/staff/libraries/neop', LibrariesNeop, name="LibrariesNeop"),
+    path('neop/staff/libraries/cos/save', LibrariesAddCos, name="LibrariesAddCos"),
+    path('neop/staff/libraries/cos/update', LibrariesUpdateCos, name="LibrariesUpdateCos"),
+    path('neop/staff/libraries/neop/save', LibrariesAddNeop, name="LibrariesAddNeop"),
+    path('neop/staff/libraries/neop/update', LibrariesUpdateNeop, name="LibrariesUpdateNeop"),
+
 
     path('cos-guidelines', GetCosGuideLines, name="GetCosGuideLines"),
     path('cos-guidelines/lib/activities', GetLibCosGuideLinesActivities, name="GetLibCosGuideLinesActivities"),

@@ -380,6 +380,28 @@
                     add_neop_milestone: add_neop_milestone
                 }
             }).done(function (data) {
+                if(data.data =="success"){
+                    Swal.fire({
+                        html: `<strong>` + data.message + `</strong> added Successfully`,
+                        icon: "success",
+                        buttonsStyling: false,
+                        confirmButtonText: "Ok, got it!",
+                        customClass: {
+                            confirmButton: "btn btn-primary"
+                        }
+                    });
+                }
+                else{
+                    Swal.fire({
+                        text: data.message,
+                        icon: "error",
+                        buttonsStyling: false,
+                        confirmButtonText: "Ok, got it!",
+                        customClass: {
+                            confirmButton: "btn btn-primary"
+                        }
+                    });
+                }
                 $('#add_neop_modal').modal('hide');
                 table.ajax.reload(null, false);
             });
@@ -400,6 +422,28 @@
                     update_neop_milestone: update_neop_milestone
                 }
             }).done(function (data) {
+                if(data.data =="success"){
+                    Swal.fire({
+                        html: `<strong>` + data.message + `</strong> update Successfully`,
+                        icon: "success",
+                        buttonsStyling: false,
+                        confirmButtonText: "Ok, got it!",
+                        customClass: {
+                            confirmButton: "btn btn-primary"
+                        }
+                    });
+                }
+                else{
+                    Swal.fire({
+                        text: data.message,
+                        icon: "error",
+                        buttonsStyling: false,
+                        confirmButtonText: "Ok, got it!",
+                        customClass: {
+                            confirmButton: "btn btn-primary"
+                        }
+                    });
+                }
                 $('#update_neop_modal').modal('hide');
                 table.ajax.reload(null, false);
             });

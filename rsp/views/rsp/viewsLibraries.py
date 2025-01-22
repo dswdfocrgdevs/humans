@@ -18,56 +18,34 @@ def LibrariesCosWithGuidelines(request):
         search_value = request.GET.get('search[value]', '').strip()  # Get search query
 
         # Fetch data and apply search filter if search term exists
-        newly_hired_data = NewlyHiredStaff.objects.filter(onboarding_type_id=1)
+        lib_data = LibCosGuidelinesActivities.objects.filter().order_by('-id')
 
         if search_value:
-            newly_hired_data = newly_hired_data.filter(
-                full_name__icontains=search_value
+            lib_data = lib_data.filter(
+                name__icontains=search_value
             )
 
         # Total records (before pagination)
-        total = newly_hired_data.count()
+        total = lib_data.count()
 
         # Paginate data
         start = (page - 1) * per_page
-        paginated_data = newly_hired_data[start:start + per_page]
+        paginated_data = lib_data[start:start + per_page]
 
         # Prepare data for response
         data = []
         for item in paginated_data:
-            # Fetch related StaffNeopInfo data for each NewlyHiredStaff
-            try:
-                staff_neop_info = StaffNeopInfo.objects.get(staff_id=item.id)
-                assumption_date = staff_neop_info.assumption_date
-                date_end_third = staff_neop_info.date_end_third
-                date_end_sixth = staff_neop_info.date_end_sixth
-            except StaffNeopInfo.DoesNotExist:
-                assumption_date = None
-                date_end_third = None
-                date_end_sixth = None
-
             data.append({
                 'id': item.id,
-                'app_id': item.id,
-                'full_name': item.full_name,
-                'position': item.position,
-                'former_incumbent': item.former_incumbent,
-                'salary': item.salary,
-                'effectivity_of_contract': item.effectivity_of_contract,
-                'end_of_contract': item.end_of_contract,
-                'emp_status': item.emp_status,
-                'nature': item.nature,
-                'area_of_assignment': item.area_of_assignment,
-                'requirements_ok': item.requirements_ok,
-                'remarks': item.remarks,
-                'assumption_date': assumption_date,  # Add assumption_date
-                'date_end_third': date_end_third,    # Add date_end_third
-                'date_end_sixth': date_end_sixth    # Add date_end_sixth
+                'name': item.name,
+                'description': item.description,
+                'created_at': localtime(item.created_at).strftime('%B %d, %Y %I:%M %p'),
+                'updated_at': localtime(item.updated_at).strftime('%B %d, %Y %I:%M %p')
             })
         return JsonResponse({
             'data': data,
-            'recordsTotal': total,  # Total records without filtering
-            'recordsFiltered': total,  # Total filtered records after search
+            'recordsTotal': total,
+            'recordsFiltered': total,
         })
 
     except Exception as e:
@@ -127,27 +105,64 @@ def LibrariesNeop(request):
         }, status=200)
     
 @csrf_exempt
-def LibrariesAddNeop(request):
-    neop_name = request.POST.get('add_neop_name')
-    neop_description = request.POST.get('add_neop_description')
-    neop_milestone = request.POST.get('add_neop_milestone')
+def LibrariesAddCos(request):
+    try:
+        name = request.POST.get('add_cos_name')
+        description = request.POST.get('add_cos_description')
 
-    if LibNeopActivities.objects.filter(name=neop_name).exists():
-            return JsonResponse({'status': 'error', 'message': 'Neop Name already Exists'})
-    else:
-        neop = LibNeopActivities(name=neop_name,description=neop_description, milestone = neop_milestone, created_at = localtime)
-        neop.save()
-        return JsonResponse({'data': 'success'})
+        if LibCosGuidelinesActivities.objects.filter(name=name).exists():
+                return JsonResponse({'data': 'error', 'message': name + ' Name already Exists'})
+        else:
+            cos = LibCosGuidelinesActivities(name=name,description=description, created_at = localtime)
+            cos.save()
+            return JsonResponse({'data': 'success','message': name,'title': 'Success'})
+    except Exception as e:
+        return JsonResponse({'data': 'error', 'message': e})
+    
+@csrf_exempt
+def LibrariesUpdateCos(request):
+    try:
+        id = request.POST.get('cos_id')
+        name = request.POST.get('update_cos_name')
+        description = request.POST.get('update_cos_description')
+        LibCosGuidelinesActivities.objects.filter(id=id).update(
+            name=name,
+            description=description,
+            updated_at = now())
+        return JsonResponse({'data': 'success','message': name,'title': 'Success'})
+    except Exception as e:
+        return JsonResponse({'data': 'error', 'message': e})
+
+    
+    
+@csrf_exempt
+def LibrariesAddNeop(request):
+    try:
+        name = request.POST.get('add_neop_name')
+        description = request.POST.get('add_neop_description')
+        milestone = request.POST.get('add_neop_milestone')
+
+        if LibNeopActivities.objects.filter(name=name).exists():
+                return JsonResponse({'data': 'error', 'message': name + ' Name already Exists'})
+        else:
+            neop = LibNeopActivities(name=name,description=description, milestone = milestone, created_at = localtime)
+            neop.save()
+            return JsonResponse({'data': 'success','message': name,'title': 'Success'})
+    except Exception as e:
+        return JsonResponse({'data': 'error', 'message': e})
     
 @csrf_exempt
 def LibrariesUpdateNeop(request):
-    neop_id = request.POST.get('neop_id')
-    neop_name = request.POST.get('update_neop_name')
-    neop_description = request.POST.get('update_neop_description')
-    neop_milestone = request.POST.get('update_neop_milestone')
-    LibNeopActivities.objects.filter(id=neop_id).update(
-        name=neop_name,
-        description=neop_description,
-        milestone=neop_milestone,
-        updated_at = now())
-    return JsonResponse({'data': 'success'})
+    try:
+        neop_id = request.POST.get('neop_id')
+        name = request.POST.get('update_neop_name')
+        description = request.POST.get('update_neop_description')
+        milestone = request.POST.get('update_neop_milestone')
+        LibNeopActivities.objects.filter(id=neop_id).update(
+            name=name,
+            description=description,
+            milestone=milestone,
+            updated_at = now())
+        return JsonResponse({'data': 'success','message': name,'title': 'Success'})
+    except Exception as e:
+        return JsonResponse({'data': 'error', 'message': e})
