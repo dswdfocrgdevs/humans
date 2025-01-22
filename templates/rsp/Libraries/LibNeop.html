@@ -352,43 +352,47 @@
             var add_neop_milestone = AddNeopMilestone.val();
             const NeopIsEmailNotify = AddNeopIsEmailNotify.is(':checked');
 
-            $.ajax({
-                type: 'POST',
-                url: "{% url 'rsp:LibrariesAddNeop' %}",
-                data:{
-                    staff_id : lib.selectedData,
-                    add_neop_name: add_neop_name,
-                    add_neop_description: add_neop_description,
-                    add_neop_milestone: add_neop_milestone,
-                    neop_email_notify : NeopIsEmailNotify
-                }
-            }).done(function (data) {
-                if(data.data =="success"){
-                    Swal.fire({
-                        html: `<strong>` + data.message + `</strong> added Successfully`,
-                        icon: "success",
-                        buttonsStyling: false,
-                        confirmButtonText: "Ok, got it!",
-                        customClass: {
-                            confirmButton: "btn btn-primary"
-                        }
-                    });
-                }
-                else{
-                    Swal.fire({
-                        text: data.message,
-                        icon: "error",
-                        buttonsStyling: false,
-                        confirmButtonText: "Ok, got it!",
-                        customClass: {
-                            confirmButton: "btn btn-primary"
-                        }
-                    });
-                }
-                $('#add_neop_modal').modal('hide');
-                table.ajax.reload(null, false);
-            });
-
+            if (!add_neop_name.trim() || !add_neop_description.trim() || !add_neop_milestone) {
+                alert("Fields are required!");
+            }
+            else{
+                $.ajax({
+                    type: 'POST',
+                    url: "{% url 'rsp:LibrariesAddNeop' %}",
+                    data:{
+                        staff_id : lib.selectedData,
+                        add_neop_name: add_neop_name,
+                        add_neop_description: add_neop_description,
+                        add_neop_milestone: add_neop_milestone,
+                        neop_email_notify : NeopIsEmailNotify
+                    }
+                }).done(function (data) {
+                    if(data.data =="success"){
+                        Swal.fire({
+                            html: `<strong>` + data.message + `</strong> added Successfully`,
+                            icon: "success",
+                            buttonsStyling: false,
+                            confirmButtonText: "Ok, got it!",
+                            customClass: {
+                                confirmButton: "btn btn-primary"
+                            }
+                        });
+                    }
+                    else{
+                        Swal.fire({
+                            text: data.message,
+                            icon: "error",
+                            buttonsStyling: false,
+                            confirmButtonText: "Ok, got it!",
+                            customClass: {
+                                confirmButton: "btn btn-primary"
+                            }
+                        });
+                    }
+                    $('#add_neop_modal').modal('hide');
+                    table.ajax.reload(null, false);
+                });
+            }
         },
         updateNeop(){
             var update_neop_name = UpdateNeopName.val();
@@ -396,43 +400,47 @@
             var update_neop_milestone = UpdateNeopMilestone.val();
             const NeopIsEmailNotify = UpdateNeopIsEmailNotify.is(':checked');
 
-            $.ajax({
-                type: 'POST',
-                url: "{% url 'rsp:LibrariesUpdateNeop' %}",
-                data:{
-                    neop_id : lib.selectedData,
-                    update_neop_name: update_neop_name,
-                    update_neop_description: update_neop_description,
-                    update_neop_milestone: update_neop_milestone,
-                    neop_email_notify : NeopIsEmailNotify
-                }
-            }).done(function (data) {
-                if(data.data =="success"){
-                    Swal.fire({
-                        html: `<strong>` + data.message + `</strong> update Successfully`,
-                        icon: "success",
-                        buttonsStyling: false,
-                        confirmButtonText: "Ok, got it!",
-                        customClass: {
-                            confirmButton: "btn btn-primary"
-                        }
-                    });
-                }
-                else{
-                    Swal.fire({
-                        text: data.message,
-                        icon: "error",
-                        buttonsStyling: false,
-                        confirmButtonText: "Ok, got it!",
-                        customClass: {
-                            confirmButton: "btn btn-primary"
-                        }
-                    });
-                }
-                $('#update_neop_modal').modal('hide');
-                table.ajax.reload(null, false);
-            });
-
+            if (!update_neop_name.trim() || !update_neop_description.trim() || !update_neop_milestone) {
+                alert("Fields are required!");
+            }
+            else{
+                $.ajax({
+                    type: 'POST',
+                    url: "{% url 'rsp:LibrariesUpdateNeop' %}",
+                    data:{
+                        neop_id : lib.selectedData,
+                        update_neop_name: update_neop_name,
+                        update_neop_description: update_neop_description,
+                        update_neop_milestone: update_neop_milestone,
+                        neop_email_notify : NeopIsEmailNotify
+                    }
+                }).done(function (data) {
+                    if(data.data =="success"){
+                        Swal.fire({
+                            html: `<strong>` + data.message + `</strong> update Successfully`,
+                            icon: "success",
+                            buttonsStyling: false,
+                            confirmButtonText: "Ok, got it!",
+                            customClass: {
+                                confirmButton: "btn btn-primary"
+                            }
+                        });
+                    }
+                    else{
+                        Swal.fire({
+                            text: data.message,
+                            icon: "error",
+                            buttonsStyling: false,
+                            confirmButtonText: "Ok, got it!",
+                            customClass: {
+                                confirmButton: "btn btn-primary"
+                            }
+                        });
+                    }
+                    $('#update_neop_modal').modal('hide');
+                    table.ajax.reload(null, false);
+                });
+            }
         }
     }
 

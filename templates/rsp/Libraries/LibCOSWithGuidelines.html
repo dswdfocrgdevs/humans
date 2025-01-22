@@ -332,85 +332,94 @@
             var cos_description = AddCosDescription.val();
             const CosIsEmailNotify = AddCosIsEmailNotify.is(':checked');
 
-            $.ajax({
-                type: 'POST',
-                url: "{% url 'rsp:LibrariesAddCos' %}",
-                data:{
-                    staff_id : lib.selectedData,
-                    add_cos_name: cos_name,
-                    add_cos_description: cos_description,
-                    cos_email_notify : CosIsEmailNotify
+            if (!cos_name.trim() || !cos_description.trim()) {
+                alert("Fields are required!");
+            }
+            else{
+                $.ajax({
+                    type: 'POST',
+                    url: "{% url 'rsp:LibrariesAddCos' %}",
+                    data:{
+                        staff_id : lib.selectedData,
+                        add_cos_name: cos_name,
+                        add_cos_description: cos_description,
+                        cos_email_notify : CosIsEmailNotify
 
-                }
-            }).done(function (data) {
-                if(data.data =="success"){
-                    Swal.fire({
-                        html: `<strong>` + data.message + `</strong> added Successfully`,
-                        icon: "success",
-                        buttonsStyling: false,
-                        confirmButtonText: "Ok, got it!",
-                        customClass: {
-                            confirmButton: "btn btn-primary"
-                        }
-                    });
-                    $('#add_cos_modal').modal('hide');
-                    table.ajax.reload(null, false);
-                }
-                else{
-                    Swal.fire({
-                        text: data.message,
-                        icon: "error",
-                        buttonsStyling: false,
-                        confirmButtonText: "Ok, got it!",
-                        customClass: {
-                            confirmButton: "btn btn-primary"
-                        }
-                    });
-                }
-            });
+                    }
+                }).done(function (data) {
+                    if(data.data =="success"){
+                        Swal.fire({
+                            html: `<strong>` + data.message + `</strong> added Successfully`,
+                            icon: "success",
+                            buttonsStyling: false,
+                            confirmButtonText: "Ok, got it!",
+                            customClass: {
+                                confirmButton: "btn btn-primary"
+                            }
+                        });
+                        $('#add_cos_modal').modal('hide');
+                        table.ajax.reload(null, false);
+                    }
+                    else{
+                        Swal.fire({
+                            text: data.message,
+                            icon: "error",
+                            buttonsStyling: false,
+                            confirmButtonText: "Ok, got it!",
+                            customClass: {
+                                confirmButton: "btn btn-primary"
+                            }
+                        });
+                    }
+                });
 
+            }
         },
         updateCos(){
             var update_cos_name = UpdateCosName.val();
             var update_cos_description = UpdateCosDescription.val();
             const CosIsEmailNotify = UpdateCosIsEmailNotify.is(':checked');
+            if (!update_cos_name.trim() || !update_cos_description.trim()) {
+                alert("Fields are required!");
+            }
+            else{
+                $.ajax({
+                    type: 'POST',
+                    url: "{% url 'rsp:LibrariesUpdateCos' %}",
+                    data:{
+                        cos_id : lib.selectedData,
+                        update_cos_name: update_cos_name,
+                        update_cos_description: update_cos_description,
+                        cos_email_notify : CosIsEmailNotify
+                    }
+                }).done(function (data) {
+                    if(data.data =="success"){
+                        Swal.fire({
+                            html: `<strong>` + data.message + `</strong> update Successfully`,
+                            icon: "success",
+                            buttonsStyling: false,
+                            confirmButtonText: "Ok, got it!",
+                            customClass: {
+                                confirmButton: "btn btn-primary"
+                            }
+                        });
+                    }
+                    else{
+                        Swal.fire({
+                            text: data.message,
+                            icon: "error",
+                            buttonsStyling: false,
+                            confirmButtonText: "Ok, got it!",
+                            customClass: {
+                                confirmButton: "btn btn-primary"
+                            }
+                        });
+                    }
+                    $('#update_cos_modal').modal('hide');
+                    table.ajax.reload(null, false);
+                });
 
-            $.ajax({
-                type: 'POST',
-                url: "{% url 'rsp:LibrariesUpdateCos' %}",
-                data:{
-                    cos_id : lib.selectedData,
-                    update_cos_name: update_cos_name,
-                    update_cos_description: update_cos_description,
-                    cos_email_notify : CosIsEmailNotify
-                }
-            }).done(function (data) {
-                if(data.data =="success"){
-                    Swal.fire({
-                        html: `<strong>` + data.message + `</strong> update Successfully`,
-                        icon: "success",
-                        buttonsStyling: false,
-                        confirmButtonText: "Ok, got it!",
-                        customClass: {
-                            confirmButton: "btn btn-primary"
-                        }
-                    });
-                }
-                else{
-                    Swal.fire({
-                        text: data.message,
-                        icon: "error",
-                        buttonsStyling: false,
-                        confirmButtonText: "Ok, got it!",
-                        customClass: {
-                            confirmButton: "btn btn-primary"
-                        }
-                    });
-                }
-                $('#update_cos_modal').modal('hide');
-                table.ajax.reload(null, false);
-            });
-
+            }
         }
     }
 
