@@ -151,6 +151,18 @@ def reports_generation(request):
     }
     return render(request, 'rsp/ReportsGeneration.html', context)
 
+def lib_neop(request):
+    context = {
+        'title': 'Libraries NEOP'
+    }
+    return render(request, 'rsp/libraries/LibNeop.html', context)
+
+def lib_cos_guidelines_activities(request):
+    context = {
+        'title': 'Libraries COS Guidelines'
+    }
+    return render(request, 'rsp/libraries/LibCOSWithGuidelines.html', context)
+
 
 @csrf_exempt
 def list_newly_hired_staff(request):
