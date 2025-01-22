@@ -139,6 +139,7 @@ class LibNeopActivities(models.Model):
     name = models.CharField(max_length=100,null=True)
     description = models.CharField(max_length=255,null=True)
     milestone = models.PositiveSmallIntegerField(null=True)
+    is_email_notify = models.BooleanField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)  # Automatically set on creation
     updated_at = models.DateTimeField(auto_now=True)      # Automatically update on save
 
@@ -164,6 +165,7 @@ class StaffNeopInfo(models.Model):
 class LibCosGuidelinesActivities(models.Model):
     name = models.CharField(max_length=100,null=True)
     description = models.CharField(max_length=255,null=True)
+    is_email_notify = models.BooleanField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)  # Automatically set on creation
     updated_at = models.DateTimeField(auto_now=True)      # Automatically update on save
 
@@ -195,26 +197,13 @@ class StaffEndorsementActivities(models.Model):
 
     def __str__(self):
         return f'{self.staff_id.full_name} - {self.lib_endorsed_id.name}'
-    
-
-class Hiredreq(models.Model):
-    name = models.CharField(max_length=255)
-    empstatus = models.ForeignKey(RspEmpstatus, on_delete=models.CASCADE)
-    is_required = models.IntegerField()
-    status = models.IntegerField()
-    upload_by_id = models.IntegerField()
-
-    class Meta:
-        managed = False
-        db_table = 'rsp_hiredreq'
 
 
 class HiredreqCompliance(models.Model):
     app_id = models.IntegerField(blank=True, null=True)
-    hired_req = models.ForeignKey(Hiredreq, on_delete=models.CASCADE)
+    hired_req = models.ForeignKey(RspHiredreq, on_delete=models.CASCADE)
     remarks = models.CharField(max_length=255, blank=True, null=True)
     datetime = models.DateTimeField(blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'rsp_hiredreq_compliance'

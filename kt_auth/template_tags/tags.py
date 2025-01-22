@@ -1,6 +1,6 @@
 import hashlib
 from django import template
-from rsp.models import RspHiredreq, RspHiredStreamlinereq, Hiredreq, HiredreqCompliance
+from rsp.models import RspHiredreq, RspHiredStreamlinereq, HiredreqCompliance
 from django.db.models import Q
 
 register = template.Library()
@@ -38,5 +38,5 @@ def get_empstatus_hired_streamline_req(emp_status):
 
 @register.simple_tag
 def get_empstatus_hired_req(emp_status):
-	data = Hiredreq.objects.filter(empstatus__name=emp_status, status=1).all()
+	data = RspHiredreq.objects.filter(empstatus__name=emp_status, status=1).all()
 	return data

@@ -21,6 +21,10 @@ import json
 from django.db import connection
 from rsp.views.rsp.functions import safe_decode
 from datetime import date
+import subprocess
+import logging
+
+logger = logging.getLogger(__name__)
 
 def check_activities_exist(endorsed, staff_id):
     """Check if all activities for a given staff member exist based on the endorsement, 
@@ -551,3 +555,31 @@ def PatchNewlyHiredOnboarding(request):
         return JsonResponse({"error": "Invalid JSON data"}, status=400)
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
+
+@csrf_exempt
+def SyncIris(request):
+    try:
+        # Run the Python script to execute the seeder command and capture error output
+        result = subprocess.run(
+            ['python', 'manage.py', 'fetch_hired_applicants'],
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True
+        )
+        
+        # Check the script output
+        logger.info(f"Script Output: {result.stdout}")
+        
+        return JsonResponse({
+            'status': 'success'
+        }, status=200)
+    
+    except subprocess.CalledProcessError as e:
+        # Log the error output from the script
+        logger.error(f"Error running script: {e.stderr}")
+        
+        return JsonResponse({
+            'status': 'error',
+            'message': f"An error occurred: {e.stderr}"
+        }, status=400)
