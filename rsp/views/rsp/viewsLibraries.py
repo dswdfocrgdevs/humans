@@ -38,6 +38,7 @@ def LibrariesCosWithGuidelines(request):
             data.append({
                 'id': item.id,
                 'name': item.name,
+                'is_email_notify': item.is_email_notify,
                 'description': item.description,
                 'created_at': localtime(item.created_at).strftime('%B %d, %Y %I:%M %p'),
                 'updated_at': localtime(item.updated_at).strftime('%B %d, %Y %I:%M %p')
@@ -87,6 +88,7 @@ def LibrariesNeop(request):
                 'name': item.name,
                 'description': item.description,
                 'milestone': item.milestone,
+                'is_email_notify': item.is_email_notify,
                 'created_at': localtime(item.created_at).strftime('%B %d, %Y %I:%M %p'),
                 'updated_at': localtime(item.updated_at).strftime('%B %d, %Y %I:%M %p')
             })
@@ -109,11 +111,13 @@ def LibrariesAddCos(request):
     try:
         name = request.POST.get('add_cos_name')
         description = request.POST.get('add_cos_description')
+        email_notify = request.POST.get('cos_email_notify')
+        email_notify = 1 if email_notify == "true" else 0
 
         if LibCosGuidelinesActivities.objects.filter(name=name).exists():
-                return JsonResponse({'data': 'error', 'message': name + ' Name already Exists'})
+            return JsonResponse({'data': 'error', 'message': f'{name} Name already exists'})
         else:
-            cos = LibCosGuidelinesActivities(name=name,description=description, created_at = localtime)
+            cos = LibCosGuidelinesActivities(name=name,description=description, is_email_notify = email_notify, created_at = localtime)
             cos.save()
             return JsonResponse({'data': 'success','message': name,'title': 'Success'})
     except Exception as e:
@@ -125,27 +129,30 @@ def LibrariesUpdateCos(request):
         id = request.POST.get('cos_id')
         name = request.POST.get('update_cos_name')
         description = request.POST.get('update_cos_description')
+        email_notify = request.POST.get('cos_email_notify')
+        email_notify = 1 if email_notify == "true" else 0
         LibCosGuidelinesActivities.objects.filter(id=id).update(
             name=name,
             description=description,
+            is_email_notify = email_notify,
             updated_at = now())
         return JsonResponse({'data': 'success','message': name,'title': 'Success'})
     except Exception as e:
         return JsonResponse({'data': 'error', 'message': e})
 
-    
-    
 @csrf_exempt
 def LibrariesAddNeop(request):
     try:
         name = request.POST.get('add_neop_name')
         description = request.POST.get('add_neop_description')
         milestone = request.POST.get('add_neop_milestone')
+        email_notify = request.POST.get('neop_email_notify')
+        email_notify = 1 if email_notify == "true" else 0
 
         if LibNeopActivities.objects.filter(name=name).exists():
                 return JsonResponse({'data': 'error', 'message': name + ' Name already Exists'})
         else:
-            neop = LibNeopActivities(name=name,description=description, milestone = milestone, created_at = localtime)
+            neop = LibNeopActivities(name=name,description=description, is_email_notify = email_notify, milestone = milestone, created_at = localtime)
             neop.save()
             return JsonResponse({'data': 'success','message': name,'title': 'Success'})
     except Exception as e:
@@ -158,10 +165,13 @@ def LibrariesUpdateNeop(request):
         name = request.POST.get('update_neop_name')
         description = request.POST.get('update_neop_description')
         milestone = request.POST.get('update_neop_milestone')
+        email_notify = request.POST.get('neop_email_notify')
+        email_notify = 1 if email_notify == "true" else 0
         LibNeopActivities.objects.filter(id=neop_id).update(
             name=name,
             description=description,
             milestone=milestone,
+            is_email_notify = email_notify,
             updated_at = now())
         return JsonResponse({'data': 'success','message': name,'title': 'Success'})
     except Exception as e:

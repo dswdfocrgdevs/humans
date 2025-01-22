@@ -18,53 +18,6 @@
 
 </style>
 
-
-
-<!--begin::Modal - Create App-->
-<div class="modal fade" id="neop_modal" tabindex="-1" aria-hidden="true">
-	<!--begin::Modal dialog-->
-	<div class="modal-dialog modal-dialog-centered mw-900px">
-		<!--begin::Modal content-->
-		<div class="modal-content">
-			<!--begin::Modal header-->
-			<div class="modal-header">
-				<!--begin::Modal title-->
-				<h2>NEOP <span class="milestone_no"></span> Milestone Activities</h2>
-				<!--end::Modal title-->
-				<!--begin::Close-->
-				<div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">{% getIcon 'cross' 'fs-1' %}</div>
-				<!--end::Close-->
-			</div>
-			<!--end::Modal header-->
-			<!--begin::Modal body-->
-			<div class="modal-body py-lg-10 px-lg-10">
-                <div id="neop-content">
-                    <table id="table-neop-content" class="table table-bordered table-striped">
-                        <thead>
-                            <th>Milestone</th>
-                            <th>Complied</th>
-                            <th>Date</th>
-                            <th>Remarks</th>
-                        </thead>
-                        <tbody  id="table-neop-content-tbody">
-                            
-                        </tbody>
-                    </table>
-                    <div class="d-flex justify-content-end mt-3">
-                        <a href="#" class="btn btn-sm fw-bold btn-success me-2">
-                            <i class="fas fa-check"></i> Save
-                        </a>
-                    </div>
-                </div>
-			</div>
-			<!--end::Modal body-->
-		</div>
-		<!--end::Modal content-->
-	</div>
-	<!--end::Modal dialog-->
-</div>
-
-
 <!--begin::Modal - Create App-->
 <div class="modal fade" id="update_neop_modal" tabindex="-1" aria-hidden="true">
 	<!--begin::Modal dialog-->
@@ -95,6 +48,12 @@
                     <option value="4">4</option>
                     <option value="5">5</option>
                 </select>
+                <br>
+                <label>Is Email Notify?</label><br>
+                <label class="form-check form-switch form-check-custom form-check-solid">
+                    <input class="form-check-input" id="update-is-email-notify" type="checkbox" name="UpdateNeopIsEmailNotify">
+                </label>
+
                 <div class="d-flex justify-content-end mt-3">
                     <div class="d-flex justify-content-end mt-3">
                         <a href="#" class="btn btn-sm fw-bold btn-success me-2" onclick="lib.updateNeop()">
@@ -140,6 +99,10 @@
                         <option value="4">4</option>
                         <option value="5">5</option>
                     </select>
+                    <label>Is Email Notify?</label><br>
+                    <label class="form-check form-switch form-check-custom form-check-solid">
+                        <input class="form-check-input" id="add-is-email-notify" type="checkbox" name="AddNeopIsEmailNotify">
+                    </label>
                     <div class="d-flex justify-content-end mt-3">
                         <a href="#" class="btn btn-sm fw-bold btn-success me-2" onclick="lib.saveNeop()">
                             <i class="fas fa-check"></i> Save
@@ -249,9 +212,11 @@
         AddNeopName = jQuery(document.querySelector('[name="AddNeopName"]')),
         AddNeopDescription = jQuery(document.querySelector('[name="AddNeopDescription"]')),
         AddNeopMilestone = jQuery(document.querySelector('[name="AddNeopMilestone"]')),
+        AddNeopIsEmailNotify = jQuery(document.querySelector('[name="AddNeopIsEmailNotify"]')),
         UpdateNeopName = jQuery(document.querySelector('[name="UpdateNeopName"]')),
         UpdateNeopDescription = jQuery(document.querySelector('[name="UpdateNeopDescription"]')),
-        UpdateNeopMilestone = jQuery(document.querySelector('[name="UpdateNeopMilestone"]'));
+        UpdateNeopMilestone = jQuery(document.querySelector('[name="UpdateNeopMilestone"]')),
+        UpdateNeopIsEmailNotify = jQuery(document.querySelector('[name="UpdateNeopIsEmailNotify"]'));
   
 
     var table = $("#hired-table").DataTable({
@@ -275,13 +240,17 @@
                 render: function(data, type, row) {
                     const name = row.name ? row.name.replace(/'/g, "\\'") : '';
                     const description = row.description ? row.description.replace(/'/g, "\\'") : '';
+                    const is_email_notify = row.is_email_notify !== null 
+                    ? String(row.is_email_notify).replace(/'/g, "\\'") 
+                    : 'false'; // Default to 'false' if null
                     return `
                         <div class="d-flex align-items-center">
                             <a href="#" class="text-decoration-none text-primary" onclick="lib.viewNeopModal(
                                 ${row.id},
                                 '${name}', 
                                 '${description}', 
-                                ${row.milestone}
+                                ${row.milestone},
+                                '${is_email_notify}'
                             )"><span class='fa fa-edit'></span></a>
                         </div>
                     `;
@@ -295,6 +264,15 @@
                 className: 'text-center',
                 render: function(data, type, row) {
                     return `<span class="btn btn-secondary">${data}</span>`;
+                }
+            },
+            {
+                data: 'is_email_notify',
+                title: 'Email Notify',
+                className: 'text-center',
+                render: function(data, type, row) {
+                    const badgeClass = data ? 'badge-light-success' : 'badge-light-danger';
+                    return `<span class="badge ${badgeClass} fs-7 fw-bold">${data ? 'Yes' : 'No'}</span>`;
                 }
             },
             { data: 'created_at', title: 'Created At', className: 'text-center'  },
@@ -319,6 +297,7 @@
                     AddNeopName.val('');
                     AddNeopDescription.val('');
                     AddNeopMilestone.val("").trigger('change');
+                    $('#add-is-email-notify').prop('checked', false);
                     $('#add_neop_modal').modal('show');
                 }
             },
@@ -358,17 +337,20 @@
 
     var lib = {
         selectedData: null,
-        viewNeopModal(id,name,description,milestone){
+        viewNeopModal(id,name,description,milestone, email_notify){
+            email_notify = (email_notify === 'true'); 
             lib.selectedData = id;
+            UpdateNeopName.val(name);
+            UpdateNeopDescription.val(description);
+            UpdateNeopMilestone.val(milestone);
+            UpdateNeopIsEmailNotify.prop('checked', email_notify);
             $('#update_neop_modal').modal('show');
-            var name = UpdateNeopName.val(name);
-            var description = UpdateNeopDescription.val(description);
-            var milestone = UpdateNeopMilestone.val(milestone);
         },
         saveNeop(){
             var add_neop_name = AddNeopName.val();
             var add_neop_description = AddNeopDescription.val();
             var add_neop_milestone = AddNeopMilestone.val();
+            const NeopIsEmailNotify = AddNeopIsEmailNotify.is(':checked');
 
             $.ajax({
                 type: 'POST',
@@ -377,7 +359,8 @@
                     staff_id : lib.selectedData,
                     add_neop_name: add_neop_name,
                     add_neop_description: add_neop_description,
-                    add_neop_milestone: add_neop_milestone
+                    add_neop_milestone: add_neop_milestone,
+                    neop_email_notify : NeopIsEmailNotify
                 }
             }).done(function (data) {
                 if(data.data =="success"){
@@ -411,6 +394,7 @@
             var update_neop_name = UpdateNeopName.val();
             var update_neop_description = UpdateNeopDescription.val();
             var update_neop_milestone = UpdateNeopMilestone.val();
+            const NeopIsEmailNotify = UpdateNeopIsEmailNotify.is(':checked');
 
             $.ajax({
                 type: 'POST',
@@ -419,7 +403,8 @@
                     neop_id : lib.selectedData,
                     update_neop_name: update_neop_name,
                     update_neop_description: update_neop_description,
-                    update_neop_milestone: update_neop_milestone
+                    update_neop_milestone: update_neop_milestone,
+                    neop_email_notify : NeopIsEmailNotify
                 }
             }).done(function (data) {
                 if(data.data =="success"){
