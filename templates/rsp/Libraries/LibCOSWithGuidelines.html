@@ -38,9 +38,9 @@
 			<!--begin::Modal body-->
 			<div class="modal-body py-lg-10 px-lg-10">
                 <label>Name</label>
-                <input type="text" id="update-cos-name" name="UpdateCosName" class="form-control me-2"/><br>
+                <input type="text" id="update-cos-name" name="UpdateCosName" class="form-control me-2" autocomplete="off"/><br>
                 <label>Description</label>
-                <input type="text" id="update-cos-description" name="UpdateCosDescription" class="form-control me-2"/><br>
+                <input type="text" id="update-cos-description" name="UpdateCosDescription" class="form-control me-2" autocomplete="off"/><br>
 
                 <label>Is Email Notify?</label><br>
                 <label class="form-check form-switch form-check-custom form-check-solid">
@@ -82,10 +82,10 @@
 			<!--begin::Modal body-->
             <div class="modal-body py-lg-10 px-lg-10">
                 <label for="add-cos-name">Name</label>
-                <input type="text" id="add-cos-name" name="AddCosName" class="form-control me-2"/><br>
+                <input type="text" id="add-cos-name" name="AddCosName" class="form-control me-2" autocomplete="off"/><br>
                 
                 <label for="add-cos-description">Description</label>
-                <input type="text" id="add-cos-description" name="AddCosDescription" class="form-control me-2"/><br>
+                <input type="text" id="add-cos-description" name="AddCosDescription" class="form-control me-2" autocomplete="off"/><br>
                 
                 <label>Is Email Notify?</label><br>
                 <label class="form-check form-switch form-check-custom form-check-solid">
@@ -210,6 +210,23 @@
         UpdateCosName = jQuery(document.querySelector('[name="UpdateCosName"]')),
         UpdateCosDescription = jQuery(document.querySelector('[name="UpdateCosDescription"]')),
         UpdateCosIsEmailNotify = jQuery(document.querySelector('[name="UpdateCosIsEmailNotify"]'));
+    
+    const toast_options = (toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": true,
+        "positionClass": "toastr-top-right",
+        "preventDuplicates": false,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    });
 
     var table = $("#hired-table").DataTable({
         processing: true, 
@@ -228,7 +245,30 @@
             }
         },
         columns: [
+            {
+                data: null,
+                title: 'No',
+                className: 'text-center',
+                render: function(data, type, row, meta) {
+                    // Use meta.settings._iDisplayStart to calculate the correct row number
+                    return meta.row + 1 + meta.settings._iDisplayStart;
+                }
+            },
+            { data: 'name', title: 'Name', className: 'text-center'  },
+            { data: 'description', title: 'Description', className: 'text-center'  },
+            {
+                data: 'is_email_notify',
+                title: 'Email Notify',
+                className: 'text-center',
+                render: function(data, type, row) {
+                    const badgeClass = data ? 'badge-light-success' : 'badge-light-danger';
+                    return `<span class="badge ${badgeClass} fs-7 fw-bold">${data ? 'Yes' : 'No'}</span>`;
+                }
+            },
+            { data: 'created_at', title: 'Created At', className: 'text-center'  },
+            { data: 'updated_at', title: 'Updated At', className: 'text-center'  },
             { 
+                title: 'Actions',
                 render: function(data, type, row) {
                     const name = row.name ? row.name.replace(/'/g, "\\'") : '';
                     const description = row.description ? row.description.replace(/'/g, "\\'") : '';
@@ -247,19 +287,6 @@
                     `;
                 }
             },
-            { data: 'name', title: 'Name', className: 'text-center'  },
-            { data: 'description', title: 'Description', className: 'text-center'  },
-            {
-                data: 'is_email_notify',
-                title: 'Email Notify',
-                className: 'text-center',
-                render: function(data, type, row) {
-                    const badgeClass = data ? 'badge-light-success' : 'badge-light-danger';
-                    return `<span class="badge ${badgeClass} fs-7 fw-bold">${data ? 'Yes' : 'No'}</span>`;
-                }
-            },
-            { data: 'created_at', title: 'Created At', className: 'text-center'  },
-            { data: 'updated_at', title: 'Updated At', className: 'text-center'  },
         ],
         headerCallback: function (thead, data, start, end, display) {
             $(thead).find('th').addClass('text-center');
@@ -333,7 +360,7 @@
             const CosIsEmailNotify = AddCosIsEmailNotify.is(':checked');
 
             if (!cos_name.trim() || !cos_description.trim()) {
-                alert("Fields are required!");
+                toastr.error('Fields are Required!', 'Invalid', toast_options);
             }
             else{
                 $.ajax({
@@ -380,7 +407,7 @@
             var update_cos_description = UpdateCosDescription.val();
             const CosIsEmailNotify = UpdateCosIsEmailNotify.is(':checked');
             if (!update_cos_name.trim() || !update_cos_description.trim()) {
-                alert("Fields are required!");
+                toastr.error('Fields are Required!', 'Invalid', toast_options);
             }
             else{
                 $.ajax({
