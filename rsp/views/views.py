@@ -12,7 +12,7 @@ from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 import requests
 import os
-from rsp.models import NewlyHiredStaff, RspOnboardingLayout, NewlyHiredStaffStreamline, StaffEndorsementActivities, EndorsementActivities, HiredreqCompliance, OnboardingStatus, OnboardingStatusNewlyhired
+from rsp.models import NewlyHiredStaff, RspOnboardingLayout, NewlyHiredStaffStreamline, StaffEndorsementActivities, EndorsementActivities, HiredreqCompliance, OnboardingStatus, OnboardingStatusNewlyhired, RspEmpstatus
 from ..utils import search_employees
 from django.db.models import Count, Case, When, Value, CharField
 from django.db.models import Q
@@ -162,6 +162,21 @@ def lib_cos_guidelines_activities(request):
         'title': 'Libraries COS Guidelines'
     }
     return render(request, 'rsp/libraries/LibCOSWithGuidelines.html', context)
+
+def lib_hired_requirements(request):
+
+    context = {
+        'title': 'Libraries Hired Requirements',
+        'data' : RspEmpstatus.objects.filter(status = 1)
+    }
+    return render(request, 'rsp/libraries/LibHiredRequirements.html', context)
+
+def lib_hired_requirements_streamline(request):
+    context = {
+        'title': 'Libraries Hired Requirements Streamline',
+        'data' : RspEmpstatus.objects.filter(status = 1)
+    }
+    return render(request, 'rsp/libraries/LibHiredRequirementsStreamline.html', context)
 
 
 @csrf_exempt
