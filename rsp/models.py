@@ -34,7 +34,7 @@ class NewlyHiredStaff(models.Model):
     updated_at = models.DateTimeField(auto_now=True,null=True)      # Automatically update on save
     remarks = models.TextField(null=True)
     picture = models.CharField(max_length=255,null=True)
-    onboarding_type = models.ForeignKey(OnboardingStatus, models.DO_NOTHING)
+    onboarding_type = models.ForeignKey(OnboardingStatus, models.DO_NOTHING,null=True)
     gender = models.CharField(max_length=100,null=True)
     contact_no = models.CharField(max_length=100,null=True)
     email = models.CharField(max_length=100,null=True)
@@ -102,7 +102,7 @@ class RspOnboardingLayout(models.Model):
 class RspEmpstatus(models.Model):
     name = models.CharField(max_length=64, unique=True)
     acronym = models.CharField(max_length=64, unique=True)
-    status = models.BooleanField()
+    status = models.BooleanField(default=1)
     upload_by = models.ForeignKey(CustomUser, models.DO_NOTHING)
     order = models.BooleanField()
 
@@ -117,7 +117,7 @@ class RspHiredreq(models.Model):
     name = models.CharField(max_length=255)
     empstatus =  models.ForeignKey(RspEmpstatus, models.DO_NOTHING)
     is_required = models.BooleanField()
-    status = models.BooleanField()
+    status = models.BooleanField(default=1)
     upload_by = models.ForeignKey(CustomUser, models.DO_NOTHING)
 
     class Meta:
@@ -128,7 +128,7 @@ class RspHiredStreamlinereq(models.Model):
     name = models.CharField(max_length=255)
     empstatus =  models.ForeignKey(RspEmpstatus, models.DO_NOTHING)
     is_required = models.BooleanField()
-    status = models.BooleanField()
+    status = models.BooleanField(default=1)
     upload_by = models.ForeignKey(CustomUser, models.DO_NOTHING)
 
     class Meta:
@@ -139,6 +139,7 @@ class LibNeopActivities(models.Model):
     name = models.CharField(max_length=100,null=True)
     description = models.CharField(max_length=255,null=True)
     milestone = models.PositiveSmallIntegerField(null=True)
+    is_email_notify = models.BooleanField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)  # Automatically set on creation
     updated_at = models.DateTimeField(auto_now=True)      # Automatically update on save
 
@@ -164,6 +165,7 @@ class StaffNeopInfo(models.Model):
 class LibCosGuidelinesActivities(models.Model):
     name = models.CharField(max_length=100,null=True)
     description = models.CharField(max_length=255,null=True)
+    is_email_notify = models.BooleanField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)  # Automatically set on creation
     updated_at = models.DateTimeField(auto_now=True)      # Automatically update on save
 
@@ -195,26 +197,13 @@ class StaffEndorsementActivities(models.Model):
 
     def __str__(self):
         return f'{self.staff_id.full_name} - {self.lib_endorsed_id.name}'
-    
-
-class Hiredreq(models.Model):
-    name = models.CharField(max_length=255)
-    empstatus = models.ForeignKey(RspEmpstatus, on_delete=models.CASCADE)
-    is_required = models.IntegerField()
-    status = models.IntegerField()
-    upload_by_id = models.IntegerField()
-
-    class Meta:
-        managed = False
-        db_table = 'rsp_hiredreq'
 
 
 class HiredreqCompliance(models.Model):
     app_id = models.IntegerField(blank=True, null=True)
-    hired_req = models.ForeignKey(Hiredreq, on_delete=models.CASCADE)
+    hired_req = models.ForeignKey(RspHiredreq, on_delete=models.CASCADE)
     remarks = models.CharField(max_length=255, blank=True, null=True)
     datetime = models.DateTimeField(blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'rsp_hiredreq_compliance'
