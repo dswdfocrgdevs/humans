@@ -359,7 +359,7 @@
             var cos_description = AddCosDescription.val();
             const CosIsEmailNotify = AddCosIsEmailNotify.is(':checked');
 
-            if (!cos_name.trim() || !cos_description.trim()) {
+            if (!cos_name.trim()) {
                 toastr.error('Fields are Required!', 'Invalid', toast_options);
             }
             else{
