@@ -147,7 +147,7 @@ def GetLibCosGuideLinesActivities(request):
     lib_cos_guidelines_activities = LibCosGuidelinesActivities.objects.all()
         
     # Serialize the LibCosGuidelinesActivities queryset
-    activities_data = list(lib_cos_guidelines_activities.values('id', 'name', 'description'))
+    activities_data = list(lib_cos_guidelines_activities.values('id', 'name', 'is_email_notify','description'))
 
     # Add the 'test' column with value 1 for each row
     for activity in activities_data:
