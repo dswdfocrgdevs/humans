@@ -16,6 +16,8 @@ from rsp.views.rsp.viewsCosGuidelines import GetCosGuideLines, GetCosGuideLinesS
 
 from rsp.views.rsp.viewsInternalStaff import GetInternalStaff, ListNewlyHiredInternalStaff
 
+from rsp.views.rsp.viewsProfile import GetProfile
+
 app_name = 'rsp'
 
 urlpatterns = [
@@ -96,7 +98,9 @@ urlpatterns = [
     path('internal-staff', GetInternalStaff, name="GetInternalStaff"),
     path('internal-staff/staff/list', ListNewlyHiredInternalStaff, name="ListNewlyHiredInternalStaff"),
     
-    path('commands/sync-iris', SyncIris, name="SyncIris")
+    path('commands/sync-iris', SyncIris, name="SyncIris"),
+
+    path('view-profile/<int:id>', GetProfile, name="GetProfile"),
 
 ]
 
