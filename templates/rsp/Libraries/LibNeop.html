@@ -37,9 +37,9 @@
 			<!--begin::Modal body-->
 			<div class="modal-body py-lg-10 px-lg-10">
                 <label>Name</label>
-                <input type="text" id="update-neop-name" name="UpdateNeopName" class="form-control me-2"/><br>
+                <input type="text" id="update-neop-name" name="UpdateNeopName" class="form-control me-2" autocomplete="off"/><br>
                 <label>Description</label>
-                <input type="text" id="update-neop-description" name="UpdateNeopDescription" class="form-control me-2"/><br>
+                <input type="text" id="update-neop-description" name="UpdateNeopDescription" class="form-control me-2" autocomplete="off"/><br>
                 <label>Milestone</label>
                 <select id="update-neop-milestone" name="UpdateNeopMilestone" class="form-select me-3">
                     <option value="1">1</option>
@@ -88,9 +88,9 @@
 			<div class="modal-body py-lg-10 px-lg-10">
                 <form id="assign-form" class="row g-3" onsubmit="return false">
                     <label>Name</label>
-                    <input type="text" id="add-neop-name" name="AddNeopName" class="form-control me-2" required/><br>
+                    <input type="text" id="add-neop-name" name="AddNeopName" class="form-control me-2" autocomplete="off"/><br>
                     <label>Description</label>
-                    <input type="text" id="add-neop-description" name="AddNeopDescription" class="form-control me-2" required/><br>
+                    <input type="text" id="add-neop-description" name="AddNeopDescription" class="form-control me-2" autocomplete="off"/><br>
                     <label>Milestone</label>
                     <select id="add-neop-milestone" name="AddNeopMilestone" class="form-select me-3">
                         <option value="1">1</option>
@@ -217,6 +217,24 @@
         UpdateNeopDescription = jQuery(document.querySelector('[name="UpdateNeopDescription"]')),
         UpdateNeopMilestone = jQuery(document.querySelector('[name="UpdateNeopMilestone"]')),
         UpdateNeopIsEmailNotify = jQuery(document.querySelector('[name="UpdateNeopIsEmailNotify"]'));
+    
+    const toast_options = (toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": true,
+        "positionClass": "toastr-top-right",
+        "preventDuplicates": false,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    });
+    
   
 
     var table = $("#hired-table").DataTable({
@@ -236,24 +254,12 @@
             }
         },
         columns: [
-            { 
-                render: function(data, type, row) {
-                    const name = row.name ? row.name.replace(/'/g, "\\'") : '';
-                    const description = row.description ? row.description.replace(/'/g, "\\'") : '';
-                    const is_email_notify = row.is_email_notify !== null 
-                    ? String(row.is_email_notify).replace(/'/g, "\\'") 
-                    : 'false'; // Default to 'false' if null
-                    return `
-                        <div class="d-flex align-items-center">
-                            <a href="#" class="text-decoration-none text-primary" onclick="lib.viewNeopModal(
-                                ${row.id},
-                                '${name}', 
-                                '${description}', 
-                                ${row.milestone},
-                                '${is_email_notify}'
-                            )"><span class='fa fa-edit'></span></a>
-                        </div>
-                    `;
+            {
+                data: null,
+                title: 'No',
+                className: 'text-center',
+                render: function(data, type, row, meta) {
+                    return meta.row + 1 + meta.settings._iDisplayStart;
                 }
             },
             { data: 'name', title: 'Name', className: 'text-center'  },
@@ -277,6 +283,27 @@
             },
             { data: 'created_at', title: 'Created At', className: 'text-center'  },
             { data: 'updated_at', title: 'Updated At', className: 'text-center'  },
+            {   
+                title: 'Actions',
+                render: function(data, type, row) {
+                    const name = row.name ? row.name.replace(/'/g, "\\'") : '';
+                    const description = row.description ? row.description.replace(/'/g, "\\'") : '';
+                    const is_email_notify = row.is_email_notify !== null 
+                    ? String(row.is_email_notify).replace(/'/g, "\\'") 
+                    : 'false'; // Default to 'false' if null
+                    return `
+                        <div class="d-flex align-items-center">
+                            <a href="#" class="text-decoration-none text-primary" onclick="lib.viewNeopModal(
+                                ${row.id},
+                                '${name}', 
+                                '${description}', 
+                                ${row.milestone},
+                                '${is_email_notify}'
+                            )"><span class='fa fa-edit'></span></a>
+                        </div>
+                    `;
+                }
+            },
         ],
         headerCallback: function (thead, data, start, end, display) {
             $(thead).find('th').addClass('text-center');
@@ -352,8 +379,8 @@
             var add_neop_milestone = AddNeopMilestone.val();
             const NeopIsEmailNotify = AddNeopIsEmailNotify.is(':checked');
 
-            if (!add_neop_name.trim() || !add_neop_description.trim() || !add_neop_milestone) {
-                alert("Fields are required!");
+            if (!add_neop_name.trim() || !add_neop_milestone) {
+                toastr.error('Fields are Required!', 'Invalid', toast_options);
             }
             else{
                 $.ajax({
@@ -401,7 +428,7 @@
             const NeopIsEmailNotify = UpdateNeopIsEmailNotify.is(':checked');
 
             if (!update_neop_name.trim() || !update_neop_description.trim() || !update_neop_milestone) {
-                alert("Fields are required!");
+                toastr.error('Fields are Required!', 'Invalid', toast_options);
             }
             else{
                 $.ajax({
@@ -443,69 +470,6 @@
             }
         }
     }
-
-
- 
-//    var neop = {
-//         selectedMilestone: null,
-//         selectedStaff: null,
-//         viewMileStone(staff_id,milestone){
-//             neop.selectedMilestone = milestone;
-//             neop.selectedStaff = staff_id;
-//             $('.milestone_no').html(milestone);
-//             $('#neop_modal').modal('show');
-//             neop.getMileStoneList(staff_id,milestone);
-//         },
-//         getMileStoneList(staff_id,milestone) {
-//             $.get("{% url 'rsp:GetLibNeopActivities' %}?milestone=" + milestone + "&staff_id=" + staff_id, function(data){
-//                 console.log(data)
-//                 neop.writeModalContent(data);
-//             });
-//         },
-//         writeModalContent(data){
-//             var contentHtml = "";
-//             data.lib_neop_activities.forEach(function(item) {
-//                 contentHtml += `<tr>`;
-//                     contentHtml += `<td>${item.name}</td>`;
-//                     contentHtml += `<td class="text-center align-middle"><input type="checkbox" class="form-check-input me-2" ${item?.date ? 'checked' : ''}/></td>`;
-//                     contentHtml += `<td><input type="date" name="neop_date[]" class="form-control me-2" data-id="${item.id}" value="${item?.date ? item.date : ''}"/></td>`;
-//                     contentHtml += `<td><input type="text" name="neop_remarks[]" class="form-control me-2" placeHolder="Remarks" value="${item?.remarks ? item.remarks : ''}"/></td>`;
-//                 contentHtml += `</tr>`;
-//             });
-//             $('#table-neop-content-tbody').html(contentHtml);
-//         },
-//         saveNeop(){
-//             var activitiesData = [];
-
-//             $("input[name='neop_date[]']").each(function(index) {
-//                 // Get the corresponding remarks value
-//                 if($(this).val()){
-//                     let date = $(this).val();
-//                     let id = $(this).attr('data-id');
-//                     let remarks = $("input[name='neop_remarks[]']").eq(index).val();
-//                     // Create an object and push it to the activitiesData array
-//                     activitiesData.push({ id:id,user_id:neop.selectedStaff, date: date, remarks: remarks });
-//                     $('#neop_modal').modal('hide');
-//                     setTimeout(function(){
-//                         table.ajax.reload(null, false);
-//                     },1000)  
-//                 }
-//             });
-            
-//             $.ajax({
-//                 url: "{% url 'rsp:PostLibNeopActivities' %}",
-//                 type: "POST",
-//                 contentType: "application/json",  // Set the correct content type
-//                 data: JSON.stringify({data: activitiesData}),  // Convert the data to a JSON string
-//                 success: function(data) {
-//                     console.log(data);
-//                 },
-//                 error: function(error) {
-//                     console.log(error);
-//                 }
-//             });
-//         }
-//    }
 
    $(document).on('click', 'a[data-role=delete]', function(){
         if(confirm("Are you sure you want to delete?")){
