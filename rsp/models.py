@@ -102,7 +102,7 @@ class RspOnboardingLayout(models.Model):
 class RspEmpstatus(models.Model):
     name = models.CharField(max_length=64, unique=True)
     acronym = models.CharField(max_length=64, unique=True)
-    status = models.BooleanField()
+    status = models.BooleanField(default=1)
     upload_by = models.ForeignKey(CustomUser, models.DO_NOTHING)
     order = models.BooleanField()
 
@@ -117,7 +117,7 @@ class RspHiredreq(models.Model):
     name = models.CharField(max_length=255)
     empstatus =  models.ForeignKey(RspEmpstatus, models.DO_NOTHING)
     is_required = models.BooleanField()
-    status = models.BooleanField()
+    status = models.BooleanField(default=1)
     upload_by = models.ForeignKey(CustomUser, models.DO_NOTHING)
 
     class Meta:
@@ -128,7 +128,7 @@ class RspHiredStreamlinereq(models.Model):
     name = models.CharField(max_length=255)
     empstatus =  models.ForeignKey(RspEmpstatus, models.DO_NOTHING)
     is_required = models.BooleanField()
-    status = models.BooleanField()
+    status = models.BooleanField(default=1)
     upload_by = models.ForeignKey(CustomUser, models.DO_NOTHING)
 
     class Meta:

@@ -18,9 +18,8 @@
 
 </style>
 
-
 <!--begin::Modal - Create App-->
-<div class="modal fade" id="update_cos_modal" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="update_neop_modal" tabindex="-1" aria-hidden="true">
 	<!--begin::Modal dialog-->
 	<div class="modal-dialog modal-dialog-centered mw-500px">
 		<!--begin::Modal content-->
@@ -28,7 +27,7 @@
 			<!--begin::Modal header-->
 			<div class="modal-header">
 				<!--begin::Modal title-->
-				<h2>Update COS Guidelines Libraries : <span id="staff-name"></span></h2>
+				<h2>Update Hired Requirements Libraries : <span id="staff-name"></span></h2>
 				<!--end::Modal title-->
 				<!--begin::Close-->
 				<div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">{% getIcon 'cross' 'fs-1' %}</div>
@@ -38,20 +37,22 @@
 			<!--begin::Modal body-->
 			<div class="modal-body py-lg-10 px-lg-10">
                 <label>Name</label>
-                <input type="text" id="update-cos-name" name="UpdateCosName" class="form-control me-2" autocomplete="off"/><br>
-                <label>Description</label>
-                <input type="text" id="update-cos-description" name="UpdateCosDescription" class="form-control me-2" autocomplete="off"/><br>
-
-                <label>Is Email Notify?</label><br>
+                <input type="text" id="update-hired-requirements-name" name="UpdateHiredRequirementsName" class="form-control me-2"/><br>
+                <label>Emp Status</label>
+                <select class="form-select me-3" name="UpdateHiredRequirementsEmpStatus" id="add-emp-status" class="form-select me-3">
+                    <option></option>
+                    {% for row in data %}
+                    <option value="{{ row.id }}">{{ row.name }}</option>
+                    {% endfor %}
+                </select><br>
+                <label>Is Required?</label><br>
                 <label class="form-check form-switch form-check-custom form-check-solid">
-                    <input class="form-check-input" id="update-is-email-notify" type="checkbox" name="UpdateCosIsEmailNotify">
+                    <input class="form-check-input" id="update-is-email-notify" type="checkbox" name="UpdateHiredRequirementsIsRequired">
                 </label>
-
-
-
+                <input type="hidden" id="hr-emp-status-id" name="HREmpStatusId" class="form-control me-2"/><br>
                 <div class="d-flex justify-content-end mt-3">
                     <div class="d-flex justify-content-end mt-3">
-                        <a href="#" class="btn btn-sm fw-bold btn-success me-2" onclick="lib.updateCos()">
+                        <a href="#" class="btn btn-sm fw-bold btn-success me-2" onclick="lib.updateHiredRequirements()">
                             <i class="fas fa-check"></i> Save
                         </a>
                     </div>
@@ -64,7 +65,7 @@
 	<!--end::Modal dialog-->
 </div>
 
-<div class="modal fade" id="add_cos_modal" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="add_neop_modal" tabindex="-1" aria-hidden="true">
 	<!--begin::Modal dialog-->
 	<div class="modal-dialog modal-dialog-centered mw-500px">
 		<!--begin::Modal content-->
@@ -72,7 +73,7 @@
 			<!--begin::Modal header-->
 			<div class="modal-header">
 				<!--begin::Modal title-->
-				<h2>Add COS Record : <span id="staff-name"></span></h2>
+				<h2>Add Hired Requirements Record : <span id="staff-name"></span></h2>
 				<!--end::Modal title-->
 				<!--begin::Close-->
 				<div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">{% getIcon 'cross' 'fs-1' %}</div>
@@ -80,30 +81,33 @@
 			</div>
 			<!--end::Modal header-->
 			<!--begin::Modal body-->
-            <div class="modal-body py-lg-10 px-lg-10">
-                <label for="add-cos-name">Name</label>
-                <input type="text" id="add-cos-name" name="AddCosName" class="form-control me-2" autocomplete="off"/><br>
-                
-                <label for="add-cos-description">Description</label>
-                <input type="text" id="add-cos-description" name="AddCosDescription" class="form-control me-2" autocomplete="off"/><br>
-                
-                <label>Is Email Notify?</label><br>
-                <label class="form-check form-switch form-check-custom form-check-solid">
-                    <input class="form-check-input" id="add-is-email-notify" type="checkbox" name="AddCosIsEmailNotify">
-                </label>
-                
-                <div class="d-flex justify-content-end mt-3">
-                    <button type="button" class="btn btn-sm fw-bold btn-success me-2" onclick="lib.saveCos()">
-                        <i class="fas fa-check"></i> Save
-                    </button>
-                </div>
-            </div>
+			<div class="modal-body py-lg-10 px-lg-10">
+                    <label>Name</label>
+                    <input type="text" id="add-hired-requirements-name" name="AddHiredRequirementsName" class="form-control me-2" autocomplete="off"/><br>
+                    <label>Emp Status</label>
+                    <select class="form-select me-3" name="AddHiredRequirementsEmpStatus" id="add-emp-status" class="form-select me-3">
+                        <option></option>
+                        {% for row in data %}
+                        <option value="{{ row.id }}">{{ row.name }}</option>
+                        {% endfor %}
+                    </select><br>
+                    <label>Is Required?</label>
+                    <label class="form-check form-switch form-check-custom form-check-solid">
+                        <input class="form-check-input" id="add-is-required" type="checkbox" name="AddHiredRequirementsIsRequired" autocomplete="off">
+                    </label>
+                    <div class="d-flex justify-content-end mt-3">
+                        <a href="#" class="btn btn-sm fw-bold btn-success me-2" onclick="lib.saveHiredRequirements()">
+                            <i class="fas fa-check"></i> Save
+                        </a>
+                    </div>
+			</div>
 			<!--end::Modal body-->
 		</div>
 		<!--end::Modal content-->
 	</div>
 	<!--end::Modal dialog-->
 </div>
+
 
 <div class="">
     <!--begin::Toolbar-->
@@ -194,23 +198,18 @@
 
 {% block script %}
 <script type="text/javascript">
-    const container = $('#kt_success_container');
-    const targetElement = $('[data-kt-docs-toast="stack"]');
-
-    const newToast = targetElement.clone();
-    newToast.removeAttr('id'); // Remove duplicate IDs to avoid conflicts
-    container.append(newToast);
-
-    const toast = bootstrap.Toast.getOrCreateInstance(newToast[0]);
 
     const ItemFormValidation = document.getElementById('item-form'),
-        AddCosName = jQuery(document.querySelector('[name="AddCosName"]')),
-        AddCosDescription = jQuery(document.querySelector('[name="AddCosDescription"]')),
-        AddCosIsEmailNotify = jQuery(document.querySelector('[name="AddCosIsEmailNotify"]')),
-        UpdateCosName = jQuery(document.querySelector('[name="UpdateCosName"]')),
-        UpdateCosDescription = jQuery(document.querySelector('[name="UpdateCosDescription"]')),
-        UpdateCosIsEmailNotify = jQuery(document.querySelector('[name="UpdateCosIsEmailNotify"]'));
-    
+        AddHiredRequirementsName = jQuery(document.querySelector('[name="AddHiredRequirementsName"]')),
+        AddHiredRequirementsIsRequired = jQuery(document.querySelector('[name="AddHiredRequirementsIsRequired"]')),
+        AddHiredRequirementsEmpStatus = jQuery(document.querySelector('[name="AddHiredRequirementsEmpStatus"]')),
+        UpdateHiredRequirementsName = jQuery(document.querySelector('[name="UpdateHiredRequirementsName"]')),
+        UpdateHiredRequirementsEmpStatus = jQuery(document.querySelector('[name="UpdateHiredRequirementsEmpStatus"]')),
+        HREmpStatusId = jQuery(document.querySelector('[name="HREmpStatusId"]')),
+        UpdateHiredRequirementsIsRequired = jQuery(document.querySelector('[name="UpdateHiredRequirementsIsRequired"]')),
+        UpdateHiredRequirementsStatus = jQuery(document.querySelector('[name="UpdateHiredRequirementsStatus"]')),
+        UpdateHiredRequirementsIsEmailNotify = jQuery(document.querySelector('[name="UpdateHiredRequirementsIsEmailNotify"]'));
+
     const toast_options = (toastr.options = {
         "closeButton": true,
         "debug": false,
@@ -233,7 +232,7 @@
         serverSide: true, 
         stateSave: true,
         ajax: {
-            url: "{% url 'rsp:LibrariesCosWithGuidelines' %}",
+            url: "{% url 'rsp:LibrariesHiredRequirementsStreamline' %}",
             type: 'GET',
             data: function(d) {
                 d.page = Math.floor(d.start / d.length) + 1; 
@@ -246,43 +245,57 @@
         },
         columns: [
             {
-                data: null,
+                data: null, 
                 title: 'No',
                 className: 'text-center',
                 render: function(data, type, row, meta) {
-                    // Use meta.settings._iDisplayStart to calculate the correct row number
                     return meta.row + 1 + meta.settings._iDisplayStart;
                 }
             },
             { data: 'name', title: 'Name', className: 'text-center'  },
-            { data: 'description', title: 'Description', className: 'text-center'  },
+            { data: 'empstatus', title: 'Emp Status', className: 'text-center'  },
             {
-                data: 'is_email_notify',
-                title: 'Email Notify',
+                data: 'is_required',
+                title: 'Is Required',
                 className: 'text-center',
                 render: function(data, type, row) {
                     const badgeClass = data ? 'badge-light-success' : 'badge-light-danger';
                     return `<span class="badge ${badgeClass} fs-7 fw-bold">${data ? 'Yes' : 'No'}</span>`;
                 }
             },
-            { data: 'created_at', title: 'Created At', className: 'text-center'  },
-            { data: 'updated_at', title: 'Updated At', className: 'text-center'  },
-            { 
+            { data: 'upload_by', title: 'Upload By', className: 'text-center'},
+            {
                 title: 'Actions',
                 render: function(data, type, row) {
                     const name = row.name ? row.name.replace(/'/g, "\\'") : '';
-                    const description = row.description ? row.description.replace(/'/g, "\\'") : '';
-                    const is_email_notify = row.is_email_notify !== null 
-                    ? String(row.is_email_notify).replace(/'/g, "\\'") 
-                    : 'false'; // Default to 'false' if null
+                    const is_required = row.is_required;
+                    const status = row.status;
+                    const emp_status = row.empstatus;
+                    const empstatus_id = row.empstatus_id;
+
+                    // Determine the state of the switch
+                    var switchChecked = status === true ? 'checked' : '';
+                    var switchLabel = status === true ? 'Active' : 'Inactive';
+
+                    // Render the HTML with both edit button and switch in the same row with proper label
                     return `
                         <div class="d-flex align-items-center">
-                            <a href="#" class="text-decoration-none text-primary" onclick="lib.viewCosModal(
+                            <a href="#" class="text-decoration-none text-primary me-3" onclick="lib.viewHiredRequirementsModal(
                                 ${row.id},
                                 '${name}', 
-                                '${description}',
-                                '${is_email_notify}'
-                            )"><span class='fa fa-edit'></span></a>
+                                '${is_required}', 
+                                ${status},
+                                '${emp_status}',
+                                '${empstatus_id}'
+                            )">
+                            <span class='fa fa-edit'></span>
+                            </a>
+                            <label class="form-check form-switch form-check-custom form-check-solid">
+                                <input class="form-check-input toggle-switch" type="checkbox" ${switchChecked} 
+                                    data-id="${row.id}" 
+                                    name="UpdateStatusToggle">
+                                <span class="form-check-label">${switchLabel}</span>
+                            </label>
                         </div>
                     `;
                 }
@@ -302,23 +315,25 @@
         buttons: [
             {
                 text: '<i class="ti ti-plus me-sm-1"></i> <span class="d-none d-sm-inline-block">Add New Record</span>',
-                className: 'create-new btn btn-secondary me-2',
+                className: 'create-new btn btn-secondary me-2', // Add `me-2` (margin-end) class
                 action: function () {
-                    AddCosName.val('');
-                    AddCosDescription.val('');
+                    AddHiredRequirementsName.val('');
+                    AddHiredRequirementsIsRequired.val('');
+                    AddHiredRequirementsEmpStatus.val("").trigger('change');
+                    AddHiredRequirementsIsRequired.prop('checked', false);
                     $('#add-is-email-notify').prop('checked', false);
-                    $('#add_cos_modal').modal('show');
+                    $('#add_neop_modal').modal('show');
                 }
             },
             {
                 extend: 'collection',
                 text: 'Export',
-                className: 'btn btn-secondary me-2',
+                className: 'btn btn-secondary me-2', // Add `me-2` (margin-end) class for spacing
                 buttons: [
                     {
                         extend: 'excelHtml5',
                         text: 'Export to Excel',
-                        title: 'Libraries COS',
+                        title: 'Libraries Hired Requirements',
                         exportOptions: {
                             columns: ':visible' 
                         }
@@ -326,7 +341,7 @@
                     {
                         extend: 'csvHtml5',
                         text: 'Export to CSV',
-                        title: 'Libraries COS',
+                        title: 'Libraries Hired Requirements',
                         exportOptions: {
                             columns: ':visible'
                         }
@@ -334,7 +349,7 @@
                     {
                         extend: 'pdfHtml5',
                         text: 'Export to PDF',
-                        title: 'Libraries COS',
+                        title: 'Libraries Hired Requirements',
                         exportOptions: {
                             columns: ':visible'
                         }
@@ -346,32 +361,31 @@
 
     var lib = {
         selectedData: null,
-        viewCosModal(id, name, description, email_notify) {
-            email_notify = (email_notify === 'true'); 
+        viewHiredRequirementsModal(id,name,is_required,status, emp_status, emp_id){
+            is_required = (is_required === 'true'); 
             lib.selectedData = id;
-            UpdateCosName.val(name);
-            UpdateCosDescription.val(description);
-            UpdateCosIsEmailNotify.prop('checked', email_notify);
-            $('#update_cos_modal').modal('show');
+            HREmpStatusId.val(emp_id);
+            UpdateHiredRequirementsName.val(name);
+            UpdateHiredRequirementsEmpStatus.val(emp_id).trigger('change');
+            UpdateHiredRequirementsIsRequired.prop('checked', is_required);
+            UpdateHiredRequirementsStatus.val(status).trigger('change');
+            $('#update_neop_modal').modal('show');
         },
-        saveCos(){
-            var cos_name = AddCosName.val();
-            var cos_description = AddCosDescription.val();
-            const CosIsEmailNotify = AddCosIsEmailNotify.is(':checked');
-
-            if (!cos_name.trim()) {
+        saveHiredRequirements(){
+            var name = AddHiredRequirementsName.val();
+            var emp_status = AddHiredRequirementsEmpStatus.val();
+            const is_required = AddHiredRequirementsIsRequired.is(':checked');
+            if (!name.trim() || !emp_status.trim()) {
                 toastr.error('Fields are Required!', 'Invalid', toast_options);
             }
             else{
                 $.ajax({
                     type: 'POST',
-                    url: "{% url 'rsp:LibrariesAddCos' %}",
+                    url: "{% url 'rsp:LibrariesAddHiredRequirementsStreamline' %}",
                     data:{
-                        staff_id : lib.selectedData,
-                        add_cos_name: cos_name,
-                        add_cos_description: cos_description,
-                        cos_email_notify : CosIsEmailNotify
-
+                        name: name,
+                        emp_status: emp_status,
+                        is_required: is_required
                     }
                 }).done(function (data) {
                     if(data.data =="success"){
@@ -384,7 +398,7 @@
                                 confirmButton: "btn btn-primary"
                             }
                         });
-                        $('#add_cos_modal').modal('hide');
+                        $('#add_neop_modal').modal('hide');
                         table.ajax.reload(null, false);
                     }
                     else{
@@ -398,26 +412,28 @@
                             }
                         });
                     }
-                });
 
+                });
             }
         },
-        updateCos(){
-            var update_cos_name = UpdateCosName.val();
-            var update_cos_description = UpdateCosDescription.val();
-            const CosIsEmailNotify = UpdateCosIsEmailNotify.is(':checked');
-            if (!update_cos_name.trim() || !update_cos_description.trim()) {
+        updateHiredRequirements(){
+            var name = UpdateHiredRequirementsName.val();
+            var emp_status = UpdateHiredRequirementsEmpStatus.val();
+            var is_required = UpdateHiredRequirementsIsRequired.is(':checked');
+
+
+            if (!name.trim() || !emp_status.trim()) {
                 toastr.error('Fields are Required!', 'Invalid', toast_options);
             }
             else{
                 $.ajax({
                     type: 'POST',
-                    url: "{% url 'rsp:LibrariesUpdateCos' %}",
+                    url: "{% url 'rsp:LibrariesUpdateHiredRequirementsStreamline' %}",
                     data:{
-                        cos_id : lib.selectedData,
-                        update_cos_name: update_cos_name,
-                        update_cos_description: update_cos_description,
-                        cos_email_notify : CosIsEmailNotify
+                        id : lib.selectedData,
+                        name: name,
+                        hr_emp_status: emp_status,
+                        is_required: is_required
                     }
                 }).done(function (data) {
                     if(data.data =="success"){
@@ -425,7 +441,7 @@
                             html: `<strong>` + data.message + `</strong> update Successfully`,
                             icon: "success",
                             buttonsStyling: false,
-                            confirmButtonText: "Ok, got it!",
+                            confirmButtonText: "Ok, got itss!",
                             customClass: {
                                 confirmButton: "btn btn-primary"
                             }
@@ -442,49 +458,45 @@
                             }
                         });
                     }
-                    $('#update_cos_modal').modal('hide');
+                    $('#update_neop_modal').modal('hide');
                     table.ajax.reload(null, false);
                 });
-
             }
         }
     }
+    $(document).on('change', '.toggle-switch', function() {
+        const switchElement = $(this); 
+        const status = switchElement.is(':checked') ? 'Active' : 'Inactive'; 
+        const status_id = switchElement.is(':checked') ? 1 : 0; 
+        const labelElement = switchElement.siblings('.form-check-label'); 
+        labelElement.text(status);
+        const id = switchElement.data('id');
+        $.ajax({
+            type: 'POST',
+            url: "{% url 'rsp:LibrariesUpdateStatusHRStreamline' %}",
+            data:{
+                id: id,
+                status_id: status_id
+            }
+        }).done(function (data) {
+            if(data.data =="success"){
+                toastr.success('Update successfully', 'Success', toast_options);
+                table.ajax.reload(null, false);
+            }
+            else{
+                Swal.fire({
+                    text: data.message,
+                    icon: "error",
+                    buttonsStyling: false,
+                    confirmButtonText: "Ok, got it!",
+                    customClass: {
+                        confirmButton: "btn btn-primary"
+                    }
+                });
+            }
 
-   $(document).on('click', 'a[data-role=delete]', function(){
-        if(confirm("Are you sure you want to delete?")){
-            emp_id = $(this).data('id')[2];
-            $.ajax({
-                url: "{% url 'rsp:delete_hiredreq_compliance' %}",
-                data: {
-                    emp_id: $(this).data('id')[1],
-                    req_id: $(this).data('id')[0]
-                },
-                type: "POST"
-            })
-            .done(function(data){
-                if(data.data == "success"){
-                    Swal.fire({
-                        title: "Good job!",
-                        text: "Requirements status successfully deleted!",
-                        icon: "success",
-                        confirmButtonColor: "#3498DB",
-                        allowOutsideClick: false,
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            $('#view-modal-requirements').modal('show').find('.modal-content').load("/rsp/view_hired_requirements/"+ emp_id);
-                        }
-                    });
-                }else{
-                    Swal.fire("Warning", data.error, "warning");
-                }
-            });
-        }
+        });
     });
 
-    $(document).on('click', 'a[data-role=view-req]',function(){
-		$('#view-modal-requirements').modal('show').find('.modal-content').empty();
-		$('#view-modal-requirements').modal('show').find('.modal-content').load('/rsp/view_hired_requirements/' + $(this).data('id'));
-	});
-   
 </script>
 {% endblock script %}
