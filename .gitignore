@@ -87,5 +87,4 @@ local_settings.py
 
 .env
 venv
-.venv
 db.sqlite3

@@ -255,38 +255,51 @@ def view_hired_requirements(request, pk):
         try:
             req_ids = request.POST.getlist('req_id[]')
             app_ids = request.POST.getlist('app_id[]')
+            is_required = request.POST.getlist('is_required[]')
             date_compliance = request.POST.getlist('date_compliance[]')
             date_remarkscompliance = request.POST.getlist('date_remarkscompliance[]')
 
             data = [
-                {'req_id': req_ids[i], 'app_id': app_ids[i], 
-                'date_compliance': date_compliance[i], 'date_remarkscompliance': date_remarkscompliance[i]}
+                {
+                    'req_id': req_ids[i], 
+                    'app_id': app_ids[i], 
+                    'date_compliance': date_compliance[i], 
+                    'date_remarkscompliance': date_remarkscompliance[i], 
+                    'is_required': is_required[i]
+                }
                 for i in range(len(req_ids))
-                if date_compliance[i] and date_remarkscompliance[i]
             ]
 
             existing_compliances = HiredreqCompliance.objects.filter(app_id=app.app_id)
             existing_ids = {str(compliance.hired_req_id): compliance.id for compliance in existing_compliances}
-
+            print (data)
+            
             for row in data:
                 req_id = str(row['req_id'])  # Ensure the req_id is compared as a string
-                if req_id in existing_ids:
-                    # Update existing record
-                    compliance_id = existing_ids[req_id]
-                    HiredreqCompliance.objects.filter(id=compliance_id).update(
-                        app_id=row['app_id'],
-                        hired_req_id=row['req_id'],
-                        remarks=row['date_remarkscompliance'],
-                        datetime=row['date_compliance'],
-                    )
+                if (row['is_required'] == '1'):
+                    if req_id in existing_ids:
+                        # Update existing record
+                        compliance_id = existing_ids[req_id]
+                        HiredreqCompliance.objects.filter(id=compliance_id).update(
+                            app_id=row['app_id'],
+                            hired_req_id=row['req_id'],
+                            remarks=row['date_remarkscompliance'],
+                            datetime=row['date_compliance'] if row['date_compliance'] != '' else None,
+                            is_required=row['is_required']
+                        )
+                    else:
+                        # Create new record
+                        HiredreqCompliance.objects.create(
+                            app_id=row['app_id'],
+                            hired_req_id=row['req_id'],
+                            remarks=row['date_remarkscompliance'],
+                            datetime=row['date_compliance'] if row['date_compliance'] != '' else None,
+                            is_required=row['is_required']
+                        )
                 else:
-                    # Create new record
-                    HiredreqCompliance.objects.create(
-                        app_id=row['app_id'],
-                        hired_req_id=row['req_id'],
-                        remarks=row['date_remarkscompliance'],
-                        datetime=row['date_compliance'],
-                    )
+                    if HiredreqCompliance.objects.filter(hired_req_id=req_id).count():
+                        compliance_id = existing_ids[req_id]
+                        HiredreqCompliance.objects.filter(id=compliance_id).delete()
 
             # # Delete records that are no longer in the submitted data
             # OasHiredreqCompliance.objects.filter(hired_req_id__in=to_delete_ids).delete()
@@ -313,10 +326,10 @@ def hiredreq_complete(request):
                 NewlyHiredStaff.objects.create(
                     id = request.POST.get('app_id'),
                     remarks ='Requirements Done',
-                    requirements_ok = 'Done',
+                    requirements_ok = 'Complete',
                     )
             else:
-                check_hired.requirements_ok = 'Done'
+                check_hired.requirements_ok = 'Complete'
                 check_hired.remarks = 'Requirements Done'
                 check_hired.save()
                     
@@ -345,7 +358,9 @@ def hiredreq_not_complete(request):
     if request.method == "POST":
         try:
             chck = NewlyHiredStaff.objects.filter(id = request.POST.get('app_id')).first()
+            chck.requirements_ok="Incomplete"
             chck.remarks = request.POST.get('remarks')
+            chck.araf_due_date = request.POST.get('due_date')
             chck.save()
             # send_notification(request.user.id , message, app.pi.mobile_no)
             # if app.pi.mobile_no_two:
@@ -502,6 +517,15 @@ def print_onboarding_forms(request, pk, ids=None):
     }
     return render(request, 'rsp/NewlyHiredStaff/print_onboarding_forms.html', context)
 
+@csrf_exempt
+def print_req_araf(request, pk=None):
+    if pk != '0':
+        all = NewlyHiredStaff.objects.filter(id=pk).first()
+        context = {
+            'pk': pk,
+            'all': all,
+        }
+    return render(request, 'rsp/NewlyHiredStaff/print_requirements_araf.html', context)
 
 @csrf_exempt
 def print_req_checklist(request, pk=None):

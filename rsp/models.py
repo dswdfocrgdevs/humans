@@ -38,6 +38,8 @@ class NewlyHiredStaff(models.Model):
     gender = models.CharField(max_length=100,null=True)
     contact_no = models.CharField(max_length=100,null=True)
     email = models.CharField(max_length=100,null=True)
+    araf_due_date = models.DateField(blank=True,null=True)  # Automatically set on creation
+
 
     def __str__(self):
         return f"{self.full_name} - {self.position}"
@@ -204,6 +206,7 @@ class HiredreqCompliance(models.Model):
     hired_req = models.ForeignKey(RspHiredreq, on_delete=models.CASCADE)
     remarks = models.CharField(max_length=255, blank=True, null=True)
     datetime = models.DateTimeField(blank=True, null=True)
+    is_required = models.BooleanField(default=0)
 
     class Meta:
         db_table = 'rsp_hiredreq_compliance'
