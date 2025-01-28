@@ -440,7 +440,12 @@
                 { data: 'emp_status', title:'Status' },
                 { data: 'nature', title: 'Nature' },
                 { data: 'area_of_assignment', title: 'Area of Assignment' },
-                { data: 'requirements_ok', title: 'Requirements' },
+                { data: 'requirements_ok', title: 'Requirements',
+                    render: function(data, type, row) {
+                        if (!data) return null;
+                        return `<span class="badge py-2 px-4 fs-7 badge-light-${data == "Complete" ? "success":"danger"}">${data}</span>`;
+                    }
+                },
                 { data: 'remarks', title: 'Remarks' },
                 { 
                     title: 'Endorse to Welfare',
@@ -535,7 +540,7 @@
                 {
                     extend: 'collection',
                     text: 'Export',
-                    className: 'btn btn-secondary', // Basic button styling
+                    className: 'btn btn-secondary btn-sm me-5', // Basic button styling
                     buttons: [
                         {
                             extend: 'excelHtml5',
@@ -761,5 +766,10 @@
             }
         });
     }
+
+    $('#view-modal-requirements').on('hidden.bs.modal', () => {
+        $('body').css('overflow', '');
+    });
+
 </script>
 {% endblock script %}
