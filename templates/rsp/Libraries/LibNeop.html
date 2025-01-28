@@ -379,7 +379,7 @@
             var add_neop_milestone = AddNeopMilestone.val();
             const NeopIsEmailNotify = AddNeopIsEmailNotify.is(':checked');
 
-            if (!add_neop_name.trim() || !add_neop_description.trim() || !add_neop_milestone) {
+            if (!add_neop_name.trim() || !add_neop_milestone) {
                 toastr.error('Fields are Required!', 'Invalid', toast_options);
             }
             else{
