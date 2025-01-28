@@ -1,0 +1,330 @@
+{% extends 'layout.html' %}
+{% block content %}
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="{% static 'assets/plugins/custom/prismjs/prismjs.bundle.css' %}" />
+<link rel="stylesheet" href="{% static 'assets/plugins/custom/datatables/datatables.bundle.css' %}" />
+<link rel="stylesheet" href="{% static 'assets/plugins/global/plugins.bundle.css' %}" />
+<link rel="stylesheet" href="{% static 'assets/css/style.bundle.css' %}" />
+<style>
+.link-style {
+    color: #337ab7; /* Link color */
+    text-decoration: none; /* Removes underline */
+    cursor: pointer; /* Pointer cursor on hover */
+}
+
+.link-style:hover {
+    text-decoration: underline; /* Adds underline on hover */
+    color: darkblue; /* Changes color slightly on hover */
+}
+.select2-container {
+    z-index: 9999 !important;
+}
+.select2-container--open {
+    z-index: 99999 !important;
+}
+
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.container {
+    width: 90%;
+    margin: 20px auto;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.header img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-right: 20px;
+}
+
+.header .info {
+    flex: 1;
+}
+
+.info p {
+    margin: 5px 0;
+}
+
+.section {
+    margin-top: 20px;
+}
+
+.section h3 {
+    margin-bottom: 10px;
+}
+
+.checkbox-group label {
+    display: block;
+    margin: 5px 0;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.grid div {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+    border-radius: 5px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.buttons button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #007BFF;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.buttons button:hover {
+    background-color: #0056b3;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.table th, .table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+.table th {
+    background-color: #f4f4f4;
+}
+</style>
+
+<div class="d-flex flex-column flex-column-fluid">
+    <!--begin::Toolbar-->
+    <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+        <!--begin::Toolbar container-->
+        <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
+            <!--begin::Page title-->
+            <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+                <!--begin::Title-->
+                <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0">{{title}}</h1>
+                <!--end::Title-->
+                <!--begin::Breadcrumb-->
+                <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+                    <!--begin::Item-->
+                    <li class="breadcrumb-item text-muted">
+                        <a href="#" class="text-muted text-hover-primary">Home</a>
+                    </li>
+                    <!--end::Item-->
+                    <!--begin::Item-->
+                    <li class="breadcrumb-item">
+                        <span class="bullet bg-gray-500 w-5px h-2px"></span>
+                    </li>
+                    <!--end::Item-->
+                    <!--begin::Item-->
+                    <li class="breadcrumb-item text-muted">{{title}}</li>
+                    <!--end::Item-->
+                </ul>
+                <!--end::Breadcrumb-->
+            </div>
+            <!--end::Page title-->
+            <!--begin::Actions-->
+
+            <!--end::Actions-->
+        </div>
+        <!--end::Toolbar container-->
+    </div>
+    <!--end::Toolbar-->
+    <!--begin::Content-->
+    <div id="kt_app_content" class="app-content flex-column-fluid">
+        <!--begin::Content container-->
+        <div id="kt_app_content_container" class="app-container container-fluid">
+        </div>
+    </div>
+</div>
+
+<div id="kt_app_content" class="app-content flex-column-fluid">
+    <!--begin::Content container-->
+    <div id="kt_app_content_container" class="app-container container-fluid">
+
+        <div class="container">
+            <div class="">
+                <div class="row g-4">
+                  <!-- Profile Section -->
+                  <div class="col-12 col-md-4">
+                    <div class="section border rounded p-10">
+                        <div class="d-flex align-items-center">
+                            <img src="{{IRIS_URL}}/{{data.picture}}" alt="Profile" class="img-fluid rounded-circle mb-3" style="width: 100px; height: 100px; margin-right: 15px;">
+                            <!-- Other content here -->
+                        </div>
+                      <div class="info text-left">
+                        <p><strong>Name</strong>: {{data.full_name}}</p>
+                        <p><strong >Contact Information</strong></p>
+                        <p><strong style="padding-left: 2em;">Mobile</strong>: {{data.contact_no}}</p>
+                        <p><strong style="padding-left: 2em;">Email</strong>: {{data.email}}</p>
+                        <p><strong>Position</strong>: {{data.position}}</p>
+                        <p><strong>SG</strong>: {{data.salary_grade}}</p>
+                        <p><strong>Status of Employment</strong>: {{data.emp_status}}</p>
+                        <p><strong>Nature of Appointment</strong>: {{data.nature}}</p>
+                        <p><strong>Division</strong>_______________</p>
+                        <p><strong>Section</strong> _______________</p>
+                        <p><strong>Area of assignment</strong>: {{data.area_of_assignment}}</p>
+                      </div>
+                    </div>
+                  </div>
+              
+                  <!-- Details Section -->
+                  <div class="col-12 col-md-4">
+                    <div class="section border rounded p-10">
+                      <h3 class="h5 mb-3">Details</h3>
+                      <p>Item Number: __________</p>
+                      <p>Vice: __________</p>
+                      <p>Immediate Supervisor: __________</p>
+                      <p>Peer Buddy: __________</p>
+                      <p>Onboarding Coordinator: __________</p>
+                      <p>Date of HR Orientation: __________</p>
+                      <p>Streamlined: Yes / No</p>
+                      <div class="checkbox-group mt-3">
+                        <h3 class="h6">Type of Onboarding</h3>
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="neop">
+                          <label class="form-check-label" for="neop">NEOP</label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="cos">
+                          <label class="form-check-label" for="cos">COS with Guidelines</label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="internal-staff">
+                          <label class="form-check-label" for="internal-staff">Internal Staff</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              
+                  <!-- NEOP Section -->
+                  <div class="col-12 col-md-4">
+                    <div class="section border rounded p-10">
+                      <h3 class="h5 mb-3">If NEOP (this portion is required)</h3>
+                      <div class="checkbox-group mb-3">
+                        <h3 class="h6">Type of Employee</h3>
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="pe">
+                          <label class="form-check-label" for="pe">PE</label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="pi">
+                          <label class="form-check-label" for="pi">PI</label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="nc">
+                          <label class="form-check-label" for="nc">NC</label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="tr">
+                          <label class="form-check-label" for="tr">TR</label>
+                        </div>
+                      </div>
+                      <div class="checkbox-group mb-3">
+                        <h3 class="h6">Type of New Employee</h3>
+                        <h4 class="h6">Probationary¹</h4>
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="original">
+                          <label class="form-check-label" for="original">Original</label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="reappointed">
+                          <label class="form-check-label" for="reappointed">Reappointed</label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="reemployed">
+                          <label class="form-check-label" for="reemployed">Reemployed</label>
+                        </div>
+                      </div>
+                      <hr>
+                      <div class="checkbox-group">
+                        <h3 class="h6">Internal Employee Undergoing Probationary Period²</h3>
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="non-career">
+                          <label class="form-check-label" for="non-career">Previously Non-Career</label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="cos">
+                          <label class="form-check-label" for="cos">Previously COS</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+    
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Onboarding Type</th>
+                        <th>Date of Interview</th>
+                        <th>Date Deliberation Approved</th>
+                        <th>Assumption/Effective Date</th>
+                        <th>Date of End of 3 Months</th>
+                        <th>Date of End of 6 Months</th>
+                        <th>Date Notified</th>
+                        <th>HR Orientation/Date of Requirement Submission</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>__________</td>
+                        <td>__________</td>
+                        <td>__________</td>
+                        <td>__________</td>
+                        <td>__________</td>
+                        <td>__________</td>
+                        <td>__________</td>
+                        <td>__________</td>
+                    </tr>
+                </tbody>
+            </table>
+    
+            <div class="buttons">
+                <button>ENDORSE TO WELFARE</button>
+                <button>ENDORSE TO LDS</button>
+                <button>ENDORSE TO PMS</button>
+                <button>ENDORSE TO PAS</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock content %}
+
+{% block script %}
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script type="text/javascript">
+    
+</script>
+{% endblock script %}
