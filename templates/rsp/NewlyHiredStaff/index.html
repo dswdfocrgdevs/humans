@@ -513,9 +513,10 @@
                                 Actions
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="actionDropdown">
+                                <li><a class="dropdown-item" href='/rsp/view-profile/${data}' >Profile</a></li>
                                 <li><a class="dropdown-item" href="javascript:void(0)" data-role="view-req" data-id="${data}">Requirements Checklist</a></li>
                                 <li><a class="dropdown-item" href="javascript:void(0)" data-role="remarks" data-id="${data}">Remarks</a></li>
-                                <li><a class="dropdown-item" href='/rsp/print/notice-of-appointed-applicants/${data}' target='_blank' title='PRINT'>Print Notice Newly Hired</a></li>
+                                <li><a class="dropdown-item" href='/rsp/print/notice-of-appointed-applicants/${row.iris_id}' target='_blank' title='PRINT'>Print Notice Newly Hired</a></li>
                             </ul>
                         </div>
                     `;
@@ -761,5 +762,6 @@
             }
         });
     }
+
 </script>
 {% endblock script %}

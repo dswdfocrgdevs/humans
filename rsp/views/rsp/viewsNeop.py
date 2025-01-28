@@ -4,9 +4,11 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.db import connection
 from rsp.models import LibNeopActivities, NewlyHiredStaff, StaffNeopActivities, StaffNeopInfo
+from rsp.mail import send_email
 from datetime import datetime
 import json
 from rsp.views.rsp.functions import safe_decode
+from django.conf import settings
 
 def check_activities_exist(milestone, staff_id):
     """Check if all activities for a given staff member exist based on the milestone, 
@@ -133,6 +135,8 @@ def ListNewlyHiredNeop(request):
         }, status=200)
         
 def Neop (request):
+    print(123)
+    send_email()
     return render(request, 'rsp/Neop/index.html', {
         'title': 'NEOP'
     })
@@ -172,6 +176,10 @@ def GetLibNeopActivities(request):
 
 @csrf_exempt
 def PostLibNeopActivities(request):
+    
+
+
+
     if request.method == 'POST':
         try:
             # Parse the incoming JSON data
