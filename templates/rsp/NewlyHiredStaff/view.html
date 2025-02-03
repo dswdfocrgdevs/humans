@@ -124,7 +124,7 @@ body {
 }
 </style>
 
-
+{% include 'rsp/NewlyHiredStaff/modals.html' %}
 
 <div class="d-flex flex-column flex-column-fluid">
     <!--begin::Toolbar-->
@@ -333,10 +333,10 @@ body {
             </table>
     
             <div class="buttons">
-                <button>ENDORSE TO WELFARE</button>
-                <button>ENDORSE TO LDS</button>
-                <button>ENDORSE TO PMS</button>
-                <button>ENDORSE TO PAS</button>
+                <button onclick="endorse.viewEndorsement({{ data.id }},1)">ENDORSE TO WELFARE ({{data.endorse_welfareprogress}})</button>
+                <button onclick="endorse.viewEndorsement({{ data.id }},2)">ENDORSE TO LDS ({{data.endorse_ldsprogress}})</button>
+                <button onclick="endorse.viewEndorsement({{ data.id }},3)">ENDORSE TO PMS ({{data.endorse_pmsprogress}})</button>
+                <button onclick="endorse.viewEndorsement({{ data.id }},4)">ENDORSE TO PAS ({{data.endorse_pasprogress}})</button>
             </div>
             <hr>
             <button class="btn btn-sm btn-success">Save</button>
@@ -349,6 +349,71 @@ body {
 {% block script %}
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script type="text/javascript">
-    
+     var endorse = {
+        selectedEndorsed: null,
+        selectedStaff: null,
+        viewEndorsement(staff_id, endorsed){
+            endorse.selectedEndorsed = endorsed;
+            endorse.selectedStaff = staff_id;
+            if(endorsed==1){
+                $('.endorsed_name').html('Welfare');
+            }else if(endorsed==2){
+                $('.endorsed_name').html('LDS');
+            }else if(endorsed==3){
+                $('.endorsed_name').html('PMS');
+            }else{
+                $('.endorsed_name').html('PAS');
+            }
+            $('#endorsed_modal').modal('show');
+            endorse.getEndorsedList(staff_id, endorsed);
+        },
+        getEndorsedList(staff_id, endorsed) {
+            $.get("{% url 'rsp:GetLibEndorsedActivities' %}?endorsed=" + endorsed + "&staff_id=" + staff_id, function(data){
+                console.log(data)
+                endorse.writeModalContent(data);
+            });
+        },
+        writeModalContent(data){
+            var contentHtml = "";
+            data.lib_endorsed_activities.forEach(function(item) {
+                contentHtml += `<tr>`;
+                    contentHtml += `<td>${item.name}</td>`;
+                    contentHtml += `<td class="text-center align-middle"><input type="checkbox" class="form-check-input me-2" ${item?.date ? 'checked' : ''}/></td>`;
+                    contentHtml += `<td><input type="date" name="endorsed_date[]" class="form-control me-2" data-id="${item.id}" value="${item?.date ? item.date : ''}"/></td>`;
+                    contentHtml += `<td><input type="text" name="endorsed_remarks[]" class="form-control me-2" placeHolder="Remarks" value="${item?.remarks ? item.remarks : ''}"/></td>`;
+                contentHtml += `</tr>`;
+            });
+            $('#table-endorse-content-tbody').html(contentHtml);
+        },
+        saveEndorsed(){
+            var activitiesData = [];
+
+            $("input[name='endorsed_date[]']").each(function(index) {
+                // Get the corresponding remarks value
+                if($(this).val()){
+                    let date = $(this).val();
+                    let id = $(this).attr('data-id');
+                    let remarks = $("input[name='endorsed_remarks[]']").eq(index).val();
+                    // Create an object and push it to the activitiesData array
+                    activitiesData.push({ id:id,user_id:endorse.selectedStaff, date: date, remarks: remarks });
+                    $('#endorsed_modal').modal('hide');
+                   
+                }
+            });
+            
+            $.ajax({
+                url: "{% url 'rsp:PostLibEndorsedActivities' %}",
+                type: "POST",
+                contentType: "application/json",  // Set the correct content type
+                data: JSON.stringify({data: activitiesData}),  // Convert the data to a JSON string
+                success: function(data) {
+                  location.reload();
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        }
+   }
 </script>
 {% endblock script %}
