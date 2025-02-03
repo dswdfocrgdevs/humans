@@ -137,10 +137,10 @@
                                         {{ row.name }}
                                     </td>
                                     <td class="text-center">
-                                        <input type="date" class="date-compliance form-control form-control-sm {% if req_is_required is None %}opacity-50{% endif %}" name="date_compliance[]" value="{{ compliance.datetime|date:'Y-m-d' }}" {% if req_is_required is None %}readonly{% endif %} required>
+                                        <input type="date" class="date-compliance form-control form-control-sm {% if req_is_required is None %}opacity-50{% endif %}" name="date_compliance[]" value="{{ compliance.datetime|date:'Y-m-d' }}" {% if req_is_required is None %}readonly{% endif %}>
                                     </td>
                                     <td class="text-center">
-                                        <input type="text" class="date-remarkscompliance form-control form-control-sm {% if req_is_required is None %}opacity-50{% endif %}" name="date_remarkscompliance[]" value="{% if compliance %}{{ compliance.remarks }}{% endif %}" {% if req_is_required is None %}readonly{% endif %} required>
+                                        <input type="text" class="date-remarkscompliance form-control form-control-sm {% if req_is_required is None %}opacity-50{% endif %}" name="date_remarkscompliance[]" value="{% if compliance %}{{ compliance.remarks }}{% endif %}" {% if req_is_required is None %}readonly{% endif %}>
                                     </td>
                                     <td class="text-center">
                                         {% if req_is_required is None %} 
