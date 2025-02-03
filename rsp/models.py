@@ -157,7 +157,7 @@ class StaffNeopActivities(models.Model):
     # class Meta:
     #     unique_together = ('staff_id', 'lib_neop_id')  # Ensure a staff can't have duplicate activities
 
-class StaffNeopInfo(models.Model):
+class StaffOnboardingInfo(models.Model):
     staff_id = models.ForeignKey(NewlyHiredStaff, on_delete=models.CASCADE, related_name='neop_info_activities')
     assumption_date = models.DateField(null=True, blank=True)
     date_end_third = models.DateField(null=True, blank=True)

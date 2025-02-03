@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.db import connection
-from rsp.models import LibNeopActivities, NewlyHiredStaff, StaffNeopActivities, StaffNeopInfo
+from rsp.models import LibNeopActivities, NewlyHiredStaff, StaffNeopActivities, StaffOnboardingInfo
 from datetime import datetime
 import json
 from rsp.views.rsp.functions import safe_decode
@@ -86,13 +86,13 @@ def ListNewlyHiredInternalStaff(request):
         # Prepare data for response
         data = []
         for item in paginated_data:
-            # Fetch related StaffNeopInfo data for each NewlyHiredStaff
+            # Fetch related StaffOnboardingInfo data for each NewlyHiredStaff
             try:
-                staff_neop_info = StaffNeopInfo.objects.get(staff_id=item.id)
+                staff_neop_info = StaffOnboardingInfo.objects.get(staff_id=item.id)
                 assumption_date = staff_neop_info.assumption_date
                 date_end_third = staff_neop_info.date_end_third
                 date_end_sixth = staff_neop_info.date_end_sixth
-            except StaffNeopInfo.DoesNotExist:
+            except StaffOnboardingInfo.DoesNotExist:
                 assumption_date = None
                 date_end_third = None
                 date_end_sixth = None

@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.db import connection
-from rsp.models import LibNeopActivities, NewlyHiredStaff, StaffNeopActivities, StaffNeopInfo, LibCosGuidelinesActivities, RspHiredreq, RspHiredStreamlinereq
+from rsp.models import LibNeopActivities, NewlyHiredStaff, StaffNeopActivities, StaffOnboardingInfo, LibCosGuidelinesActivities, RspHiredreq, RspHiredStreamlinereq
 from datetime import datetime
 import json
 from django.utils.timezone import localtime

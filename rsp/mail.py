@@ -8,6 +8,7 @@ def send_email():
     plain_text = get_template('email_template/email.txt')
     html_body = get_template('email_template/email.html')
 
+    print(123)
     subject = 'Caraga HUMANS TEST'
     content = 'TEST'
     email_from = 'dioamejade@gmail.com'

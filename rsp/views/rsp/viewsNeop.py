@@ -3,12 +3,13 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.db import connection
-from rsp.models import LibNeopActivities, NewlyHiredStaff, StaffNeopActivities, StaffNeopInfo
+from rsp.models import LibNeopActivities, NewlyHiredStaff, StaffNeopActivities, StaffOnboardingInfo
 from rsp.mail import send_email
 from datetime import datetime
 import json
 from rsp.views.rsp.functions import safe_decode
 from django.conf import settings
+from dateutil.relativedelta import relativedelta
 
 def check_activities_exist(milestone, staff_id):
     """Check if all activities for a given staff member exist based on the milestone, 
@@ -81,13 +82,13 @@ def ListNewlyHiredNeop(request):
         # Prepare data for response
         data = []
         for item in paginated_data:
-            # Fetch related StaffNeopInfo data for each NewlyHiredStaff
+            # Fetch related StaffOnboardingInfo data for each NewlyHiredStaff
             try:
-                staff_neop_info = StaffNeopInfo.objects.get(staff_id=item.id)
+                staff_neop_info = StaffOnboardingInfo.objects.get(staff_id=item.id)
                 assumption_date = staff_neop_info.assumption_date
                 date_end_third = staff_neop_info.date_end_third
                 date_end_sixth = staff_neop_info.date_end_sixth
-            except StaffNeopInfo.DoesNotExist:
+            except StaffOnboardingInfo.DoesNotExist:
                 assumption_date = None
                 date_end_third = None
                 date_end_sixth = None
@@ -135,8 +136,6 @@ def ListNewlyHiredNeop(request):
         }, status=200)
         
 def Neop (request):
-    print(123)
-    send_email()
     return render(request, 'rsp/Neop/index.html', {
         'title': 'NEOP'
     })
@@ -220,20 +219,24 @@ def PostNeopStaffInfo(request):
 
         # Extract data
         staff_id = data.get('data', {}).get('staff_id')
-        assumption_date = data.get('data', {}).get('assumption_date')
-        date_end_third = data.get('data', {}).get('date_end_third')
-        date_end_sixth = data.get('data', {}).get('date_end_sixth')
+        assumption_date_str = data.get('data', {}).get('assumption_date')
+
+        if assumption_date_str:
+            assumption_date = datetime.strptime(assumption_date_str, "%Y-%m-%d")  # Convert string to date
+            date_end_third = assumption_date + relativedelta(months=3)
+            date_end_sixth = assumption_date + relativedelta(months=6)
+        else:
+            assumption_date = date_end_third = date_end_sixth = None
 
         # Helper function to safely parse date strings
         def parse_date(date_str):
-            if date_str:
+            if date_str and isinstance(date_str, str):  # Ensure it's a string before parsing
                 return datetime.strptime(date_str, '%Y-%m-%d').date()
-            return None
+            return date_str  # If it's already a date, return as is
 
-        # Safely convert the date strings to date objects
-        assumption_date = parse_date(assumption_date)
-        date_end_third = parse_date(date_end_third)
-        date_end_sixth = parse_date(date_end_sixth)
+        # Convert to string format only if not None
+        date_end_third = date_end_third.strftime("%Y-%m-%d") if date_end_third else None
+        date_end_sixth = date_end_sixth.strftime("%Y-%m-%d") if date_end_sixth else None
 
         # Get the staff instance
         try:
@@ -241,8 +244,8 @@ def PostNeopStaffInfo(request):
         except NewlyHiredStaff.DoesNotExist:
             return JsonResponse({"error": "Staff not found"}, status=404)
 
-        # Check if StaffNeopInfo exists for the given staff
-        staff_neop_info, created = StaffNeopInfo.objects.update_or_create(
+        # Check if StaffOnboardingInfo exists for the given staff
+        staff_neop_info, created = StaffOnboardingInfo.objects.update_or_create(
             staff_id=staff,  # Use staff instance for the foreign key
             defaults={
                 'assumption_date': assumption_date,

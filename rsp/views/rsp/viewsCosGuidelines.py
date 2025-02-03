@@ -86,7 +86,7 @@ def GetCosGuideLinesStaffList(request):
         paginated_data = newly_hired_data[start:start + per_page]
 
         for item in paginated_data:
-            # Fetch related StaffNeopInfo data for each NewlyHiredStaff
+            # Fetch related StaffOnboardingInfo data for each NewlyHiredStaff
             try:
                 staff_cost_guidelines_info = StaffCosGuidelinesInfo.objects.get(staff_id=item.id)
                 assumption_date = staff_cost_guidelines_info.assumption_date

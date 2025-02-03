@@ -212,21 +212,22 @@ body {
                       <div class="checkbox-group mt-3">
                         <h3 class="h6">Type of Onboarding</h3>
                         <div class="form-check">
-                          <input class="form-check-input" type="checkbox" id="neop">
+                          <input class="form-check-input" type="checkbox" id="neop" {% if data.onboarding_type.id == 1 %}checked{% endif %}>
                           <label class="form-check-label" for="neop">NEOP</label>
                         </div>
                         <div class="form-check">
-                          <input class="form-check-input" type="checkbox" id="cos">
+                          <input class="form-check-input" type="checkbox" id="cos" {% if data.onboarding_type.id == 2 %}checked{% endif %}>
                           <label class="form-check-label" for="cos">COS with Guidelines</label>
                         </div>
                         <div class="form-check">
-                          <input class="form-check-input" type="checkbox" id="internal-staff">
+                          <input class="form-check-input" type="checkbox" id="internal-staff" {% if data.onboarding_type.id == 3 %}checked{% endif %}>
                           <label class="form-check-label" for="internal-staff">Internal Staff</label>
                         </div>
                       </div>
                     </div>
                   </div>
               
+                  {% if data.onboarding_type.id == 1 %}
                   <!-- NEOP Section -->
                   <div class="col-12 col-md-4">
                     <div class="section border rounded p-10">
@@ -250,20 +251,35 @@ body {
                           <label class="form-check-label" for="tr">TR</label>
                         </div>
                       </div>
-                      <div class="checkbox-group mb-3">
-                        <h3 class="h6">Type of New Employee</h3>
-                        <h4 class="h6">Probationary¹</h4>
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox" id="original">
-                          <label class="form-check-label" for="original">Original</label>
+                      <hr>
+                      <h3 class="h6">Type of New Employee</h3>
+                      <div class="row">
+                        <div class="col-6 col-lg-6 col-md-6 col-sm-6">
+                          <h4 class="h6">Probationary¹</h4>
+                          <div class="form-check">
+                            <input class="form-check-input mt-1" type="checkbox" id="original">
+                            <label class="form-check-label mt-1" for="original">Original</label>
+                          </div>
+                          <div class="form-check">
+                            <input class="form-check-input mt-1" type="checkbox" id="reappointed">
+                            <label class="form-check-label mt-1" for="reappointed">Reappointed</label>
+                          </div>
+                          <div class="form-check">
+                            <input class="form-check-input mt-1" type="checkbox" id="reemployed">
+                            <label class="form-check-label mt-1" for="reemployed">Reemployed</label>
+                          </div>
                         </div>
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox" id="reappointed">
-                          <label class="form-check-label" for="reappointed">Reappointed</label>
-                        </div>
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox" id="reemployed">
-                          <label class="form-check-label" for="reemployed">Reemployed</label>
+                      
+                        <div class="col-6 col-lg-6 col-md-6 col-sm-6">
+                          <h4 class="h6">Non-Probationary</h4>
+                          <div class="form-check">
+                            <input class="form-check-input mt-1" type="checkbox" id="original2">
+                            <label class="form-check-label mt-1" for="original2">Non-Career³</label>
+                          </div>
+                          <div class="form-check">
+                            <input class="form-check-input mt-1" type="checkbox" id="reappointed2">
+                            <label class="form-check-label mt-1" for="reappointed2">Transferred⁴ <br> from ________ previously ________</label>
+                          </div>
                         </div>
                       </div>
                       <hr>
@@ -278,12 +294,17 @@ body {
                           <label class="form-check-label" for="cos">Previously COS</label>
                         </div>
                       </div>
+                      <hr>
+                      <button class="btn btn-sm btn-success">Save</button>
                     </div>
                   </div>
                 </div>
+          
               </div>
+             
+              {% endif %}
     
-            <table class="table">
+            <table class="table table-bordered">
                 <thead>
                     <tr>
                         <th>Onboarding Type</th>
@@ -298,12 +319,12 @@ body {
                 </thead>
                 <tbody>
                     <tr>
+                        <td>{{data.onboarding_type.name}}</td>
                         <td>__________</td>
                         <td>__________</td>
-                        <td>__________</td>
-                        <td>__________</td>
-                        <td>__________</td>
-                        <td>__________</td>
+                        <td>{{onboarding_info.assumption_date}}</td>
+                        <td>{{onboarding_info.date_end_third}}</td>
+                        <td>{{onboarding_info.date_end_sixth}}</td>
                         <td>__________</td>
                         <td>__________</td>
                     </tr>

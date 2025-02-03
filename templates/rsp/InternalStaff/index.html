@@ -85,10 +85,6 @@
 			<div class="modal-body py-lg-10 px-lg-10">
                 <label>Assumption Date</label>
                 <input type="date" id="assumption_date" class="form-control me-2"/>
-                <label>Date of End of 3rd Month</label>
-                <input type="date" id="date_end_third" class="form-control me-2"/>
-                <label>Date of End of 6th Month</label>
-                <input type="date" id="date_end_sixth" class="form-control me-2"/>
                 <div class="d-flex justify-content-end mt-3">
                     <a href="#" class="btn btn-sm fw-bold btn-success me-2" onclick="staff.saveStaff()">
                         <i class="fas fa-check"></i> Save
@@ -215,8 +211,6 @@
                                 ${row.id},
                                 '${row.full_name}',
                                 '${row.assumption_date}',
-                                '${row.date_end_third}',
-                                '${row.date_end_sixth}',
                                 )"><span class='fa fa-edit'></span></a>
                             </div>
                         `;
@@ -363,7 +357,7 @@
 
     var staff = {
         selectedStaff: null,
-        viewStaffModal(staff_id,full_name,assumption_date,date_end_third,date_end_sixth){
+        viewStaffModal(staff_id,full_name,assumption_date){
             staff.selectedStaff = staff_id;
             $('#staff_modal').modal('show');
             $('#staff-name').html(full_name);
@@ -375,15 +369,11 @@
         saveStaff(){
 
             var assumption_date = $('#assumption_date').val();
-            var date_end_third = $('#date_end_third').val();
-            var date_end_sixth = $('#date_end_sixth').val();
 
 
             var data = {
                 staff_id : staff.selectedStaff,
                 assumption_date: assumption_date,
-                date_end_third: date_end_third,
-                date_end_sixth: date_end_sixth
             };
 
             $.ajax({
