@@ -84,7 +84,7 @@
                     <!--begin::Header-->
                     <div class="card-header border-0 pt-5 d-flex justify-content-between align-items-center">
                         <div class="d-flex">
-                            <a href="{% url 'rsp:list_endorse_applicants' %}" target="_blank" class="btn btn-sm fw-bold btn-primary me-2>
+                            <a href="{% url 'rsp:list_endorse_applicants' %}" target="_blank" class="btn btn-sm fw-bold btn-primary me-2">
                                 <i class="fas fa-list"></i> List of Transmittal
                             </a>
                             <a href="{% url 'rsp:newly-hired-staff-streamline' %}" target="_blank" class="btn btn-sm fw-bold btn-secondary">
@@ -93,6 +93,9 @@
                         </div>
                     
                         <div class="d-flex">
+                            <a href="#" class="btn btn-sm fw-bold btn-light-primary me-2" onclick="endorsement.viewModal()">
+                                <i class="fa-solid fa-paper-plane"></i> Endorsement
+                            </a>
                             <a href="#" class="btn btn-sm fw-bold btn-success me-2" onclick="onboarding.viewModal()">
                                 <i class="fas fa-check"></i> Set Onboarding Type
                             </a>
@@ -397,7 +400,9 @@
                 sortable: false,
                 targets: 0,
                 render: function(data) {
-                    return `<input type="checkbox" class="dt-checkboxes row-select form-check-input checkbox-items" value="${data}">`;
+                    return `<div class="form-check">
+                                <input type="checkbox" class="dt-checkboxes row-select form-check-input checkbox-items" value="${data}">
+                            </div>`;
                 },
             },
             {
@@ -408,7 +413,7 @@
                 render: function (data, type, row) {
                     return `
                         <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" id="actionDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="actionDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                 Actions
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="actionDropdown">
@@ -470,6 +475,20 @@
 		$('#view-modal-requirements').modal('show').find('.modal-content').empty();
 		$('#view-modal-requirements').modal('show').find('.modal-content').load('/rsp/view_hired_requirements/' + $(this).data('id'));
 	});
+
+    var endorsement = {
+        selectedIds: [],
+        viewModal(){
+            $('.dt-checkboxes:checked').each(function() {
+                endorsement.selectedIds.push($(this).val());
+            });
+            if (endorsement.selectedIds.length > 0) {
+                $('#endorsement_modal').modal('show');
+            }else{
+                alert("Please Select Staff");
+            }
+        }
+    };
 
    var onboarding = {
         selectedIds: [],
