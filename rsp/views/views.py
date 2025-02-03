@@ -19,57 +19,13 @@ from django.db.models import Q
 from django.template import Context, Template
 import json
 from django.db import connection
-from rsp.views.rsp.functions import safe_decode
+from rsp.functions import safe_decode, check_endorsement_activities_exist
 from datetime import date
 import subprocess
 import logging
 
 logger = logging.getLogger(__name__)
 
-def check_activities_exist(endorsed, staff_id):
-    """Check if all activities for a given staff member exist based on the endorsement, 
-       and return progress (completed/total)."""
-    with connection.cursor() as cursor:
-        query = """
-        SELECT 
-            CASE 
-                WHEN NOT EXISTS (
-                    SELECT 1
-                    FROM rsp_endorsementactivities lib
-                    WHERE lib.endorsed = %s
-                    AND NOT EXISTS (
-                        SELECT 1
-                        FROM rsp_staffendorsementactivities staff
-                        WHERE staff.staff_id_id = %s
-                        AND staff.lib_endorsed_id_id = lib.id
-                    )
-                ) THEN 'TRUE'
-                ELSE 'FALSE'
-            END AS all_activities_exist,
-            
-            CONCAT(
-                (SELECT COUNT(1) 
-                 FROM rsp_staffendorsementactivities staff 
-                 WHERE staff.staff_id_id = %s 
-                 AND EXISTS (
-                    SELECT 1 
-                    FROM rsp_endorsementactivities lib 
-                    WHERE lib.id = staff.lib_endorsed_id_id 
-                    AND lib.endorsed = %s
-                )),
-                '/', 
-                (SELECT COUNT(1) 
-                 FROM rsp_endorsementactivities lib 
-                 WHERE lib.endorsed = %s)
-            ) AS progress;
-        """
-        cursor.execute(query, [endorsed, staff_id, staff_id, endorsed, endorsed])
-        result = cursor.fetchone()
-
-    return {
-        'all_activities_exist': True if result and result[0] == 'TRUE' else False,
-        'progress': safe_decode(result[1]) if result and result[1] else '0/0'  # Decode and default to '0/0'
-    }
 
 def dashboard(request):
     today = date.today()
@@ -223,14 +179,14 @@ def list_newly_hired_staff(request):
                 'Internal Staff' if item.onboarding_type_id == 3 else
                 item.onboarding_type_id
             ),
-            'endorse_welfare': check_activities_exist(1, item.id)['all_activities_exist'],
-            'endorse_welfareprogress': check_activities_exist(1, item.id)['progress'],
-            'endorse_lds': check_activities_exist(2, item.id)['all_activities_exist'],
-            'endorse_ldsprogress': check_activities_exist(2, item.id)['progress'],
-            'endorse_pms': check_activities_exist(3, item.id)['all_activities_exist'],
-            'endorse_pmsprogress': check_activities_exist(3, item.id)['progress'],
-            'endorse_pas': check_activities_exist(4, item.id)['all_activities_exist'],
-            'endorse_pasprogress': check_activities_exist(4, item.id)['progress'],
+            'endorse_welfare': check_endorsement_activities_exist(1, item.id)['all_activities_exist'],
+            'endorse_welfareprogress': check_endorsement_activities_exist(1, item.id)['progress'],
+            'endorse_lds': check_endorsement_activities_exist(2, item.id)['all_activities_exist'],
+            'endorse_ldsprogress': check_endorsement_activities_exist(2, item.id)['progress'],
+            'endorse_pms': check_endorsement_activities_exist(3, item.id)['all_activities_exist'],
+            'endorse_pmsprogress': check_endorsement_activities_exist(3, item.id)['progress'],
+            'endorse_pas': check_endorsement_activities_exist(4, item.id)['all_activities_exist'],
+            'endorse_pasprogress': check_endorsement_activities_exist(4, item.id)['progress'],
         } for item in paginated_data]
 
         return JsonResponse({

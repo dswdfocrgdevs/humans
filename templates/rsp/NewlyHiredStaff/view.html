@@ -124,6 +124,8 @@ body {
 }
 </style>
 
+
+
 <div class="d-flex flex-column flex-column-fluid">
     <!--begin::Toolbar-->
     <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
@@ -208,19 +210,19 @@ body {
                       <p>Peer Buddy: __________</p>
                       <p>Onboarding Coordinator: __________</p>
                       <p>Date of HR Orientation: __________</p>
-                      <p>Streamlined: Yes / No</p>
+                      <p>Streamlined: No</p>
                       <div class="checkbox-group mt-3">
                         <h3 class="h6">Type of Onboarding</h3>
                         <div class="form-check">
-                          <input class="form-check-input" type="checkbox" id="neop" {% if data.onboarding_type.id == 1 %}checked{% endif %}>
+                          <input class="form-check-input" name="onboardingstatus" type="radio" id="neop" {% if data.onboarding_type.id == 1 %}checked{% endif %}>
                           <label class="form-check-label" for="neop">NEOP</label>
                         </div>
                         <div class="form-check">
-                          <input class="form-check-input" type="checkbox" id="cos" {% if data.onboarding_type.id == 2 %}checked{% endif %}>
+                          <input class="form-check-input" name="onboardingstatus" type="radio" id="cos" {% if data.onboarding_type.id == 2 %}checked{% endif %}>
                           <label class="form-check-label" for="cos">COS with Guidelines</label>
                         </div>
                         <div class="form-check">
-                          <input class="form-check-input" type="checkbox" id="internal-staff" {% if data.onboarding_type.id == 3 %}checked{% endif %}>
+                          <input class="form-check-input" name="onboardingstatus" type="radio" id="internal-staff" {% if data.onboarding_type.id == 3 %}checked{% endif %}>
                           <label class="form-check-label" for="internal-staff">Internal Staff</label>
                         </div>
                       </div>
@@ -294,8 +296,7 @@ body {
                           <label class="form-check-label" for="cos">Previously COS</label>
                         </div>
                       </div>
-                      <hr>
-                      <button class="btn btn-sm btn-success">Save</button>
+                      
                     </div>
                   </div>
                 </div>
@@ -337,6 +338,8 @@ body {
                 <button>ENDORSE TO PMS</button>
                 <button>ENDORSE TO PAS</button>
             </div>
+            <hr>
+            <button class="btn btn-sm btn-success">Save</button>
         </div>
 
     </div>
