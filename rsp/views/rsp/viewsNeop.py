@@ -130,10 +130,8 @@ def GetLibNeopActivities(request):
 
 @csrf_exempt
 def PostLibNeopActivities(request):
+
     
-
-
-
     if request.method == 'POST':
         try:
             # Parse the incoming JSON data
@@ -145,6 +143,9 @@ def PostLibNeopActivities(request):
             for activity in activities:
                 staff = NewlyHiredStaff.objects.get(id=activity.get('user_id'))  # Fetch the staff object
                 lib_neop_activity = LibNeopActivities.objects.get(id=activity.get('id'))  # Get the LibNeopActivities object
+
+                if lib_neop_activity.is_email_notify and activity.get('date'):
+                    send_email(staff.email, 'NEOP Activity Notification', lib_neop_activity.name)
                 StaffNeopActivities.objects.update_or_create(
                     staff_id=staff,
                     lib_neop_id=lib_neop_activity,

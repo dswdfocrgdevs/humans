@@ -3,15 +3,14 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
 import smtplib
 
-def send_email():
+def send_email(email,notify_type,activity):
     email="dioamejade@gmail.com"
     plain_text = get_template('email_template/email.txt')
     html_body = get_template('email_template/email.html')
 
-    print(123)
     subject = 'Caraga HUMANS TEST'
-    content = 'TEST'
-    email_from = 'dioamejade@gmail.com'
+    content = notify_type + ' ' + activity
+    email_from = 'DSWD Field Office Caraga <dswd.focrg@dswd.gov.ph>'
 
     d = {
         'message': content,

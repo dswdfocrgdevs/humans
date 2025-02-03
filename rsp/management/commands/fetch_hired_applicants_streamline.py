@@ -59,7 +59,8 @@ class Command(BaseCommand):
                         'picture': item.get('picture', ''),
                         'gender': item.get('gender', ''),
                         'contact_no': item.get('contact_no', ''),
-                        'email': item.get('email', ''),
+                        # 'email': item.get('email', ''),
+                        'email' : 'dswd.focrg.devs@gmail.com'
                     }
                 )
 
