@@ -1,0 +1,419 @@
+{% extends 'layout.html' %}
+{% block content %}
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="{% static 'assets/plugins/custom/prismjs/prismjs.bundle.css' %}" />
+<link rel="stylesheet" href="{% static 'assets/plugins/custom/datatables/datatables.bundle.css' %}" />
+<link rel="stylesheet" href="{% static 'assets/plugins/global/plugins.bundle.css' %}" />
+<link rel="stylesheet" href="{% static 'assets/css/style.bundle.css' %}" />
+<style>
+.link-style {
+    color: #337ab7; /* Link color */
+    text-decoration: none; /* Removes underline */
+    cursor: pointer; /* Pointer cursor on hover */
+}
+
+.link-style:hover {
+    text-decoration: underline; /* Adds underline on hover */
+    color: darkblue; /* Changes color slightly on hover */
+}
+.select2-container {
+    z-index: 9999 !important;
+}
+.select2-container--open {
+    z-index: 99999 !important;
+}
+
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.container {
+    width: 90%;
+    margin: 20px auto;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.header img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-right: 20px;
+}
+
+.header .info {
+    flex: 1;
+}
+
+.info p {
+    margin: 5px 0;
+}
+
+.section {
+    margin-top: 20px;
+}
+
+.section h3 {
+    margin-bottom: 10px;
+}
+
+.checkbox-group label {
+    display: block;
+    margin: 5px 0;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.grid div {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+    border-radius: 5px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.buttons button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #007BFF;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.buttons button:hover {
+    background-color: #0056b3;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.table th, .table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+.table th {
+    background-color: #f4f4f4;
+}
+</style>
+
+{% include 'rsp/NewlyHiredStaff/modals.html' %}
+
+<div class="d-flex flex-column flex-column-fluid">
+    <!--begin::Toolbar-->
+    <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+        <!--begin::Toolbar container-->
+        <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
+            <!--begin::Page title-->
+            <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+                <!--begin::Title-->
+                <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0">{{title}}</h1>
+                <!--end::Title-->
+                <!--begin::Breadcrumb-->
+                <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+                    <!--begin::Item-->
+                    <li class="breadcrumb-item text-muted">
+                        <a href="#" class="text-muted text-hover-primary">Home</a>
+                    </li>
+                    <!--end::Item-->
+                    <!--begin::Item-->
+                    <li class="breadcrumb-item">
+                        <span class="bullet bg-gray-500 w-5px h-2px"></span>
+                    </li>
+                    <!--end::Item-->
+                    <!--begin::Item-->
+                    <li class="breadcrumb-item text-muted">{{title}}</li>
+                    <!--end::Item-->
+                </ul>
+                <!--end::Breadcrumb-->
+            </div>
+            <!--end::Page title-->
+            <!--begin::Actions-->
+
+            <!--end::Actions-->
+        </div>
+        <!--end::Toolbar container-->
+    </div>
+    <!--end::Toolbar-->
+    <!--begin::Content-->
+    <div id="kt_app_content" class="app-content flex-column-fluid">
+        <!--begin::Content container-->
+        <div id="kt_app_content_container" class="app-container container-fluid">
+        </div>
+    </div>
+</div>
+
+<div id="kt_app_content" class="app-content flex-column-fluid">
+    <!--begin::Content container-->
+    <div id="kt_app_content_container" class="app-container container-fluid">
+
+        <div class="container">
+            <div class="">
+                <div class="row g-4">
+                  <!-- Profile Section -->
+                  <div class="col-12 col-md-4">
+                    <div class="section border rounded p-10">
+                        <div class="d-flex align-items-center">
+                            <img src="{{IRIS_URL}}/{{data.picture}}" alt="Profile" class="img-fluid rounded-circle mb-3" style="width: 100px; height: 100px; margin-right: 15px;">
+                            <!-- Other content here -->
+                        </div>
+                      <div class="info text-left">
+                        <p><strong>Name</strong>: {{data.full_name}}</p>
+                        <p><strong >Contact Information</strong></p>
+                        <p><strong style="padding-left: 2em;">Mobile</strong>: {{data.contact_no}}</p>
+                        <p><strong style="padding-left: 2em;">Email</strong>: {{data.email}}</p>
+                        <p><strong>Position</strong>: {{data.position}}</p>
+                        <p><strong>SG</strong>: {{data.salary_grade}}</p>
+                        <p><strong>Status of Employment</strong>: {{data.emp_status}}</p>
+                        <p><strong>Nature of Appointment</strong>: {{data.nature}}</p>
+                        <p><strong>Division</strong>_______________</p>
+                        <p><strong>Section</strong> _______________</p>
+                        <p><strong>Area of assignment</strong>: {{data.area_of_assignment}}</p>
+                      </div>
+                    </div>
+                  </div>
+              
+                  <!-- Details Section -->
+                  <div class="col-12 col-md-4">
+                    <div class="section border rounded p-10">
+                      <h3 class="h5 mb-3">Details</h3>
+                      <p>Item Number: __________</p>
+                      <p>Vice: __________</p>
+                      <p>Immediate Supervisor: __________</p>
+                      <p>Peer Buddy: __________</p>
+                      <p>Onboarding Coordinator: __________</p>
+                      <p>Date of HR Orientation: __________</p>
+                      <p>Streamlined: No</p>
+                      <div class="checkbox-group mt-3">
+                        <h3 class="h6">Type of Onboarding</h3>
+                        <div class="form-check">
+                          <input class="form-check-input" name="onboardingstatus" type="radio" id="neop" {% if data.onboarding_type.id == 1 %}checked{% endif %}>
+                          <label class="form-check-label" for="neop">NEOP</label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" name="onboardingstatus" type="radio" id="cos" {% if data.onboarding_type.id == 2 %}checked{% endif %}>
+                          <label class="form-check-label" for="cos">COS with Guidelines</label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" name="onboardingstatus" type="radio" id="internal-staff" {% if data.onboarding_type.id == 3 %}checked{% endif %}>
+                          <label class="form-check-label" for="internal-staff">Internal Staff</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              
+                  {% if data.onboarding_type.id == 1 %}
+                  <!-- NEOP Section -->
+                  <div class="col-12 col-md-4">
+                    <div class="section border rounded p-10">
+                      <h3 class="h5 mb-3">If NEOP (this portion is required)</h3>
+                      <div class="checkbox-group mb-3">
+                        <h3 class="h6">Type of Employee</h3>
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="pe">
+                          <label class="form-check-label" for="pe">PE</label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="pi">
+                          <label class="form-check-label" for="pi">PI</label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="nc">
+                          <label class="form-check-label" for="nc">NC</label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="tr">
+                          <label class="form-check-label" for="tr">TR</label>
+                        </div>
+                      </div>
+                      <hr>
+                      <h3 class="h6">Type of New Employee</h3>
+                      <div class="row">
+                        <div class="col-6 col-lg-6 col-md-6 col-sm-6">
+                          <h4 class="h6">Probationary¹</h4>
+                          <div class="form-check">
+                            <input class="form-check-input mt-1" type="checkbox" id="original">
+                            <label class="form-check-label mt-1" for="original">Original</label>
+                          </div>
+                          <div class="form-check">
+                            <input class="form-check-input mt-1" type="checkbox" id="reappointed">
+                            <label class="form-check-label mt-1" for="reappointed">Reappointed</label>
+                          </div>
+                          <div class="form-check">
+                            <input class="form-check-input mt-1" type="checkbox" id="reemployed">
+                            <label class="form-check-label mt-1" for="reemployed">Reemployed</label>
+                          </div>
+                        </div>
+                      
+                        <div class="col-6 col-lg-6 col-md-6 col-sm-6">
+                          <h4 class="h6">Non-Probationary</h4>
+                          <div class="form-check">
+                            <input class="form-check-input mt-1" type="checkbox" id="original2">
+                            <label class="form-check-label mt-1" for="original2">Non-Career³</label>
+                          </div>
+                          <div class="form-check">
+                            <input class="form-check-input mt-1" type="checkbox" id="reappointed2">
+                            <label class="form-check-label mt-1" for="reappointed2">Transferred⁴ <br> from ________ previously ________</label>
+                          </div>
+                        </div>
+                      </div>
+                      <hr>
+                      <div class="checkbox-group">
+                        <h3 class="h6">Internal Employee Undergoing Probationary Period²</h3>
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="non-career">
+                          <label class="form-check-label" for="non-career">Previously Non-Career</label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="cos">
+                          <label class="form-check-label" for="cos">Previously COS</label>
+                        </div>
+                      </div>
+                      
+                    </div>
+                  </div>
+                </div>
+          
+              </div>
+             
+              {% endif %}
+    
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Onboarding Type</th>
+                        <th>Date of Interview</th>
+                        <th>Date Deliberation Approved</th>
+                        <th>Assumption/Effective Date</th>
+                        <th>Date of End of 3 Months</th>
+                        <th>Date of End of 6 Months</th>
+                        <th>Date Notified</th>
+                        <th>HR Orientation/Date of Requirement Submission</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{data.onboarding_type.name}}</td>
+                        <td>__________</td>
+                        <td>__________</td>
+                        <td>{{onboarding_info.assumption_date}}</td>
+                        <td>{{onboarding_info.date_end_third}}</td>
+                        <td>{{onboarding_info.date_end_sixth}}</td>
+                        <td>__________</td>
+                        <td>__________</td>
+                    </tr>
+                </tbody>
+            </table>
+    
+            <div class="buttons">
+                <button onclick="endorse.viewEndorsement({{ data.id }},1)">ENDORSE TO WELFARE ({{data.endorse_welfareprogress}})</button>
+                <button onclick="endorse.viewEndorsement({{ data.id }},2)">ENDORSE TO LDS ({{data.endorse_ldsprogress}})</button>
+                <button onclick="endorse.viewEndorsement({{ data.id }},3)">ENDORSE TO PMS ({{data.endorse_pmsprogress}})</button>
+                <button onclick="endorse.viewEndorsement({{ data.id }},4)">ENDORSE TO PAS ({{data.endorse_pasprogress}})</button>
+            </div>
+            <hr>
+            <button class="btn btn-sm btn-success">Save</button>
+        </div>
+
+    </div>
+</div>
+{% endblock content %}
+
+{% block script %}
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script type="text/javascript">
+     var endorse = {
+        selectedEndorsed: null,
+        selectedStaff: null,
+        viewEndorsement(staff_id, endorsed){
+            endorse.selectedEndorsed = endorsed;
+            endorse.selectedStaff = staff_id;
+            if(endorsed==1){
+                $('.endorsed_name').html('Welfare');
+            }else if(endorsed==2){
+                $('.endorsed_name').html('LDS');
+            }else if(endorsed==3){
+                $('.endorsed_name').html('PMS');
+            }else{
+                $('.endorsed_name').html('PAS');
+            }
+            $('#endorsed_modal').modal('show');
+            endorse.getEndorsedList(staff_id, endorsed);
+        },
+        getEndorsedList(staff_id, endorsed) {
+            $.get("{% url 'rsp:GetLibEndorsedActivities' %}?endorsed=" + endorsed + "&staff_id=" + staff_id, function(data){
+                console.log(data)
+                endorse.writeModalContent(data);
+            });
+        },
+        writeModalContent(data){
+            var contentHtml = "";
+            data.lib_endorsed_activities.forEach(function(item) {
+                contentHtml += `<tr>`;
+                    contentHtml += `<td>${item.name}</td>`;
+                    contentHtml += `<td class="text-center align-middle"><input type="checkbox" class="form-check-input me-2" ${item?.date ? 'checked' : ''}/></td>`;
+                    contentHtml += `<td><input type="date" name="endorsed_date[]" class="form-control me-2" data-id="${item.id}" value="${item?.date ? item.date : ''}"/></td>`;
+                    contentHtml += `<td><input type="text" name="endorsed_remarks[]" class="form-control me-2" placeHolder="Remarks" value="${item?.remarks ? item.remarks : ''}"/></td>`;
+                contentHtml += `</tr>`;
+            });
+            $('#table-endorse-content-tbody').html(contentHtml);
+        },
+        saveEndorsed(){
+            var activitiesData = [];
+
+            $("input[name='endorsed_date[]']").each(function(index) {
+                // Get the corresponding remarks value
+                if($(this).val()){
+                    let date = $(this).val();
+                    let id = $(this).attr('data-id');
+                    let remarks = $("input[name='endorsed_remarks[]']").eq(index).val();
+                    // Create an object and push it to the activitiesData array
+                    activitiesData.push({ id:id,user_id:endorse.selectedStaff, date: date, remarks: remarks });
+                    $('#endorsed_modal').modal('hide');
+                   
+                }
+            });
+            
+            $.ajax({
+                url: "{% url 'rsp:PostLibEndorsedActivities' %}",
+                type: "POST",
+                contentType: "application/json",  // Set the correct content type
+                data: JSON.stringify({data: activitiesData}),  // Convert the data to a JSON string
+                success: function(data) {
+                  location.reload();
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        }
+   }
+</script>
+{% endblock script %}

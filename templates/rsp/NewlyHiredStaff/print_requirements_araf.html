@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+{% load static %}
+{% load tags %}
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="shortcut icon" type="image/png" href="#"/>
+	<title>Print Notice of Appointed Applicants</title>
+    <link rel="shortcut icon" href="{% static 'assets/media/logos/favicon.ico' %}" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
+    <link href="{% static 'assets/plugins/global/plugins.bundle.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'assets/css/style.bundle.css' %}" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="{% static 'assets/plugins/custom/prismjs/prismjs.bundle.css' %}" />
+	<link href="{% static 'assets/css/print.css' %}" rel="stylesheet">
+	<style type="text/css">
+        @media print {
+            .page-break {
+                page-break-before: always; /* Forces a break before the element */
+                page-break-after: always; /* Forces a break after the element */
+            }
+            .containerX {
+                zoom: 120% !important;
+            }
+            .no-print {
+                display: none !important; /* Hide the navbar and other elements */
+            }
+            page {
+                margin: 0.4in 0.39in 0.39in 0.67in; /* Set margins: top 0.4in, right 0.39in, bottom 0.39in, left 0.67in */
+                border: 0.5px solid transparent;
+                height: 297mm !important;
+            }
+            .col-lg-9, .col-lg-3 {
+                width: 100% !important;
+                float: none !important;
+                margin: 0 !important;
+            }
+            #footerImage {
+                position: absolute;
+                margin-bottom: 460px !important;
+                left: 0;
+                width: 100%;
+                text-align: center;
+                display: block;
+            }
+            .box.no-print {
+                display: none; /* Hide the box when printing */
+            }
+            ::-webkit-input-placeholder { /* WebKit browsers */
+                color: transparent;
+            }
+            :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+                color: transparent;
+            }
+            ::-moz-placeholder { /* Mozilla Firefox 19+ */
+                color: transparent;
+            }
+            :-ms-input-placeholder { /* Internet Explorer 10+ */
+                color: transparent;
+            }
+
+            #print-date {
+                display: block !important; /* Ensure the print date is visible when printing */
+            }
+        }
+
+       body {
+           font-family: 'Inter', sans-serif;
+           font-size: 12px;
+           color: black;
+       }
+
+       .containerX {
+           zoom: 100%;
+           margin: 20px;
+       }
+
+       .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        .checkbox-group {
+            margin-top: 10px;
+            margin-left: 20px;
+        }
+        .checkbox-group input {
+            margin-right: 10px;
+        }
+        .signature-section {
+            margin-top: 20px;
+        }
+        .signature-line {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .signature-line div {
+            width: 45%;
+            border-top: 1px solid black;
+            text-align: center;
+            padding-top: 5px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 10px;
+            font-family: serif;
+        }
+   </style>
+</head>
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm no-print">
+    <div class="container">
+        <!-- Brand -->
+        <a class="navbar-brand font-weight-bold" href="#">
+            Print Requirements ARAF
+        </a>
+        <div id="navbar" class="navbar-collapse collapse">
+			<ul class="navbar-nav ms-auto">
+                <li>
+                    <button type="button" class="btn btn-secondary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" style="font-size: 14px; margin-top: 8px;"><i class="fas fa-circle-check"></i> Hide Checklist</button>&emsp;
+                    <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light-primary fw-semibold w-500px py-3" data-kt-menu="true">
+                        <div class="menu-item px-3">
+                            <div class="fw-bolder menu-content pb-2 px-3 fs-7 text-uppercase">Check the ff. requirements to hide:</div>
+                        </div>
+                        <hr class="mt-1 pt-0 mx-5">
+                        {% get_empstatus_hired_req all.emp_status as req %}
+                        {% for row in req %}
+                            <div class="text-black form-check my-2 mx-5 form-check-sm">
+                                <input data-id="{{ row.id }}"  class="checklist-hide form-check-input pt-1" type="checkbox"/>
+                                <label class="text-black form-check-label" for="flexCheckDefault">
+                                    {{ row.name }}
+                                </label>
+                            </div>
+                        {% endfor %}
+                        
+                    </div>
+                </li>
+				<li><button type="button" class="btn btn-primary" class="print-button" id="printButton" title="Print" style="font-size: 14px; margin-top: 8px;"><i class="fas fa-print"></i> Print</button>&emsp;</li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<body style="font-family: Inter">
+	<page size="A4" class="page" style="padding: 50px;height: auto; font-family: 'Inter'; page-break-after: always;">
+		<div class="containerX">
+            <div class="d-flex align-content-between justify-content-between">
+                <div class="pull-left" style="font-size: 13px;">
+                    <img src="{% static 'assets/media/logos/dswd_new_logo.png' %}" width="130px;" style="mix-blend-mode: multiply;">
+                    <img src="{% static 'assets/media/logos/Bagong_Pilipinas_logo.png' %}" width="60px;" style="mix-blend-mode: multiply; margin-top: -10px;">
+                </div>
+                <div class="pull-right" style="font-size: 10px">
+                    <i>DSWD-GF-010A | REV 00 | 22 SEP 2023</i>
+                </div>
+            </div>
+            <center>
+				<h1 class="fw-bolder my-14">ACKNOWLEDGEMENT RECEIPT OF REQUIREMENTS AND<br>AGREEMENT FORM</h1>
+			</center>
+            <div class="form-container">
+                <p>This is to acknowledge receipt of the 
+                  <input type="checkbox"> partial /
+                  <input type="checkbox"> complete pre-employment requirements from 
+                  <u class="fw-bold">{% if all.gender == 'Male' %}Mr.{% else %}Ms.{% endif %} {{ all.full_name }}</u> on <u class="fw-bold">{{ all.effectivity_of_contract }}</u> for the position of <u class="fw-bold">{{ all.position }}</u>.
+                </p>
+            
+                <p>For partial submissions, we only accept an extension for the submission if documents are included in the list below:</p>
+            
+                <div class="checkbox-group my-5">
+                {% get_empstatus_hired_req all.emp_status as req %}
+                {% for row in req %}
+                    {% getcompliance all.app_id row.id as compliance %}
+                    {% checkcompliance all.app_id as check_compliance %}
+                    {% get_is_required check_compliance compliance row as req_is_required %}
+                    <div id="checklist-{{ row.id }}" class="d-flex my-1">
+                        <i class="{% if req_is_required %}fa-solid fa-square-check{% else %}far fa-square{% endif %} mt-1 me-2 text-black"></i><label>{{ row.name }}</label><br>
+                    </div>
+                {% endfor %}
+                </div>
+            
+                <p>As partial submission, the undersigned and <u class="fw-bold">{% if all.gender == 'Male' %}Mr.{% else %}Ms.{% endif %} {{ all.full_name }}</u> have discussed and agreed that the documents listed with a checkmark above will be submitted on or before <u class="fw-bold">{{ all.araf_due_date }}</u>.</p>
+            
+                <p>Failure to comply within the agreed date will have certain consequences depending on the duration of the delay in submission.</p>
+            
+                <p>Signed this <u class="fw-bold">{% now "jS" %}</u> day of <u class="fw-bold">{% now "F" %}</u> in DSWD FO Caraga, Butuan City.</p>
+            
+                <div class="signature-section">
+                    <p class="fw-bold">Received by:</p>
+                    <div class="mt-10 row text-center">
+                    {% get_session_fullname as onboarding_staff %}
+                        <div class="col-6">
+                            <p class="text-center m-0 p-0 fw-bold">{{ onboarding_staff }}</p>
+                            <div style="border-top: 1px solid black">Name & Signature of Onboarding Staff</div>
+                        </div>
+                    </div>
+                    <div class="mt-10 row text-center d-flex">
+                        <div class="col-6">
+                            <p class="text-center m-0 p-0 fw-bold">{{ all.full_name|upper }}</p>
+                            <div style="border-top: 1px solid black">Employee's Name & Signature</div>
+                        </div>
+                        <div class="col-2"></div>
+                        <div class="col-4">
+                            {% now 'l - M d, Y' as today %}
+                            <p class="text-center m-0 p-0">{% now "m/d/Y h:i A" %}</p>
+                            <div style="border-top: 1px solid black">Date and Time</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="remarks-section mt-15">
+                    <div class="d-flex">
+                        <p>Remarks:</p>
+                        <p style="width: 100%; margin-left: 10px; text-decoration: underline">{{ all.remarks }}<p>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="footer">
+                <p class="p-0 my-1" style="border-bottom: 2px solid black; font-size: 11px"><strong>PAGE 1 of 1</strong></p>
+                <p style="font-size: 9px; color: #555">
+                  DSWD Field Office Caraga, R. Palma Street, Butuan City, Agusan Del Norte, Philippines, 8600<br>
+                  Website: <a href="http://caraga.dswd.gov.ph">http://caraga.dswd.gov.ph</a> Tel. Nos.: (085) 342-5619 to 20 Telefax: (085) 815-9173
+                </p>
+            </div>
+        </div>
+    </page>
+    <footer>
+        
+    </footer>
+	<br>
+	<script src="{% static 'assets/plugins/global/plugins.bundle.js' %}"></script>
+    <script src="{% static 'assets/js/scripts.bundle.js' %}"></script>
+    <script src="{% static 'assets/plugins/custom/prismjs/prismjs.bundle.js' %}"></script>
+	<script src="{% static 'assets/js/function.js' %}"></script>
+	<script type="text/javascript">
+		$(document).on('keydown', function(e) {
+			if(e.ctrlKey && (e.key == "p" || e.charCode == 16 || e.charCode == 112 || e.keyCode == 80) ){
+				Swal.fire("Print Warning",
+				"Please use the PRINT button on the upper left part of the page for better rendering of the document in the print dialog.",
+				"warning");
+				e.cancelBubble = true;
+				e.preventDefault();
+				e.stopImmediatePropagation();
+			}
+		});
+
+        $('#printButton').on('click', function () {
+            window.print();
+        });
+
+        $('.checklist-hide').on('change', function() {
+            const status = $(this).is(':checked');
+            const id = $(this).data('id');
+            if(status) {
+                $(`#checklist-${id}`).addClass('d-none')
+            } else {
+                $(`#checklist-${id}`).removeClass('d-none')
+            }
+        });
+
+	</script>
+</body>
+</html>

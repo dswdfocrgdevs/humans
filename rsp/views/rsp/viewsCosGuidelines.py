@@ -8,51 +8,8 @@ from django.db import connection
 from rsp.models import LibCosGuidelinesActivities, NewlyHiredStaff, StaffCosGuidelinesActivities, StaffCosGuidelinesInfo
 from datetime import datetime
 import json
-from rsp.views.rsp.functions import safe_decode
+from rsp.functions import safe_decode, check_cos_activities_exist
 @csrf_exempt
-
-
-def check_activities_exist(staff_id):
-    """Check if all activities for a given staff member exist and return progress (completed/total)."""
-    with connection.cursor() as cursor:
-        query = """
-        SELECT 
-            CASE 
-                WHEN NOT EXISTS (
-                    SELECT 1
-                    FROM rsp_libcosguidelinesactivities lib
-                    WHERE NOT EXISTS (
-                        SELECT 1
-                        FROM rsp_staffcosguidelinesactivities staff
-                        WHERE staff.staff_id_id = %s
-                        AND staff.lib_cos_guidelines_id_id = lib.id
-                    )
-                ) THEN 'TRUE'
-                ELSE 'FALSE'
-            END AS all_activities_exist,
-            
-            CONCAT(
-                (SELECT COUNT(1) 
-                 FROM rsp_staffcosguidelinesactivities staff 
-                 WHERE staff.staff_id_id = %s
-                 AND EXISTS (
-                    SELECT 1 
-                    FROM rsp_libcosguidelinesactivities lib 
-                    WHERE lib.id = staff.lib_cos_guidelines_id_id
-                )),
-                '/', 
-                (SELECT COUNT(1) 
-                 FROM rsp_libcosguidelinesactivities lib)
-            ) AS progress;
-        """
-        cursor.execute(query, [staff_id, staff_id])  # Pass `staff_id`
-        result = cursor.fetchone()
-
-    # Return a dictionary with both existence and progress
-    return {
-        'all_activities_exist': True if result and result[0] == 'TRUE' else False,
-        'progress': safe_decode(result[1]) if result else '0/0'  # Default to '0/0' if no result
-    }
 
 def GetCosGuideLines (request):
     return render(request, 'rsp/CosGuidelines/index.html', {
@@ -86,7 +43,7 @@ def GetCosGuideLinesStaffList(request):
         paginated_data = newly_hired_data[start:start + per_page]
 
         for item in paginated_data:
-            # Fetch related StaffNeopInfo data for each NewlyHiredStaff
+            # Fetch related StaffOnboardingInfo data for each NewlyHiredStaff
             try:
                 staff_cost_guidelines_info = StaffCosGuidelinesInfo.objects.get(staff_id=item.id)
                 assumption_date = staff_cost_guidelines_info.assumption_date
@@ -113,8 +70,8 @@ def GetCosGuideLinesStaffList(request):
                 'area_of_assignment': item.area_of_assignment,
                 'requirements_ok': item.requirements_ok,
                 'remarks': item.remarks,
-                'activityExist': check_activities_exist(item.id)['all_activities_exist'],
-                'activityProgress': check_activities_exist(item.id)['progress'],
+                'activityExist': check_cos_activities_exist(item.id)['all_activities_exist'],
+                'activityProgress': check_cos_activities_exist(item.id)['progress'],
                 'assumption_date': assumption_date,   
                 'requirements_submission_date': requirements_submission_date,   
                 'ccef_submission_date': ccef_submission_date,
@@ -147,7 +104,7 @@ def GetLibCosGuideLinesActivities(request):
     lib_cos_guidelines_activities = LibCosGuidelinesActivities.objects.all()
         
     # Serialize the LibCosGuidelinesActivities queryset
-    activities_data = list(lib_cos_guidelines_activities.values('id', 'name', 'description'))
+    activities_data = list(lib_cos_guidelines_activities.values('id', 'name', 'is_email_notify','description'))
 
     # Add the 'test' column with value 1 for each row
     for activity in activities_data:

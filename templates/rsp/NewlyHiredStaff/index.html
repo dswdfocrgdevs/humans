@@ -22,95 +22,11 @@
 .select2-container--open {
     z-index: 99999 !important;
 }
+
+
 </style>
 
-
-
-<!--begin::Modal - Create App-->
-<div class="modal fade" id="onboarding_modal" tabindex="-1" aria-hidden="true">
-	<!--begin::Modal dialog-->
-	<div class="modal-dialog modal-dialog-centered mw-500px">
-		<!--begin::Modal content-->
-		<div class="modal-content">
-			<!--begin::Modal header-->
-			<div class="modal-header">
-				<!--begin::Modal title-->
-				<h2>Update Staff : <span id="staff-name"></span></h2>
-				<!--end::Modal title-->
-				<!--begin::Close-->
-				<div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">{% getIcon 'cross' 'fs-1' %}</div>
-				<!--end::Close-->
-			</div>
-			<!--end::Modal header-->
-			<!--begin::Modal body-->
-            <div class="modal-body py-lg-10 px-lg-10">
-                <!-- Title -->
-                <h5 class="modal-title mb-5 text-center fw-bold">Staff Information</h5>
-        
-                <!-- Form Inputs -->
-                <label for="selectOnboarding" class="form-label fw-bold">Select Onboarding Type</label>
-                <select id="selectOnboarding" class="form-select form-select-lg">
-                    <option value="" disabled selected>Select Option</option>
-                    {% for row in status %}
-                    <option value="{{row.id}}">{{row.name}}</option>
-                    {% endfor %}
-                </select>
-                <!-- Save Button -->
-                <div class="d-flex justify-content-end mt-5">
-                    <a href="#" class="btn btn-sm fw-bold btn-success me-2" onclick="onboarding.save()">
-                        <i class="fas fa-check"></i> Save
-                    </a>
-                </div>
-            </div>
-			<!--end::Modal body-->
-		</div>
-		<!--end::Modal content-->
-	</div>
-	<!--end::Modal dialog-->
-</div>
-
-<div class="modal fade" id="endorsed_modal" tabindex="-1" aria-hidden="true">
-	<!--begin::Modal dialog-->
-	<div class="modal-dialog modal-dialog-centered mw-900px">
-		<!--begin::Modal content-->
-		<div class="modal-content">
-			<!--begin::Modal header-->
-			<div class="modal-header">
-				<!--begin::Modal title-->
-				<h2>Endorsed to <span class="endorsed_name"></span> Activities</h2>
-				<!--end::Modal title-->
-				<!--begin::Close-->
-				<div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">{% getIcon 'cross' 'fs-1' %}</div>
-				<!--end::Close-->
-			</div>
-			<!--end::Modal header-->
-			<!--begin::Modal body-->
-			<div class="modal-body py-lg-10 px-lg-10">
-                <div id="neop-content">
-                    <table id="table-neop-content" class="table table-bordered table-striped">
-                        <thead>
-                            <th>Details</th>
-                            <th>Complied</th>
-                            <th>Date</th>
-                            <th>Remarks</th>
-                        </thead>
-                        <tbody  id="table-endorse-content-tbody">
-                            
-                        </tbody>
-                    </table>
-                    <div class="d-flex justify-content-end mt-3">
-                        <a href="#" class="btn btn-sm fw-bold btn-success me-2" onclick="endorse.saveEndorsed()">
-                            <i class="fas fa-check"></i> Save
-                        </a>
-                    </div>
-                </div>
-			</div>
-			<!--end::Modal body-->
-		</div>
-		<!--end::Modal content-->
-	</div>
-	<!--end::Modal dialog-->
-</div>
+{% include 'rsp/NewlyHiredStaff/modals.html' %}
 
 <div class="">
     <!--begin::Toolbar-->
@@ -168,7 +84,7 @@
                     <!--begin::Header-->
                     <div class="card-header border-0 pt-5 d-flex justify-content-between align-items-center">
                         <div class="d-flex">
-                            <a href="{% url 'rsp:list_endorse_applicants' %}" target="_blank" class="btn btn-sm fw-bold btn-primary me-2>
+                            <a href="{% url 'rsp:list_endorse_applicants' %}" target="_blank" class="btn btn-sm fw-bold btn-primary me-2">
                                 <i class="fas fa-list"></i> List of Transmittal
                             </a>
                             <a href="{% url 'rsp:newly-hired-staff-streamline' %}" target="_blank" class="btn btn-sm fw-bold btn-secondary">
@@ -177,6 +93,9 @@
                         </div>
                     
                         <div class="d-flex">
+                            <a href="#" class="btn btn-sm fw-bold btn-light-primary me-2" onclick="endorsement.viewModal()">
+                                <i class="fa-solid fa-paper-plane"></i> Endorsement
+                            </a>
                             <a href="#" class="btn btn-sm fw-bold btn-success me-2" onclick="onboarding.viewModal()">
                                 <i class="fas fa-check"></i> Set Onboarding Type
                             </a>
@@ -207,9 +126,13 @@
                                     </li>
                                 </ul>
                             </div>
-                            <a href="{% url 'rsp:print_req_checklist' 0 %}" id="generate-template-btn" target="_blank" class="gen_template btn btn-sm fw-bold btn-info">
+                            <a href="{% url 'rsp:print_req_checklist' 0 %}" id="generate-template-btn" target="_blank" class="gen_template me-2 btn btn-sm fw-bold btn-info">
                                 <i class="fas fa-file-excel"></i> Generate Checklist
                             </a>
+                            <a href='#' class="gen_template me-2 btn btn-sm fw-bold btn-warning" onclick="syncIris()">
+                                <i class="fas fa-file-excel"></i> Sync IRIS
+                            </a>
+                            
                         </div>
                     </div>
                     <!--end::Header-->
@@ -268,6 +191,9 @@
         </div>
     </div>
 </div>
+
+
+
 {% endblock content %}
 
 {% block script %}
@@ -411,7 +337,12 @@
                 { data: 'emp_status', title:'Status' },
                 { data: 'nature', title: 'Nature' },
                 { data: 'area_of_assignment', title: 'Area of Assignment' },
-                { data: 'requirements_ok', title: 'Requirements' },
+                { data: 'requirements_ok', title: 'Requirements',
+                    render: function(data, type, row) {
+                        if (!data) return null;
+                        return `<span class="badge py-2 px-4 fs-7 badge-light-${data == "Complete" ? "success":"danger"}">${data}</span>`;
+                    }
+                },
                 { data: 'remarks', title: 'Remarks' },
                 { 
                     title: 'Endorse to Welfare',
@@ -469,7 +400,9 @@
                 sortable: false,
                 targets: 0,
                 render: function(data) {
-                    return `<input type="checkbox" class="dt-checkboxes row-select form-check-input checkbox-items" value="${data}">`;
+                    return `<div class="form-check">
+                                <input type="checkbox" class="dt-checkboxes row-select form-check-input checkbox-items" value="${data}">
+                            </div>`;
                 },
             },
             {
@@ -480,13 +413,14 @@
                 render: function (data, type, row) {
                     return `
                         <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" id="actionDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="actionDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                 Actions
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="actionDropdown">
+                                <li><a class="dropdown-item" href='/rsp/view-profile/${data}' >Profile</a></li>
                                 <li><a class="dropdown-item" href="javascript:void(0)" data-role="view-req" data-id="${data}">Requirements Checklist</a></li>
                                 <li><a class="dropdown-item" href="javascript:void(0)" data-role="remarks" data-id="${data}">Remarks</a></li>
-                                <li><a class="dropdown-item" href='/rsp/print/notice-of-appointed-applicants/${data}' target='_blank' title='PRINT'>Print Notice Newly Hired</a></li>
+                                <li><a class="dropdown-item" href='/rsp/print/notice-of-appointed-applicants/${row.iris_id}' target='_blank' title='PRINT'>Print Notice Newly Hired</a></li>
                             </ul>
                         </div>
                     `;
@@ -506,7 +440,7 @@
                 {
                     extend: 'collection',
                     text: 'Export',
-                    className: 'btn btn-secondary', // Basic button styling
+                    className: 'btn btn-secondary btn-sm me-5', // Basic button styling
                     buttons: [
                         {
                             extend: 'excelHtml5',
@@ -541,6 +475,20 @@
 		$('#view-modal-requirements').modal('show').find('.modal-content').empty();
 		$('#view-modal-requirements').modal('show').find('.modal-content').load('/rsp/view_hired_requirements/' + $(this).data('id'));
 	});
+
+    var endorsement = {
+        selectedIds: [],
+        viewModal(){
+            $('.dt-checkboxes:checked').each(function() {
+                endorsement.selectedIds.push($(this).val());
+            });
+            if (endorsement.selectedIds.length > 0) {
+                $('#endorsement_modal').modal('show');
+            }else{
+                alert("Please Select Staff");
+            }
+        }
+    };
 
    var onboarding = {
         selectedIds: [],
@@ -694,5 +642,49 @@
 			});
 		}
 	});
+
+
+    function syncIris(){
+        $('#syncModal').modal('show')
+        $.ajax({
+            url: "{% url 'rsp:SyncIris' %}",
+            type: "POST",
+            contentType: "application/json",
+            success: function(data) {
+                $('#syncModal').modal('hide')
+                if(data.status == 'success'){
+                    Swal.fire({
+                        title: "Good job!",
+                        text: "Successfully Sync from IRIS!",
+                        icon: "success",
+                        confirmButtonColor: "#3498DB",
+                        allowOutsideClick: false,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            location.reload();
+                        }
+                    });
+                }else{
+                    Swal.fire({
+                        title: "Sorry!",
+                        text: "There seems to be a problem!",
+                        icon: "danger",
+                        confirmButtonColor: "#3498DB",
+                        allowOutsideClick: false,
+                    })
+                }
+                
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    }
+
+
+    $('#view-modal-requirements').on('hidden.bs.modal', () => {
+        $('body').css('overflow', '');
+    });
+
 </script>
 {% endblock script %}

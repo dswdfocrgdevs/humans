@@ -9,9 +9,16 @@ class Command(BaseCommand):
             'truncate_tables',
             'fetch_hired_applicants',
             'fetch_hired_applicants_streamline',
+            'seed_custom_user',
             'seed_cos_guidlines_activities', 
             'seed_neop_activities', 
-            'seed_endorsement_activities',          
+            'seed_endorsement_activities',
+            'seed_onboarding_status',
+            'seed_rsp_empstatus',
+            'seed_rsp_hiredreq',
+            'seed_rsp_hired_streamline',
+            
+
         ]
 
         for command in commands:

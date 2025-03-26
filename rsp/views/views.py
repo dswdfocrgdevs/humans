@@ -12,60 +12,20 @@ from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 import requests
 import os
-from rsp.models import NewlyHiredStaff, RspOnboardingLayout, NewlyHiredStaffStreamline, StaffEndorsementActivities, EndorsementActivities, HiredreqCompliance, OnboardingStatus, OnboardingStatusNewlyhired
+from rsp.models import NewlyHiredStaff, RspOnboardingLayout, NewlyHiredStaffStreamline, StaffEndorsementActivities, EndorsementActivities, HiredreqCompliance, OnboardingStatus, OnboardingStatusNewlyhired, RspEmpstatus
 from ..utils import search_employees
 from django.db.models import Count, Case, When, Value, CharField
 from django.db.models import Q
 from django.template import Context, Template
 import json
 from django.db import connection
-from rsp.views.rsp.functions import safe_decode
+from rsp.functions import safe_decode, check_endorsement_activities_exist
 from datetime import date
+import subprocess
+import logging
 
-def check_activities_exist(endorsed, staff_id):
-    """Check if all activities for a given staff member exist based on the endorsement, 
-       and return progress (completed/total)."""
-    with connection.cursor() as cursor:
-        query = """
-        SELECT 
-            CASE 
-                WHEN NOT EXISTS (
-                    SELECT 1
-                    FROM rsp_endorsementactivities lib
-                    WHERE lib.endorsed = %s
-                    AND NOT EXISTS (
-                        SELECT 1
-                        FROM rsp_staffendorsementactivities staff
-                        WHERE staff.staff_id_id = %s
-                        AND staff.lib_endorsed_id_id = lib.id
-                    )
-                ) THEN 'TRUE'
-                ELSE 'FALSE'
-            END AS all_activities_exist,
-            
-            CONCAT(
-                (SELECT COUNT(1) 
-                 FROM rsp_staffendorsementactivities staff 
-                 WHERE staff.staff_id_id = %s 
-                 AND EXISTS (
-                    SELECT 1 
-                    FROM rsp_endorsementactivities lib 
-                    WHERE lib.id = staff.lib_endorsed_id_id 
-                    AND lib.endorsed = %s
-                )),
-                '/', 
-                (SELECT COUNT(1) 
-                 FROM rsp_endorsementactivities lib 
-                 WHERE lib.endorsed = %s)
-            ) AS progress;
-        """
-        cursor.execute(query, [endorsed, staff_id, staff_id, endorsed, endorsed])
-        result = cursor.fetchone()
+logger = logging.getLogger(__name__)
 
-    return {
-        'all_activities_exist': True if result and result[0] == 'TRUE' else False,
-        'progress': safe_decode(result[1]) if result and result[1] else '0/0'  # Decode and default to '0/0'
-    }
 
 def dashboard(request):
     today = date.today()
@@ -147,6 +107,33 @@ def reports_generation(request):
     }
     return render(request, 'rsp/ReportsGeneration.html', context)
 
+def lib_neop(request):
+    context = {
+        'title': 'Libraries NEOP'
+    }
+    return render(request, 'rsp/libraries/LibNeop.html', context)
+
+def lib_cos_guidelines_activities(request):
+    context = {
+        'title': 'Libraries COS Guidelines'
+    }
+    return render(request, 'rsp/libraries/LibCOSWithGuidelines.html', context)
+
+def lib_hired_requirements(request):
+
+    context = {
+        'title': 'Libraries Hired Requirements',
+        'data' : RspEmpstatus.objects.filter(status = 1)
+    }
+    return render(request, 'rsp/libraries/LibHiredRequirements.html', context)
+
+def lib_hired_requirements_streamline(request):
+    context = {
+        'title': 'Libraries Hired Requirements Streamline',
+        'data' : RspEmpstatus.objects.filter(status = 1)
+    }
+    return render(request, 'rsp/libraries/LibHiredRequirementsStreamline.html', context)
+
 
 @csrf_exempt
 def list_newly_hired_staff(request):
@@ -192,14 +179,14 @@ def list_newly_hired_staff(request):
                 'Internal Staff' if item.onboarding_type_id == 3 else
                 item.onboarding_type_id
             ),
-            'endorse_welfare': check_activities_exist(1, item.id)['all_activities_exist'],
-            'endorse_welfareprogress': check_activities_exist(1, item.id)['progress'],
-            'endorse_lds': check_activities_exist(2, item.id)['all_activities_exist'],
-            'endorse_ldsprogress': check_activities_exist(2, item.id)['progress'],
-            'endorse_pms': check_activities_exist(3, item.id)['all_activities_exist'],
-            'endorse_pmsprogress': check_activities_exist(3, item.id)['progress'],
-            'endorse_pas': check_activities_exist(4, item.id)['all_activities_exist'],
-            'endorse_pasprogress': check_activities_exist(4, item.id)['progress'],
+            'endorse_welfare': check_endorsement_activities_exist(1, item.id)['all_activities_exist'],
+            'endorse_welfareprogress': check_endorsement_activities_exist(1, item.id)['progress'],
+            'endorse_lds': check_endorsement_activities_exist(2, item.id)['all_activities_exist'],
+            'endorse_ldsprogress': check_endorsement_activities_exist(2, item.id)['progress'],
+            'endorse_pms': check_endorsement_activities_exist(3, item.id)['all_activities_exist'],
+            'endorse_pmsprogress': check_endorsement_activities_exist(3, item.id)['progress'],
+            'endorse_pas': check_endorsement_activities_exist(4, item.id)['all_activities_exist'],
+            'endorse_pasprogress': check_endorsement_activities_exist(4, item.id)['progress'],
         } for item in paginated_data]
 
         return JsonResponse({
@@ -224,38 +211,51 @@ def view_hired_requirements(request, pk):
         try:
             req_ids = request.POST.getlist('req_id[]')
             app_ids = request.POST.getlist('app_id[]')
+            is_required = request.POST.getlist('is_required[]')
             date_compliance = request.POST.getlist('date_compliance[]')
             date_remarkscompliance = request.POST.getlist('date_remarkscompliance[]')
 
             data = [
-                {'req_id': req_ids[i], 'app_id': app_ids[i], 
-                'date_compliance': date_compliance[i], 'date_remarkscompliance': date_remarkscompliance[i]}
+                {
+                    'req_id': req_ids[i], 
+                    'app_id': app_ids[i], 
+                    'date_compliance': date_compliance[i], 
+                    'date_remarkscompliance': date_remarkscompliance[i], 
+                    'is_required': is_required[i]
+                }
                 for i in range(len(req_ids))
-                if date_compliance[i] and date_remarkscompliance[i]
             ]
 
             existing_compliances = HiredreqCompliance.objects.filter(app_id=app.app_id)
             existing_ids = {str(compliance.hired_req_id): compliance.id for compliance in existing_compliances}
-
+            print (data)
+            
             for row in data:
                 req_id = str(row['req_id'])  # Ensure the req_id is compared as a string
-                if req_id in existing_ids:
-                    # Update existing record
-                    compliance_id = existing_ids[req_id]
-                    HiredreqCompliance.objects.filter(id=compliance_id).update(
-                        app_id=row['app_id'],
-                        hired_req_id=row['req_id'],
-                        remarks=row['date_remarkscompliance'],
-                        datetime=row['date_compliance'],
-                    )
+                if (row['is_required'] == '1'):
+                    if req_id in existing_ids:
+                        # Update existing record
+                        compliance_id = existing_ids[req_id]
+                        HiredreqCompliance.objects.filter(id=compliance_id).update(
+                            app_id=row['app_id'],
+                            hired_req_id=row['req_id'],
+                            remarks=row['date_remarkscompliance'],
+                            datetime=row['date_compliance'] if row['date_compliance'] != '' else None,
+                            is_required=row['is_required']
+                        )
+                    else:
+                        # Create new record
+                        HiredreqCompliance.objects.create(
+                            app_id=row['app_id'],
+                            hired_req_id=row['req_id'],
+                            remarks=row['date_remarkscompliance'],
+                            datetime=row['date_compliance'] if row['date_compliance'] != '' else None,
+                            is_required=row['is_required']
+                        )
                 else:
-                    # Create new record
-                    HiredreqCompliance.objects.create(
-                        app_id=row['app_id'],
-                        hired_req_id=row['req_id'],
-                        remarks=row['date_remarkscompliance'],
-                        datetime=row['date_compliance'],
-                    )
+                    if HiredreqCompliance.objects.filter(hired_req_id=req_id).count():
+                        compliance_id = existing_ids[req_id]
+                        HiredreqCompliance.objects.filter(id=compliance_id).delete()
 
             # # Delete records that are no longer in the submitted data
             # OasHiredreqCompliance.objects.filter(hired_req_id__in=to_delete_ids).delete()
@@ -282,10 +282,10 @@ def hiredreq_complete(request):
                 NewlyHiredStaff.objects.create(
                     id = request.POST.get('app_id'),
                     remarks ='Requirements Done',
-                    requirements_ok = 'Done',
+                    requirements_ok = 'Complete',
                     )
             else:
-                check_hired.requirements_ok = 'Done'
+                check_hired.requirements_ok = 'Complete'
                 check_hired.remarks = 'Requirements Done'
                 check_hired.save()
                     
@@ -314,7 +314,9 @@ def hiredreq_not_complete(request):
     if request.method == "POST":
         try:
             chck = NewlyHiredStaff.objects.filter(id = request.POST.get('app_id')).first()
+            chck.requirements_ok="Incomplete"
             chck.remarks = request.POST.get('remarks')
+            chck.araf_due_date = request.POST.get('due_date')
             chck.save()
             # send_notification(request.user.id , message, app.pi.mobile_no)
             # if app.pi.mobile_no_two:
@@ -471,6 +473,15 @@ def print_onboarding_forms(request, pk, ids=None):
     }
     return render(request, 'rsp/NewlyHiredStaff/print_onboarding_forms.html', context)
 
+@csrf_exempt
+def print_req_araf(request, pk=None):
+    if pk != '0':
+        all = NewlyHiredStaff.objects.filter(id=pk).first()
+        context = {
+            'pk': pk,
+            'all': all,
+        }
+    return render(request, 'rsp/NewlyHiredStaff/print_requirements_araf.html', context)
 
 @csrf_exempt
 def print_req_checklist(request, pk=None):
@@ -539,3 +550,31 @@ def PatchNewlyHiredOnboarding(request):
         return JsonResponse({"error": "Invalid JSON data"}, status=400)
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
+
+@csrf_exempt
+def SyncIris(request):
+    try:
+        # Run the Python script to execute the seeder command and capture error output
+        result = subprocess.run(
+            ['python', 'manage.py', 'fetch_hired_applicants'],
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True
+        )
+        
+        # Check the script output
+        logger.info(f"Script Output: {result.stdout}")
+        
+        return JsonResponse({
+            'status': 'success'
+        }, status=200)
+    
+    except subprocess.CalledProcessError as e:
+        # Log the error output from the script
+        logger.error(f"Error running script: {e.stderr}")
+        
+        return JsonResponse({
+            'status': 'error',
+            'message': f"An error occurred: {e.stderr}"
+        }, status=400)

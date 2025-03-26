@@ -3,55 +3,13 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.db import connection
-from rsp.models import LibNeopActivities, NewlyHiredStaff, StaffNeopActivities, StaffNeopInfo
+from rsp.models import LibNeopActivities, NewlyHiredStaff, StaffNeopActivities, StaffOnboardingInfo
+from rsp.mail import send_email
 from datetime import datetime
 import json
-from rsp.views.rsp.functions import safe_decode
-
-def check_activities_exist(milestone, staff_id):
-    """Check if all activities for a given staff member exist based on the milestone, 
-       and return progress (completed/total)."""
-    with connection.cursor() as cursor:
-        query = """
-        SELECT 
-            CASE 
-                WHEN NOT EXISTS (
-                    SELECT 1
-                    FROM rsp_libneopactivities lib
-                    WHERE lib.milestone = %s
-                    AND NOT EXISTS (
-                        SELECT 1
-                        FROM rsp_staffneopactivities staff
-                        WHERE staff.staff_id_id = %s
-                        AND staff.lib_neop_id_id = lib.id
-                    )
-                ) THEN 'TRUE'
-                ELSE 'FALSE'
-            END AS all_activities_exist,
-            
-            CONCAT(
-                (SELECT COUNT(1) 
-                 FROM rsp_staffneopactivities staff 
-                 WHERE staff.staff_id_id = %s 
-                 AND EXISTS (
-                    SELECT 1 
-                    FROM rsp_libneopactivities lib 
-                    WHERE lib.id = staff.lib_neop_id_id 
-                    AND lib.milestone = %s
-                )),
-                '/', 
-                (SELECT COUNT(1) 
-                 FROM rsp_libneopactivities lib 
-                 WHERE lib.milestone = %s)
-            ) AS progress;
-        """
-        cursor.execute(query, [milestone, staff_id, staff_id, milestone, milestone])
-        result = cursor.fetchone()
-
-    return {
-        'all_activities_exist': True if result and result[0] == 'TRUE' else False,
-        'progress': safe_decode(result[1]) if result and result[1] else '0/0'  # Decode and default to '0/0'
-    }
+from rsp.functions import safe_decode, check_neop_activities_exist
+from django.conf import settings
+from dateutil.relativedelta import relativedelta
 
 @csrf_exempt
 def ListNewlyHiredNeop(request):
@@ -79,13 +37,13 @@ def ListNewlyHiredNeop(request):
         # Prepare data for response
         data = []
         for item in paginated_data:
-            # Fetch related StaffNeopInfo data for each NewlyHiredStaff
+            # Fetch related StaffOnboardingInfo data for each NewlyHiredStaff
             try:
-                staff_neop_info = StaffNeopInfo.objects.get(staff_id=item.id)
+                staff_neop_info = StaffOnboardingInfo.objects.get(staff_id=item.id)
                 assumption_date = staff_neop_info.assumption_date
                 date_end_third = staff_neop_info.date_end_third
                 date_end_sixth = staff_neop_info.date_end_sixth
-            except StaffNeopInfo.DoesNotExist:
+            except StaffOnboardingInfo.DoesNotExist:
                 assumption_date = None
                 date_end_third = None
                 date_end_sixth = None
@@ -104,16 +62,16 @@ def ListNewlyHiredNeop(request):
                 'area_of_assignment': item.area_of_assignment,
                 'requirements_ok': item.requirements_ok,
                 'remarks': item.remarks,
-                'milestone1': check_activities_exist(1, item.id)['all_activities_exist'],
-                'milestone2': check_activities_exist(2, item.id)['all_activities_exist'],
-                'milestone3': check_activities_exist(3, item.id)['all_activities_exist'],
-                'milestone4': check_activities_exist(4, item.id)['all_activities_exist'],
-                'milestone5': check_activities_exist(5, item.id)['all_activities_exist'],
-                'milestone1progress': check_activities_exist(1, item.id)['progress'],
-                'milestone2progress': check_activities_exist(2, item.id)['progress'],
-                'milestone3progress': check_activities_exist(3, item.id)['progress'],
-                'milestone4progress': check_activities_exist(4, item.id)['progress'],
-                'milestone5progress': check_activities_exist(5, item.id)['progress'],
+                'milestone1': check_neop_activities_exist(1, item.id)['all_activities_exist'],
+                'milestone2': check_neop_activities_exist(2, item.id)['all_activities_exist'],
+                'milestone3': check_neop_activities_exist(3, item.id)['all_activities_exist'],
+                'milestone4': check_neop_activities_exist(4, item.id)['all_activities_exist'],
+                'milestone5': check_neop_activities_exist(5, item.id)['all_activities_exist'],
+                'milestone1progress': check_neop_activities_exist(1, item.id)['progress'],
+                'milestone2progress': check_neop_activities_exist(2, item.id)['progress'],
+                'milestone3progress': check_neop_activities_exist(3, item.id)['progress'],
+                'milestone4progress': check_neop_activities_exist(4, item.id)['progress'],
+                'milestone5progress': check_neop_activities_exist(5, item.id)['progress'],
                 'assumption_date': assumption_date,  # Add assumption_date
                 'date_end_third': date_end_third,    # Add date_end_third
                 'date_end_sixth': date_end_sixth    # Add date_end_sixth
@@ -152,7 +110,7 @@ def GetLibNeopActivities(request):
         lib_neop_activities = LibNeopActivities.objects.all()
 
     # Serialize the LibNeopActivities queryset
-    activities_data = list(lib_neop_activities.values('id', 'name', 'description', 'milestone'))
+    activities_data = list(lib_neop_activities.values('id', 'name', 'description', 'is_email_notify', 'milestone'))
 
     # Add the 'test' column with value 1 for each row
     for activity in activities_data:
@@ -172,6 +130,8 @@ def GetLibNeopActivities(request):
 
 @csrf_exempt
 def PostLibNeopActivities(request):
+
+    
     if request.method == 'POST':
         try:
             # Parse the incoming JSON data
@@ -183,6 +143,9 @@ def PostLibNeopActivities(request):
             for activity in activities:
                 staff = NewlyHiredStaff.objects.get(id=activity.get('user_id'))  # Fetch the staff object
                 lib_neop_activity = LibNeopActivities.objects.get(id=activity.get('id'))  # Get the LibNeopActivities object
+
+                if lib_neop_activity.is_email_notify and activity.get('date'):
+                    send_email(staff.email, 'NEOP Activity Notification', lib_neop_activity.name)
                 StaffNeopActivities.objects.update_or_create(
                     staff_id=staff,
                     lib_neop_id=lib_neop_activity,
@@ -212,20 +175,24 @@ def PostNeopStaffInfo(request):
 
         # Extract data
         staff_id = data.get('data', {}).get('staff_id')
-        assumption_date = data.get('data', {}).get('assumption_date')
-        date_end_third = data.get('data', {}).get('date_end_third')
-        date_end_sixth = data.get('data', {}).get('date_end_sixth')
+        assumption_date_str = data.get('data', {}).get('assumption_date')
+
+        if assumption_date_str:
+            assumption_date = datetime.strptime(assumption_date_str, "%Y-%m-%d")  # Convert string to date
+            date_end_third = assumption_date + relativedelta(months=3)
+            date_end_sixth = assumption_date + relativedelta(months=6)
+        else:
+            assumption_date = date_end_third = date_end_sixth = None
 
         # Helper function to safely parse date strings
         def parse_date(date_str):
-            if date_str:
+            if date_str and isinstance(date_str, str):  # Ensure it's a string before parsing
                 return datetime.strptime(date_str, '%Y-%m-%d').date()
-            return None
+            return date_str  # If it's already a date, return as is
 
-        # Safely convert the date strings to date objects
-        assumption_date = parse_date(assumption_date)
-        date_end_third = parse_date(date_end_third)
-        date_end_sixth = parse_date(date_end_sixth)
+        # Convert to string format only if not None
+        date_end_third = date_end_third.strftime("%Y-%m-%d") if date_end_third else None
+        date_end_sixth = date_end_sixth.strftime("%Y-%m-%d") if date_end_sixth else None
 
         # Get the staff instance
         try:
@@ -233,8 +200,8 @@ def PostNeopStaffInfo(request):
         except NewlyHiredStaff.DoesNotExist:
             return JsonResponse({"error": "Staff not found"}, status=404)
 
-        # Check if StaffNeopInfo exists for the given staff
-        staff_neop_info, created = StaffNeopInfo.objects.update_or_create(
+        # Check if StaffOnboardingInfo exists for the given staff
+        staff_neop_info, created = StaffOnboardingInfo.objects.update_or_create(
             staff_id=staff,  # Use staff instance for the foreign key
             defaults={
                 'assumption_date': assumption_date,

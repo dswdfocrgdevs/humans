@@ -181,6 +181,7 @@ def signin_service(request, params):
     auth_login(request, user)
     request.session['user_id'] = user.id
     request.session['user_first_name'] = user.first_name
+    request.session['user_middle_name'] = user.middle_name
     request.session['user_last_name'] = user.last_name
     request.session['user_position'] = user.position
     request.session['user_image'] = user.image_path
